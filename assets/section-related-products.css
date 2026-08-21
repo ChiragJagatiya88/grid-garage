@@ -1,0 +1,15 @@
+.related-products {
+  display: block;
+}
+
+.related-products__heading {
+  margin: 0 0 2rem;
+  text-align: center;
+}
+.recently-viewed-products .grid__item, .recently-viewed-products .gg-pc__media {
+  border-radius: 12px;
+  background: #FFF;
+}
+.recently-viewed-products .gg-pc .price .price-item {
+  color: #000;
+}

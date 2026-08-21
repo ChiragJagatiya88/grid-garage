@@ -1,0 +1,390 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "gg_story_banner_VzY66n": {
+      "type": "gg-story-banner",
+      "name": "GG: Story banner",
+      "settings": {
+        "image": "shopify://shop_images/about-banner.png",
+        "image_alt": "Grid Garage team and flooring",
+        "image_position": "center center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30,
+        "heading": "{{ page.title }}",
+        "heading_color": "#ffffff",
+        "heading_size_desktop": 5.5,
+        "heading_lh_desktop": 6.2,
+        "heading_tracking_desktop": 0,
+        "heading_size_mobile": 3.2,
+        "heading_lh_mobile": 0,
+        "heading_tracking_mobile": 0,
+        "align_h_desktop": "center",
+        "align_v_desktop": "center",
+        "min_height_desktop": 44,
+        "inner_pad_y_desktop_top": 0,
+        "inner_pad_y_desktop_bottom": 0,
+        "align_h_mobile": "center",
+        "align_v_mobile": "center",
+        "min_height_mobile": 20,
+        "inner_pad_y_mobile": 0,
+        "content_max_width": 0,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gg_breadcrumbs_t7HE7g": {
+      "type": "gg-breadcrumbs",
+      "blocks": {
+        "crumb_3rrB6z": {
+          "type": "crumb",
+          "settings": {
+            "label": "Home",
+            "link": "/",
+            "is_current": false
+          }
+        }
+      },
+      "block_order": [
+        "crumb_3rrB6z"
+      ],
+      "name": "GG: Breadcrumbs",
+      "settings": {
+        "breadcrumb_mode": "auto",
+        "hide_on_home": true,
+        "home_label": "Home",
+        "separator": "|",
+        "aria_label": "Breadcrumb",
+        "label_cart": "",
+        "label_search": "",
+        "label_collections": "",
+        "label_404": "",
+        "background_color": "#ffffff",
+        "text_color": "#222222",
+        "separator_color": "#222222",
+        "font_size_desktop": 1.2,
+        "font_size_mobile": 1.1,
+        "line_height": 1.5,
+        "font_weight": 700,
+        "letter_spacing": 0,
+        "align_desktop": "left",
+        "align_mobile": "left",
+        "padding_top": 20,
+        "padding_bottom": 12
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "collapsible_content_f7MBfC": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_iCJNGV": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer free shipping?",
+            "icon": "none",
+            "row_content": "<p>Yes—we offer free shipping on all tile floor kits nationwide. There are no hidden fees or surprise charges. The price you see is the price you pay.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_EkqEFU": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I know how many tiles I need?",
+            "icon": "none",
+            "row_content": "<p>We’ve eliminated the guesswork by offering pre-sized kits for standard spaces like 2-car and 3-car garages.<br/>If your space is custom, email us at <a href=\"mailto:info@gridgarageinc.com\" target=\"_blank\" title=\"mailto:info@gridgarageinc.com\">info@gridgarageinc.com</a> and we will respond right away with the exact number of tiles and layout recommendation.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_gt8e7X": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What if my space isn’t a standard size?",
+            "icon": "none",
+            "row_content": "<p>No problem. Send us your width and length along with any obstacles, and we will provide a custom tile count, edge pieces, and layout recommendation.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_qCkTFm": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Are the tiles easy to install?",
+            "icon": "none",
+            "row_content": "<p>Yes. The tiles use an interlocking system that snaps together without glue or special tools. Most installations can be completed in just a few hours.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_Eij9cJ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I install these over my existing concrete?",
+            "icon": "none",
+            "row_content": "<p>Yes. These tiles are designed to be installed directly over concrete, including surfaces that are cracked, stained, or slightly uneven.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_tYf4tM": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Are the tiles strong enough for vehicles?",
+            "icon": "none",
+            "row_content": "<p>Yes. These tiles are built to handle heavy vehicles, high traffic, and daily use without cracking or breaking.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_K6NLBy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do the tiles handle water, dirt, and spills?",
+            "icon": "none",
+            "row_content": "<p>Yes. The flow-through design allows water and debris to drain underneath the tiles, keeping the surface clean and dry. They are also resistant to oil, gas, and common chemicals.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_JiNAMA": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Are the tiles slippery?",
+            "icon": "none",
+            "row_content": "<p>No. The surface is designed with a textured, slip-resistant finish to provide traction even when wet.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_PxWjPw": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I clean the floor?",
+            "icon": "none",
+            "row_content": "<p>Maintenance is simple. You can use a leaf blower, shop vacuum, hose, or mop to keep your floor clean.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_8wJaLp": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I replace individual tiles?",
+            "icon": "none",
+            "row_content": "<p>Yes. Individual tiles can be removed and replaced at any time without affecting the rest of the floor.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_YAPCBH": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Are these better than epoxy or paint?",
+            "icon": "none",
+            "row_content": "<p>Unlike epoxy or paint, these tiles will not peel, chip, or require curing time. They provide a long-term, low-maintenance flooring solution.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_jch8Kb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Where can these tiles be used?",
+            "icon": "none",
+            "row_content": "<p>These tiles can be used in garages, home gyms, patios, basements, workshops, and other residential or commercial spaces.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_i34KMi": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer support if I have questions?",
+            "icon": "none",
+            "row_content": "<p>Yes. If you need help choosing a kit, sizing your space, or planning your layout, email us and we will respond quickly.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_UkFDVe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What makes Grid Garage different?",
+            "icon": "none",
+            "row_content": "<p>We simplify the entire process. No calculators, no confusion. Just pre-built kits, free shipping, and a straightforward buying experience built around one promise: One Click. One Price. No Surprises.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_kfQVXf": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do I need tools for the installation?",
+            "icon": "none",
+            "row_content": "<p>If you choose to do a \"Wall-to-Wall\" fit and finish, you can easily trim the tiles using any power saw (jigsaw, table saw, or circular saw)</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_tgrCJm": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is there  a return shipping fee?",
+            "icon": "none",
+            "row_content": "<p>Customers are responsible for return shipping costs.<br/><br/></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_7Awer7": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you accept open box returns?",
+            "icon": "none",
+            "row_content": "<p>Yes, we accept open-box returns as long as they are within the 30-day return window.<br/><br/></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_PDi4Ke": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Are there any return exclusions?",
+            "icon": "none",
+            "row_content": "<p>Returns must be in new, unused condition. Any damage caused by improper use or installation will not be eligible for a return.<br/><br/></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_UJFGRz": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is there an installation video tutorial I can watch?",
+            "icon": "none",
+            "row_content": "<p>Yes Absolutely, here is the link: <a href=\"https://youtube.com/watch?si=pPuIOxsk1o-k5LX-&v=dPlBTquJ-fs&feature=youtu.be\" title=\"https://youtube.com/watch?si=pPuIOxsk1o-k5LX-&v=dPlBTquJ-fs&feature=youtu.be\">youtube.com/watch?si=pPuIOxsk1o-k5LX-&v=dPlBTquJ-fs&feature=youtu.be</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_qG9beH": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I use a floor jack or jack stands on the tiles?",
+            "icon": "none",
+            "row_content": "<p>Yes. All Grid Garage tiles are engineered to support the weight of standard passenger vehicles, floor jacks, and jack stands when used properly. For best results, we recommend using jack stand pads or protective bases on concentrated load points.<br/><br/></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_QNEGU6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do the tiles handle road salt and snowy winters?",
+            "icon": "none",
+            "row_content": "<p>All Grid Garage tiles are designed to perform in harsh climates, including snowy winters and exposure to road salt. The modular design allows airflow and drainage beneath the surface, helping reduce trapped moisture, salt buildup, and staining commonly found on bare concrete floors.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_X9zhVM": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Will my floor buckle or shift in the summer heat?",
+            "icon": "none",
+            "row_content": "<p>No. Grid Garage tiles are designed with expansion allowances to handle normal temperature fluctuations in garages and outdoor environments. When installed according to our recommended guidelines, the floor will remain stable through seasonal temperature changes.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_jKdFHV": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I initiate a return?",
+            "icon": "none",
+            "row_content": "<p>To initiate a return, please email our support team at <a href=\"mailto:info@gridgarageinc.com\" target=\"_blank\">info@gridgarageinc.com</a> within 30 days of delivery. Include your name, order number and reason for the return, and our team will assist you with the next steps.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_F7MKLf": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How does the 30-Day Money Back Guarantee work?",
+            "icon": "none",
+            "row_content": "<p>If you are not satisfied with your Grid Garage purchase, you may request a return within 30 days of delivery. Products must be unused and in original condition. Customers are responsible for return shipping costs unless the order arrived damaged or incorrect.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_RFXzq4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I install the tiles over cracked or uneven concrete floors?",
+            "icon": "none",
+            "row_content": "<p>Yes. All Grid Garage tiles can be installed over most cracked or lightly uneven concrete surfaces. The modular interlocking system helps cover imperfections while creating a clean finished appearance. However, large elevation changes, loose concrete, or severe surface damage should be repaired prior to installation for best results. Please feel free to send us a video if you are unsure. <br/></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_zAiQqq": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How does the Grid Garage Showcase Bonus work?",
+            "icon": "none",
+            "row_content": "<p>Submit photos and a couple of cool short videos of your install and completed garage transformation and receive a $100 Grid Garage Showcase bonus upon approval. Feel free to reach out for content ideas. Before and after photos/videos are encouraged. </p><p>We’re building a community of real Grid Garage customer installs and may feature selected transformations across our website and social media channels.</p><p>To participate, simply email your completed project photos and short video along with your name and order number to <a href=\"mailto:info@gridgarageinc.com\" target=\"_blank\">info@gridgarageinc.com</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_8nnwMt": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer a referral bonus?",
+            "icon": "none",
+            "row_content": "<p>Yes, please email us directly to inquire about our referral bonus.<br/><br/></p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_iCJNGV",
+        "collapsible_row_EkqEFU",
+        "collapsible_row_gt8e7X",
+        "collapsible_row_qCkTFm",
+        "collapsible_row_Eij9cJ",
+        "collapsible_row_tYf4tM",
+        "collapsible_row_K6NLBy",
+        "collapsible_row_JiNAMA",
+        "collapsible_row_PxWjPw",
+        "collapsible_row_8wJaLp",
+        "collapsible_row_YAPCBH",
+        "collapsible_row_jch8Kb",
+        "collapsible_row_i34KMi",
+        "collapsible_row_UkFDVe",
+        "collapsible_row_kfQVXf",
+        "collapsible_row_tgrCJm",
+        "collapsible_row_7Awer7",
+        "collapsible_row_PDi4Ke",
+        "collapsible_row_UJFGRz",
+        "collapsible_row_qG9beH",
+        "collapsible_row_QNEGU6",
+        "collapsible_row_X9zhVM",
+        "collapsible_row_jKdFHV",
+        "collapsible_row_F7MKLf",
+        "collapsible_row_RFXzq4",
+        "collapsible_row_zAiQqq",
+        "collapsible_row_8nnwMt"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "FAQs",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "container_color_scheme": "",
+        "color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "gg_story_banner_VzY66n",
+    "gg_breadcrumbs_t7HE7g",
+    "main",
+    "collapsible_content_f7MBfC"
+  ]
+}

@@ -1,0 +1,103 @@
+{% doc %}
+  Hero slide copy: eyebrow, two-line accent heading, description, primary/secondary CTAs, samples link.
+
+  @param {object} section - Parent section (for settings fallback is unused when block is set).
+  @param {object} [block] - Slide block with content settings. When blank, reads from section.settings (fallback slide).
+
+  @example
+  {% render 'gg-hero-slide-content', section: section, block: block %}
+  @example
+  {% render 'gg-hero-slide-content', section: section %}
+{% enddoc %}
+
+{%- liquid
+  if block != blank
+    assign s_eyebrow = block.settings.eyebrow
+    assign s_heading = block.settings.heading | strip
+    assign s_accent_word = block.settings.accent_word | strip
+    assign s_subtext = block.settings.subtext
+    assign s_primary_label = block.settings.primary_label
+    assign s_primary_link = block.settings.primary_link
+    assign s_secondary_label = block.settings.secondary_label
+    assign s_secondary_link = block.settings.secondary_link
+    assign s_samples_label = block.settings.samples_label
+    assign s_samples_link = block.settings.samples_link
+  else
+    assign s_eyebrow = section.settings.eyebrow
+    assign s_heading = section.settings.heading | strip
+    assign s_accent_word = section.settings.accent_word | strip
+    assign s_subtext = section.settings.subtext
+    assign s_primary_label = section.settings.primary_label
+    assign s_primary_link = section.settings.primary_link
+    assign s_secondary_label = section.settings.secondary_label
+    assign s_secondary_link = section.settings.secondary_link
+    assign s_samples_label = section.settings.samples_label
+    assign s_samples_link = section.settings.samples_link
+  endif
+
+  assign full_heading = s_heading | strip
+  assign accent_word = s_accent_word | strip
+  assign heading_d = full_heading | downcase
+  assign accent_d = accent_word | downcase
+  assign show_accent = false
+  assign before_accent = full_heading
+  assign accent_display = accent_word
+  if accent_word != blank and heading_d contains accent_d
+    assign show_accent = true
+    assign before_d_part = heading_d | split: accent_d | first
+    assign before_len = before_d_part | size
+    assign accent_len = accent_word | size
+    assign before_accent = full_heading | slice: 0, before_len
+    assign accent_display = full_heading | slice: before_len, accent_len
+  endif
+-%}
+
+{%- if s_eyebrow != blank -%}
+  <p class="gg-hero-gg__eyebrow gg-font-body">{{ s_eyebrow | escape }}</p>
+{%- endif -%}
+
+<h2 class="gg-hero-gg__heading gg-font-heading">
+  {%- if show_accent -%}
+    <span class="gg-hero-gg__heading-line">{{ before_accent | escape }}</span>
+    <span class="gg-hero-gg__accent">{{ accent_display | escape }}</span>
+  {%- else -%}
+    {{ full_heading | escape }}
+  {%- endif -%}
+</h2>
+
+{%- if s_subtext != blank -%}
+  <div class="gg-hero-gg__subtext rte gg-font-body">{{ s_subtext }}</div>
+{%- endif -%}
+
+{%- if s_primary_label != blank or s_secondary_label != blank -%}
+  <div class="gg-hero-gg__buttons">
+    {%- if s_primary_label != blank -%}
+      <a
+        href="{{ s_primary_link }}"
+        class="gg-btn gg-btn--primary"
+      >
+        {{- s_primary_label | escape -}}
+      </a>
+    {%- endif -%}
+    {%- if s_secondary_label != blank -%}
+      <a
+        href="{{ s_secondary_link }}"
+        class="gg-btn gg-btn--secondary-ghost-dark"
+      >
+        {{- s_secondary_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- if s_samples_label != blank -%}
+  <a
+    href="{{ s_samples_link }}"
+    class="gg-hero-gg__samples gg-font-body"
+  >
+    <span>{{ s_samples_label | escape }}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path d="M7.10208 5.25H0V4.08333H7.10208L3.83542 0.816667L4.66667 0L9.33333 4.66667L4.66667 9.33333L3.83542 8.51667L7.10208 5.25Z" fill="white"/>
+    </svg>
+  </a>
+{%- endif -%}

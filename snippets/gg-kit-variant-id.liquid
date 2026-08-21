@@ -1,0 +1,95 @@
+{%- comment -%}
+  Resolves the display/offer variant for kit PDPs.
+  Sets no outer assigns (render-scoped). Capture via:
+    {% capture gg_kit_variant_id %}{% render 'gg-kit-variant-id', product: product %}{% endcapture %}
+{%- endcomment -%}
+{%- liquid
+  assign offer_variant = product.selected_or_first_available_variant
+  assign has_kit_variant = false
+  assign force_kit_offer = false
+
+  for v in product.variants
+    assign vt = v.title | downcase
+    if vt contains '2-car' or vt contains '2 car' or vt contains '2car' or vt contains '3-car' or vt contains '3 car' or vt contains '3car'
+      assign has_kit_variant = true
+      break
+    endif
+  endfor
+
+  if has_kit_variant
+    assign ov_title = offer_variant.title | downcase
+    assign is_unit_offer = false
+    if ov_title contains 'per sq' or ov_title contains 'per-sq' or ov_title contains '/sq' or ov_title contains 'sqft' or ov_title contains 'sq ft'
+      assign is_unit_offer = true
+    endif
+    for opt in offer_variant.options
+      assign ol = opt | downcase
+      if ol contains 'per sq' or ol contains 'per-sq' or ol contains 'custom (per'
+        assign is_unit_offer = true
+      endif
+    endfor
+
+    unless product.selected_variant
+      assign force_kit_offer = true
+    endunless
+    if is_unit_offer
+      assign force_kit_offer = true
+    endif
+  endif
+
+  if force_kit_offer
+    assign kit_variant = nil
+    for v in product.variants
+      assign vt = v.title | downcase
+      assign v_is_unit = false
+      if vt contains 'per sq' or vt contains 'per-sq' or vt contains '/sq' or vt contains 'sqft'
+        assign v_is_unit = true
+      endif
+      unless v_is_unit
+        if vt contains '2-car' or vt contains '2 car' or vt contains '2car'
+          assign kit_variant = v
+          if v.available
+            break
+          endif
+        endif
+      endunless
+    endfor
+    if kit_variant == nil
+      for v in product.variants
+        assign vt = v.title | downcase
+        assign v_is_unit = false
+        if vt contains 'per sq' or vt contains 'per-sq' or vt contains '/sq' or vt contains 'sqft'
+          assign v_is_unit = true
+        endif
+        unless v_is_unit
+          if vt contains '3-car' or vt contains '3 car' or vt contains '3car'
+            assign kit_variant = v
+            if v.available
+              break
+            endif
+          endif
+        endunless
+      endfor
+    endif
+    if kit_variant == nil
+      assign max_price = 0
+      for v in product.variants
+        assign vt = v.title | downcase
+        assign v_is_unit = false
+        if vt contains 'per sq' or vt contains 'per-sq' or vt contains '/sq' or vt contains 'sqft'
+          assign v_is_unit = true
+        endif
+        unless v_is_unit
+          if v.price > max_price
+            assign max_price = v.price
+            assign kit_variant = v
+          endif
+        endunless
+      endfor
+    endif
+    if kit_variant != nil
+      assign offer_variant = kit_variant
+    endif
+  endif
+-%}
+{{- offer_variant.id -}}

@@ -1,0 +1,371 @@
+{%- comment -%}
+  Figma node 279:3340 — “Grid Garage vs. The Rest”: copy + comparison table + footer lines + CTA | lifestyle image.
+{%- endcomment -%}
+{{ 'gg-comparison-split.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  #shopify-section-{{ section.id }} .gg-comp {
+    --gg-accent: {{ section.settings.button_color.red }},{{ section.settings.button_color.green }},{{ section.settings.button_color.blue }};
+    --gg-comp-border: {{ section.settings.table_border_color.red }},{{ section.settings.table_border_color.green }},{{ section.settings.table_border_color.blue }};
+    --gg-comp-cell-bg: {{ section.settings.table_cell_bg.red }},{{ section.settings.table_cell_bg.green }},{{ section.settings.table_cell_bg.blue }};
+    --gg-comp-muted: {{ section.settings.competitor_text_color.red }},{{ section.settings.competitor_text_color.green }},{{ section.settings.competitor_text_color.blue }};
+    --gg-comp-heading: {{ section.settings.heading_text_color.red }},{{ section.settings.heading_text_color.green }},{{ section.settings.heading_text_color.blue }};
+    --gg-comp-min-h: {{ section.settings.min_section_height }}rem;
+    --gg-comp-intro-size: {{ section.settings.intro_size }}rem;
+    --gg-comp-subheading-size: {{ section.settings.footer_heading_size }}rem;
+    --gg-comp-subtext-size: {{ section.settings.footer_text_size }}rem;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-comp section-{{ section.id }}-padding{% if section.settings.media_position == 'left' %} gg-comp--media-left{% endif %}"
+  {% if section.settings.heading != blank %}
+    aria-labelledby="gg-comp-title-{{ section.id }}"
+  {% endif %}
+>
+  <div class="gg-comp__layout">
+    <div class="gg-comp__copy">
+      {%- if section.settings.heading != blank -%}
+        <div
+          id="gg-comp-title-{{ section.id }}"
+          class="gg-comp__heading gg-font-heading rte"
+          role="heading"
+          aria-level="2"
+        >
+          {{ section.settings.heading }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.intro != blank -%}
+        <div class="gg-comp__intro rte gg-font-body">{{ section.settings.intro }}</div>
+      {%- endif -%}
+
+      <div class="gg-comp__table-wrap">
+        <table class="gg-comp__table" role="table">
+          {%- if section.settings.table_caption != blank -%}
+            <caption class="visually-hidden">{{ section.settings.table_caption | escape }}</caption>
+          {%- endif -%}
+          <thead>
+            <tr>
+              <th scope="col" class="gg-comp__th--feature">{{ section.settings.col_feature_label | escape }}</th>
+              <th scope="col" class="gg-comp__th--brand">{{ section.settings.col_brand_label | escape }}</th>
+              <th scope="col" class="gg-comp__th--proxy">{{ section.settings.col_competitor_a_label | escape }}</th>
+              <th scope="col" class="gg-comp__th--comp">{{ section.settings.col_competitor_b_label | escape }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'row' -%}
+                <tr {{ block.shopify_attributes }}>
+                  <td class="gg-comp__td--feature gg-font-body">{{ block.settings.feature_label | escape }}</td>
+                  <td class="gg-comp__td--brand gg-font-body">{{ block.settings.brand_value | escape }}</td>
+                  <td class="gg-comp__td--comp gg-font-body">{{ block.settings.competitor_a_value | escape }}</td>
+                  <td class="gg-comp__td--comp gg-font-body">{{ block.settings.competitor_b_value | escape }}</td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+
+      {%- if section.settings.footer_heading != blank -%}
+        <p class="gg-comp__subheading gg-font-heading">{{ section.settings.footer_heading | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.footer_text != blank -%}
+        <p class="gg-comp__subtext gg-font-body">{{ section.settings.footer_text | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="gg-comp__btn gg-font-body">
+          {{- section.settings.button_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="gg-comp__media">
+      {%- if section.settings.image != blank -%}
+        {%- liquid
+          assign comp_image_alt = section.settings.image.alt | default: section.settings.image_alt
+        -%}
+        {{
+          section.settings.image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            widths: '750,1100,1500,2000',
+            alt: comp_image_alt | escape
+        }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Comparison split",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Image position on large screens",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Sports and garage flooring lifestyle"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Why Grid Garage</p><p>Tiles outperform the rest</p>"
+    },
+    {
+      "type": "color",
+      "id": "heading_text_color",
+      "label": "Heading color",
+      "default": "#F1F5F9"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Description",
+      "default": "<p>Upgrade your garage with Grid Garage tiles—the faster, stronger, and cleaner alternative to epoxy coatings and bare concrete.</p>"
+    },
+    {
+      "type": "range",
+      "id": "intro_size",
+      "min": 1.4,
+      "max": 2.2,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Description font size",
+      "default": 1.8
+    },
+    {
+      "type": "text",
+      "id": "table_caption",
+      "label": "Table caption (screen readers)",
+      "default": "Product comparison"
+    },
+    {
+      "type": "text",
+      "id": "col_feature_label",
+      "label": "Column: feature label",
+      "default": "Feature"
+    },
+    {
+      "type": "text",
+      "id": "col_brand_label",
+      "label": "Column: your brand",
+      "default": "Grid Garage tiles"
+    },
+    {
+      "type": "text",
+      "id": "col_competitor_a_label",
+      "label": "Column: competitor A",
+      "default": "Epoxy coating"
+    },
+    {
+      "type": "text",
+      "id": "col_competitor_b_label",
+      "label": "Column: competitor B",
+      "default": "Bare concrete"
+    },
+    {
+      "type": "color",
+      "id": "table_border_color",
+      "label": "Table border color",
+      "default": "#191919"
+    },
+    {
+      "type": "color",
+      "id": "table_cell_bg",
+      "label": "Table cell background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "competitor_text_color",
+      "label": "Competitor column text color",
+      "default": "#DADADA"
+    },
+    {
+      "type": "text",
+      "id": "footer_heading",
+      "label": "Footer line 1",
+      "default": "Now featuring sports flooring solutions!"
+    },
+    {
+      "type": "range",
+      "id": "footer_heading_size",
+      "min": 1.6,
+      "max": 2.8,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Footer line 1 font size",
+      "default": 2.2
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer line 2",
+      "default": "Perfect for home gyms and athletic spaces"
+    },
+    {
+      "type": "range",
+      "id": "footer_text_size",
+      "min": 1.4,
+      "max": 2.2,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Footer line 2 font size",
+      "default": 1.8
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#E61E43"
+    },
+    {
+      "type": "range",
+      "id": "min_section_height",
+      "min": 40,
+      "max": 110,
+      "step": 2,
+      "unit": "rem",
+      "label": "Minimum section height (desktop)",
+      "default": 94
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Table row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_label",
+          "label": "Feature",
+          "default": "Installation time"
+        },
+        {
+          "type": "text",
+          "id": "brand_value",
+          "label": "Grid Garage",
+          "default": "2-4 hours"
+        },
+        {
+          "type": "text",
+          "id": "competitor_a_value",
+          "label": "Competitor A",
+          "default": "3-5 days"
+        },
+        {
+          "type": "text",
+          "id": "competitor_b_value",
+          "label": "Competitor B",
+          "default": "N/A"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Comparison split",
+      "blocks": [
+        {
+          "type": "row",
+          "settings": {
+            "feature_label": "Installation time",
+            "brand_value": "2-4 hours",
+            "competitor_a_value": "3-5 days",
+            "competitor_b_value": "N/A"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_label": "Durability",
+            "brand_value": "Lifetime guarantee",
+            "competitor_a_value": "Peels over time",
+            "competitor_b_value": "Cracks and stains"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_label": "DIY friendly",
+            "brand_value": "Snap and go",
+            "competitor_a_value": "Professional needed",
+            "competitor_b_value": "Standard"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature_label": "Maintenance",
+            "brand_value": "Zero — self draining",
+            "competitor_a_value": "Frequent mopping",
+            "competitor_b_value": "Hard to clean"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

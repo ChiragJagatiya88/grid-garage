@@ -1,0 +1,230 @@
+{%- comment -%}
+  Figma: Why Grid Garage — image + features (node 279:3734).
+{%- endcomment -%}
+{{ 'gg-why-choose-split.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-why section-{{ section.id }}-padding"
+  style="--gg-accent: {{ section.settings.icon_tint.red }},{{ section.settings.icon_tint.green }},{{ section.settings.icon_tint.blue }};"
+>
+  <div class="gg-page-width">
+    <div class="gg-why__grid">
+      <div class="gg-why__visual">
+        <div class="gg-why__img">
+          {%- if section.settings.image != blank -%}
+            {%- assign gg_hero_img_alt = section.settings.image.alt | default: shop.name | escape -%}
+            {{
+              section.settings.image
+              | image_url: width: 700
+              | image_tag:
+                loading: 'lazy',
+                fetchpriority: 'low',
+                sizes: '(min-width: 990px) 50vw, 100vw',
+                widths: '375,550,750,1100,1500,1920',
+                alt: gg_hero_img_alt
+            }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="gg-why__content">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gg-why__heading gg-font-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <p class="gg-why__intro gg-font-body">{{ section.settings.intro | escape }}</p>
+        {%- endif -%}
+
+        <ul class="gg-why__features" role="list">
+          {%- for block in section.blocks -%}
+            <li class="gg-why__feature" {{ block.shopify_attributes }}>
+              <div class="gg-why__icon-wrap">
+                {%- if block.settings.icon != blank -%}
+                  {{
+                    block.settings.icon
+                    | image_url: width: 80
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '40,80',
+                      alt: '',
+                      role: 'presentation'
+                  }}
+                {%- else -%}
+                  <span class="svg-wrapper" aria-hidden="true">
+                    {{- 'icon-checkmark.svg' | inline_asset_content -}}
+                  </span>
+                {%- endif -%}
+              </div>
+              <div>
+                {%- if block.settings.title != blank -%}
+                  <h3 class="gg-why__feature-title gg-font-body">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="gg-why__feature-text gg-font-body">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        <div class="gg-why__btns">
+          {%- if section.settings.primary_label != blank -%}
+            <a href="{{ section.settings.primary_link }}" class="gg-btn gg-btn--primary gg-font-body">
+              {{- section.settings.primary_label | escape -}}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.secondary_label != blank -%}
+            <a href="{{ section.settings.secondary_link }}" class="gg-btn gg-why__btn-outline gg-font-body">
+              {{- section.settings.secondary_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Why choose",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Grid Garage"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Subheading",
+      "default": "Engineered to withstand heavy vehicles and extreme conditions while maintaining a showroom finish."
+    },
+    {
+      "type": "color",
+      "id": "icon_tint",
+      "label": "Icon accent",
+      "default": "#E61E43"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Slatwall storage and accessories"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Garage cabinets and storage"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "DIY snap-together"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Install an entire garage in just a few hours. No glue, no mess, no toxic fumes."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Why choose",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "DIY snap-together",
+            "text": "Install an entire garage in just a few hours. No glue, no mess, no toxic fumes."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Visual transformation",
+            "text": "Instantly upgrade your property value with a clean, professional aesthetic."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Easy to clean",
+            "text": "Resistance to oil, grease, and chemicals. Jet spray down or mop for a like-new look."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Modular system",
+            "text": "Easily swap damaged tiles or redesign your pattern without replacing the whole floor."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

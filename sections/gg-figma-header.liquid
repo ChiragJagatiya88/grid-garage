@@ -1,0 +1,639 @@
+{%- comment -%}
+  Figma: Announcement strip + main header (node 491:3123). Replace the default header group with this section only (do not stack with Dawn header — cart bubble id must be unique).
+{%- endcomment -%}
+<link rel="preload" href="{{ 'component-slideshow.css' | asset_url }}" as="style" onload="this.rel='stylesheet'">
+<link rel="preload" href="{{ 'component-slider.css' | asset_url }}" as="style" onload="this.rel='stylesheet'">
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+{%- if settings.predictive_search_enabled -%}
+ <link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+{%- endif -%}
+
+{%- liquid
+  assign search_id = 'Search-GG-' | append: section.id
+  assign gg_slider_id = 'Slider-GG-' | append: section.id
+  assign gg_usp_count = 0
+  for block in section.blocks
+    if block.type == 'usp' and block.settings.text != blank
+      assign gg_usp_count = gg_usp_count | plus: 1
+    endif
+  endfor
+  assign gg_has_social = false
+  if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+    assign gg_has_social = true
+  endif
+-%}
+{%- if gg_has_social -%}
+  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  if section.settings.sticky_header_enabled == false
+    assign sticky_enabled = false
+  else
+    assign sticky_enabled = true
+  endif
+  assign sticky_type = section.settings.sticky_header_type | default: 'always'
+  if sticky_enabled
+    assign header_tag = 'sticky-header'
+  else
+    assign header_tag = 'div'
+  endif
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }}.section-header {
+    z-index: 4;
+  }
+
+  {%- if sticky_enabled -%}
+    #shopify-section-{{ section.id }}.section-header {
+      position: sticky;
+    }
+
+    #shopify-section-{{ section.id }}.shopify-section-header-sticky {
+      top: 0;
+    }
+
+    #shopify-section-{{ section.id }}.shopify-section-header-hidden {
+      top: calc(-1 * var(--header-height, 120px));
+    }
+
+    #shopify-section-{{ section.id }}.section-header.animate {
+      transition: top 0.2s ease-out;
+    }
+
+    {%- if sticky_type == 'reduce-logo-size' -%}
+      #shopify-section-{{ section.id }}.scrolled-past-header .gg-fh__logo img {
+        max-height: 2.8rem;
+      }
+      #shopify-section-{{ section.id }}.scrolled-past-header .gg-fh__bar-inner {
+        min-height: 5.2rem;
+        padding-top: 0.6rem;
+        padding-bottom: 0.6rem;
+      }
+      @media screen and (max-width: 989px) {
+        #shopify-section-{{ section.id }}.scrolled-past-header .gg-fh__logo img {
+          max-height: 2.4rem;
+        }
+      }
+    {%- endif -%}
+  {%- else -%}
+    #shopify-section-{{ section.id }}.section-header {
+      position: relative;
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+<link rel="preload" href="{{ 'gg-figma-header.css' | asset_url }}" as="style" onload="this.rel='stylesheet'">
+<{{ header_tag }}
+  {% if sticky_enabled %}
+    data-sticky-type="{{ sticky_type }}"
+  {% endif %}
+  class="header-wrapper"
+>
+  <div
+    class="gg-fh color-{{ section.settings.color_scheme }} gradient{% if section.settings.menu_type_desktop == 'drawer' %} gg-fh--drawer-desktop{% endif %}{% if sticky_enabled and sticky_type == 'reduce-logo-size' %} gg-fh--shrink{% endif %}"
+    style="--gg-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};"
+  >
+    {%- if gg_usp_count > 0 -%}
+      <div
+        class="gg-fh__announcement{% if gg_usp_count > 1 %} gg-fh__announcement--multi{% endif %}{% if gg_usp_count > 1 and section.settings.announcement_arrows_mobile == false %} gg-fh__announcement--hide-arrows-mobile{% endif %}"
+      >
+        {%- if gg_usp_count == 1 -%}
+          {%- assign gg_single_rendered = false -%}
+          {%- for block in section.blocks -%}
+            {%- if gg_single_rendered == false and block.type == 'usp' and block.settings.text != blank -%}
+              {%- assign gg_single_rendered = true -%}
+              <div
+                class="announcement-bar gg-fh__announcement-bar announcement-bar--one-announcement"
+                role="region"
+                aria-label="{{ 'sections.header.announcement' | t }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.link != blank -%}
+                  <a
+                    href="{{ block.settings.link }}"
+                    class="announcement-bar__link link link--text focus-inset animate-arrow"
+                  >
+                {%- endif -%}
+                <p class="announcement-bar__message h5 gg-fh__announcement-message">
+                  <span>{{ block.settings.text | escape }}</span>
+                  {%- if block.settings.link != blank -%}
+                    {{- 'icon-arrow.svg' | inline_asset_content -}}
+                  {%- endif -%}
+                </p>
+                {%- if block.settings.link != blank -%}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <div
+            class="gg-fh__announcement-static"
+            role="region"
+            aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
+          >
+            <div class="gg-fh__marquee gg-font-body">
+              <div class="gg-fh__marquee-group">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'usp' and block.settings.text != blank -%}
+                    {%- if block.settings.link != blank -%}
+                      <a
+                        href="{{ block.settings.link }}"
+                        class="gg-fh__usp-pill link link--text focus-inset"
+                        {{ block.shopify_attributes }}
+                      >
+                        {{- block.settings.text | escape -}}
+                      </a>
+                    {%- else -%}
+                      <span class="gg-fh__usp-pill" {{ block.shopify_attributes }}>
+                        {{- block.settings.text | escape -}}
+                      </span>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <div class="gg-fh__marquee-group" aria-hidden="true">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'usp' and block.settings.text != blank -%}
+                    {%- if block.settings.link != blank -%}
+                      <a
+                        href="{{ block.settings.link }}"
+                        class="gg-fh__usp-pill link link--text focus-inset"
+                        tabindex="-1"
+                      >
+                        {{- block.settings.text | escape -}}
+                      </a>
+                    {%- else -%}
+                      <span class="gg-fh__usp-pill" aria-hidden="true">
+                        {{- block.settings.text | escape -}}
+                      </span>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+          <div class="gg-fh__announcement-slider-only">
+          <slideshow-component
+            class="announcement-bar gg-fh__announcement-bar"
+            role="region"
+            aria-roledescription="{{ 'sections.announcements.carousel' | t }}"
+            aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
+          >
+            <div class="announcement-bar-slider slider-buttons">
+              <button
+                type="button"
+                class="slider-button slider-button--prev"
+                name="previous"
+                aria-label="{{ 'sections.announcements.previous_announcement' | t }}"
+                aria-controls="{{ gg_slider_id }}"
+              >
+                <span class="svg-wrapper">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </button>
+              <div
+                class="grid grid--1-col slider slider--everywhere"
+                id="{{ gg_slider_id }}"
+                aria-live="polite"
+                aria-atomic="true"
+                data-autoplay="{% if section.settings.announcement_autoplay %}true{% else %}false{% endif %}"
+                data-speed="{{ section.settings.announcement_speed }}"
+              >
+                {%- assign gg_slide_idx = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'usp' and block.settings.text != blank -%}
+                    {%- assign gg_slide_idx = gg_slide_idx | plus: 1 -%}
+                    <div
+                      class="slideshow__slide slider__slide grid__item grid--1-col"
+                      id="Slide-GG-{{ section.id }}-{{ gg_slide_idx }}"
+                      {{ block.shopify_attributes }}
+                      role="group"
+                      aria-roledescription="{{ 'sections.announcements.announcement' | t }}"
+                      aria-label="{{ gg_slide_idx }} {{ 'general.slider.of' | t }} {{ gg_usp_count }}"
+                      tabindex="-1"
+                    >
+                      <div
+                        class="announcement-bar__announcement"
+                        role="region"
+                        aria-label="{{ 'sections.header.announcement' | t }}"
+                      >
+                        {%- if block.settings.link != blank -%}
+                          <a
+                            href="{{ block.settings.link }}"
+                            class="announcement-bar__link link link--text focus-inset animate-arrow"
+                          >
+                        {%- endif -%}
+                        <p class="announcement-bar__message h5 gg-fh__announcement-message">
+                          <span>{{ block.settings.text | escape }}</span>
+                          {%- if block.settings.link != blank -%}
+                            {{- 'icon-arrow.svg' | inline_asset_content -}}
+                          {%- endif -%}
+                        </p>
+                        {%- if block.settings.link != blank -%}
+                          </a>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <button
+                type="button"
+                class="slider-button slider-button--next"
+                name="next"
+                aria-label="{{ 'sections.announcements.next_announcement' | t }}"
+                aria-controls="{{ gg_slider_id }}"
+              >
+                <span class="svg-wrapper">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </button>
+            </div>
+          </slideshow-component>
+          </div>
+          {%- if request.design_mode -%}
+            <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+            <style>
+              .gg-fh__announcement .announcement-bar-slider .slider__slide[aria-hidden='true'] {
+                visibility: hidden;
+              }
+            </style>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="gg-fh__bar">
+      <div class="gg-fh__bar-inner">
+        <div class="gg-fh__menu-mobile">
+          {%- if section.settings.menu != blank -%}
+            {% render 'header-drawer' %}
+          {%- endif -%}
+        </div>
+
+        <a href="{{ routes.root_url }}" class="gg-fh__logo focus-inset">
+          {%- if settings.logo != blank -%}
+            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+            {{
+              settings.logo
+              | image_url: width: 600
+              | image_tag:
+                class: 'motion-reduce',
+                widths: widths,
+                height: logo_height,
+                width: settings.logo_width,
+                alt: logo_alt,
+                loading: 'eager'
+            }}
+          {%- else -%}
+            <span class="h2">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+
+        <div class="gg-fh__nav">
+          {%- if section.settings.menu != blank and section.settings.menu_type_desktop != 'drawer' -%}
+            {%- if section.settings.menu_type_desktop == 'mega' -%}
+              {% render 'header-mega-menu' %}
+            {%- else -%}
+              {% render 'header-dropdown-menu' %}
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        <div class="gg-fh__utilities">
+          {% render 'header-search', input_id: search_id %}
+
+          {%- if section.settings.help_link != blank -%}
+            <a
+              href="{{ section.settings.help_link }}"
+              class="gg-fh__util focus-inset"
+              aria-label="Help"
+            >
+              <span class="svg-wrapper">{{ 'icon-question-mark.svg' | inline_asset_content }}</span>
+            </a>
+          {%- endif -%}
+
+          <a href="{{ routes.cart_url }}" class="gg-fh__util focus-inset" id="cart-icon-bubble">
+            {% if cart == empty %}
+              <span class="svg-wrapper">{{ 'icon-cart-new.svg' | inline_asset_content }}</span>
+            {% else %}
+              <span class="svg-wrapper">{{ 'icon-cart-new.svg' | inline_asset_content }}</span>
+            {% endif %}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            <span class="gg-fh__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</{{ header_tag }}>
+
+{%- if settings.cart_type == 'notification' -%}
+  {%- render 'cart-notification',
+    color_scheme: section.settings.color_scheme,
+    desktop_menu_type: section.settings.menu_type_desktop
+  -%}
+{%- endif -%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == '@app' -%}
+    {% render block %}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- unless sticky_enabled -%}
+  <script>
+    (function () {
+      var header = document.querySelector('#shopify-section-{{ section.id }}');
+      if (header) {
+        document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
+      }
+    })();
+  </script>
+{%- endunless -%}
+
+{% javascript %}
+  class StickyHeader extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      this.header = this.closest('.section-header') || document.querySelector('.section-header');
+      if (!this.header) return;
+
+      this.headerIsAlwaysSticky =
+        this.getAttribute('data-sticky-type') === 'always' ||
+        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
+
+      this.setHeaderHeight();
+      this.setHeaderBounds();
+
+      window.matchMedia('(max-width: 990px)').addEventListener('change', () => {
+        this.setHeaderHeight();
+        this.setHeaderBounds();
+      });
+
+      if (this.headerIsAlwaysSticky) {
+        this.header.classList.add('shopify-section-header-sticky');
+      }
+
+      this.currentScrollTop = 0;
+      this.preventReveal = false;
+      this.predictiveSearch = this.querySelector('predictive-search');
+
+      this.onScrollHandler = this.onScroll.bind(this);
+      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
+
+      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
+      window.addEventListener('scroll', this.onScrollHandler, { passive: true });
+    }
+
+    setHeaderHeight() {
+      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
+    }
+
+    setHeaderBounds() {
+      const rect = this.header.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      this.headerBounds = {
+        top: rect.top + scrollTop,
+        bottom: rect.bottom + scrollTop,
+      };
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
+      window.removeEventListener('scroll', this.onScrollHandler);
+    }
+
+    onScroll() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
+      if (!this.headerBounds || this.headerBounds.bottom == null) this.setHeaderBounds();
+
+      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
+        this.header.classList.add('scrolled-past-header');
+        if (this.preventHide) {
+          this.currentScrollTop = scrollTop;
+          return;
+        }
+        requestAnimationFrame(this.hide.bind(this));
+      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
+        this.header.classList.add('scrolled-past-header');
+        if (!this.preventReveal) {
+          requestAnimationFrame(this.reveal.bind(this));
+        } else {
+          window.clearTimeout(this.isScrolling);
+
+          this.isScrolling = setTimeout(() => {
+            this.preventReveal = false;
+          }, 66);
+
+          requestAnimationFrame(this.hide.bind(this));
+        }
+      } else if (scrollTop <= this.headerBounds.top) {
+        this.header.classList.remove('scrolled-past-header');
+        requestAnimationFrame(this.reset.bind(this));
+      }
+
+      this.currentScrollTop = scrollTop;
+    }
+
+    hide() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
+      this.closeMenuDisclosure();
+      this.closeSearchModal();
+    }
+
+    reveal() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.add('shopify-section-header-sticky', 'animate');
+      this.header.classList.remove('shopify-section-header-hidden');
+    }
+
+    reset() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
+    }
+
+    closeMenuDisclosure() {
+      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
+      this.disclosures.forEach((disclosure) => {
+        if (typeof disclosure.close === 'function') disclosure.close();
+      });
+    }
+
+    closeSearchModal() {
+      this.searchModal = this.searchModal || this.header.querySelector('details-modal');
+      if (this.searchModal && typeof this.searchModal.close === 'function') {
+        this.searchModal.close(false);
+      }
+    }
+  }
+
+  if (!customElements.get('sticky-header')) {
+    customElements.define('sticky-header', StickyHeader);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "GG: Figma header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Announcement and cart badge color",
+      "default": "#E61E43"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_type_desktop",
+      "label": "Desktop menu",
+      "options": [
+        { "value": "dropdown", "label": "Dropdown" },
+        { "value": "mega", "label": "Mega menu" },
+        { "value": "drawer", "label": "Drawer" }
+      ],
+      "default": "dropdown",
+      "info": "Dropdown and mega menu show on large screens. Tablet and below always use the drawer, same as the default theme."
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header_enabled",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "label": "Sticky style",
+      "options": [
+        {
+          "value": "always",
+          "label": "Standard Sticky / Fixed"
+        },
+        {
+          "value": "on-scroll-up",
+          "label": "Hide Until Scroll Up (Smart Hide)"
+        },
+        {
+          "value": "reduce-logo-size",
+          "label": "Shrink on Scroll"
+        }
+      ],
+      "default": "always",
+      "info": "Standard keeps the header fixed. Smart Hide hides on scroll down and shows on scroll up. Shrink keeps it fixed and reduces height while scrolling.",
+      "visible_if": "{{ section.settings.sticky_header_enabled }}"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "menu_color_scheme",
+      "label": "Drawer color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "url",
+      "id": "help_link",
+      "label": "Help link",
+      "info": "Shown as the question mark icon."
+    },
+    {
+      "type": "header",
+      "content": "Announcement slider"
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_autoplay",
+      "label": "Auto-rotate announcements",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "announcement_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Change announcements every",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_arrows_mobile",
+      "label": "Show previous and next arrows on mobile",
+      "default": true,
+      "info": "When off, customers can still swipe the announcement strip on a touchscreen."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Announcement item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "✓ Lifetime tile warranty"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional. Shows an arrow next to the message like the default theme announcement bar."
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Figma header",
+      "blocks": [
+        { "type": "usp", "settings": { "text": "✓ Lifetime tile warranty" } },
+        { "type": "usp", "settings": { "text": "✓ DIY installation" } },
+        { "type": "usp", "settings": { "text": "✓ Built for heavy vehicles" } },
+        { "type": "usp", "settings": { "text": "✓ Premium garage designs" } },
+        { "type": "usp", "settings": { "text": "✓ Free shipping on garage tiles" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

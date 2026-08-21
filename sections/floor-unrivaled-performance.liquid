@@ -1,0 +1,200 @@
+{%- comment -%}
+  Figma node 551:1016 — Floor page: three performance cards + CTA.
+{%- endcomment -%}
+{{ 'floor-garage-sections.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .flr-perf {
+    --floor-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};
+    --floor-perf-bg: {{ section.settings.background_color.red }},{{ section.settings.background_color.green }},{{ section.settings.background_color.blue }};
+    --floor-perf-gap: {{ section.settings.grid_gap }}px;
+  }
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section class="floor-sec flr-perf section-{{ section.id }}-padding" aria-labelledby="FloorPerfTitle-{{ section.id }}">
+  <div class="floor-sec__inner">
+    <div class="flr-perf__head">
+      {%- if section.settings.heading != blank -%}
+        <h2 id="FloorPerfTitle-{{ section.id }}" class="flr-perf__title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <div class="flr-perf__sub rte">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="flr-perf__grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'card' -%}
+            <article class="flr-perf-card" {{ block.shopify_attributes }}>
+              <div class="flr-perf-card__media">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 750
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: '(min-width: 990px) 382px, 100vw',
+                      widths: '320,550,750',
+                      alt: block.settings.title
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </div>
+              <div class="flr-perf-card__accent" aria-hidden="true"></div>
+              <div class="flr-perf-card__body">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="flr-perf-card__name">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="flr-perf-card__text">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </article>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="flr-perf__cta">
+        <a class="floor-sec__btn floor-sec__btn--solid" href="{{ section.settings.button_link | default: '#' }}">
+          {{- section.settings.button_label | escape -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Floor: Performance",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Unrivaled performance"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Grid Garage tiles were designed and tested for harsh garage environments. Whether you're looking for a garage floor solution that is strong or long-lasting, Grid Garage tiles have got you covered.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Grid Garage vs. epoxy"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#E11D48"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Grid gap",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Highly durable"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Unlike epoxy, Grid Garage tile do not fade and are resistant to heat, weather and chemicals."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floor: Performance",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Highly durable",
+            "text": "Unlike epoxy, Grid Garage tile do not fade and are resistant to heat, weather and chemicals."
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Incredibly strong",
+            "text": "Ribtrax tiles are manufactured to withstand 60,000 lbs of rollover weight."
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Lasts a lifetime",
+            "text": "No need to worry about replacing or resealing garage coatings."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

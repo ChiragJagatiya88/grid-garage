@@ -1,0 +1,87 @@
+{%- comment -%}
+  Grid Garage Figma: announcement / USP strip with checkmarks.
+{%- endcomment -%}
+{{ 'gg-usp-marquee.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-usp-marquee section-{{ section.id }}-padding"
+  style="--gg-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};"
+  aria-label="Store highlights"
+>
+  <div class="gg-usp-marquee__inner gg-page-width">
+    {%- for block in section.blocks -%}
+      <span class="gg-usp-marquee__item" {{ block.shopify_attributes }}>
+        {{- block.settings.text | escape -}}
+      </span>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: USP marquee",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Bar background",
+      "default": "#E61E43"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Selling point",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Premium garage designs"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: USP marquee",
+      "blocks": [
+        { "type": "usp", "settings": { "text": "Premium garage designs" } },
+        { "type": "usp", "settings": { "text": "Free shipping on garage tiles" } },
+        { "type": "usp", "settings": { "text": "Lifetime tile warranty" } },
+        { "type": "usp", "settings": { "text": "DIY installation" } },
+        { "type": "usp", "settings": { "text": "Built for heavy vehicles" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

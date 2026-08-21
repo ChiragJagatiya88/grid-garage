@@ -1,0 +1,291 @@
+{% render 'if-swiper' %}
+{{ 'if-customer-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign if_accent = section.settings.accent_color | default: '#DC1C1B'
+  assign if_bg = section.settings.section_bg | default: '#F7F7F7'
+-%}
+
+<div
+  id="if-reviews-{{ section.id }}"
+  class="section_{{ section.id }} if-rev{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  data-if-rev
+  style="--if-rev-accent: {{ if_accent }}; --if-rev-bg: {{ if_bg }};"
+>
+  <div class="{% if section.settings.enable_container %}if-rev__inner{% else %}if-rev__inner if-rev__inner--fluid{% endif %}">
+    <div class="if-rev__head">
+      <div class="if-rev__titles">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="if-rev__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="if-rev__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 1 -%}
+        <div class="if-rev__nav" data-if-rev-nav aria-label="Review carousel controls">
+          <button type="button" class="if-rev__nav-btn" data-if-rev-prev aria-label="Previous reviews">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <button type="button" class="if-rev__nav-btn if-rev__nav-btn--accent" data-if-rev-next aria-label="Next reviews">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="if-rev__rail swiper" data-if-rev-rail>
+      <div class="swiper-wrapper" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'review' -%}
+            {%- assign stars = block.settings.rating | default: 5 | plus: 0 -%}
+            {%- if stars < 1 -%}{%- assign stars = 1 -%}{%- endif -%}
+            {%- if stars > 5 -%}{%- assign stars = 5 -%}{%- endif -%}
+            <div class="swiper-slide" role="listitem" {{ block.shopify_attributes }}>
+              <article class="if-rev__card">
+                <span class="if-rev__quote" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="45" height="35" viewBox="0 0 45 35" fill="none">
+                  <path d="M12.6699 16.9427C16.8932 18.2803 19.0049 21.327 19.0049 26.0828C19.0049 28.6093 18.1311 30.7643 16.3835 32.5478C14.6359 34.1826 12.3786 35 9.61165 35C6.69903 35 4.36893 34.034 2.62136 32.1019C0.873786 30.1699 0 27.569 0 24.2994C0 16.7197 4.80582 8.61996 14.4175 0L19.8786 3.78981C16.3835 9.28875 13.9806 13.673 12.6699 16.9427ZM37.7913 16.9427C42.0146 18.2803 44.1262 21.327 44.1262 26.0828C44.1262 28.6093 43.2524 30.7643 41.5049 32.5478C39.7573 34.1826 37.5 35 34.733 35C31.8204 35 29.4903 34.034 27.7427 32.1019C25.9951 30.1699 25.1214 27.569 25.1214 24.2994C25.1214 16.7197 29.9272 8.61996 39.5388 0L45 3.78981C41.5049 9.28875 39.1019 13.673 37.7913 16.9427Z" fill="#0E100F" fill-opacity="0.1"/>
+                  </svg>
+                </span>
+                {%- if block.settings.title != blank -%}
+                  <h3 class="if-rev__card-title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <p class="if-rev__card-body">{{ block.settings.body | escape | newline_to_br }}</p>
+                {%- endif -%}
+                <div class="if-rev__card-foot">
+                  <div class="if-rev__author">
+                    {%- if block.settings.author != blank -%}
+                      <span class="if-rev__author-name">{{ block.settings.author | escape }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.verified -%}
+                      <span class="if-rev__verified" title="Verified buyer" aria-label="Verified buyer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.2124 9.52503L7.1249 8.45628C6.9874 8.31878 6.81565 8.25003 6.60965 8.25003C6.40365 8.25003 6.2254 8.32503 6.0749 8.47503C5.9374 8.61253 5.86865 8.78753 5.86865 9.00003C5.86865 9.21253 5.9374 9.38753 6.0749 9.52503L7.6874 11.1375C7.8374 11.2875 8.0124 11.3625 8.2124 11.3625C8.4124 11.3625 8.5874 11.2875 8.7374 11.1375L11.9249 7.95003C12.0749 7.80003 12.1467 7.62503 12.1402 7.42503C12.1337 7.22503 12.0619 7.05003 11.9249 6.90003C11.7749 6.75003 11.5969 6.67203 11.3909 6.66603C11.1849 6.66003 11.0067 6.73178 10.8562 6.88128L8.2124 9.52503ZM6.1124 16.3125L5.0249 14.475L2.9624 14.025C2.7749 13.9875 2.6249 13.8908 2.5124 13.7348C2.3999 13.5788 2.35615 13.4068 2.38115 13.2188L2.5874 11.1L1.18115 9.48753C1.05615 9.35003 0.993652 9.18753 0.993652 9.00003C0.993652 8.81253 1.05615 8.65003 1.18115 8.51253L2.5874 6.90003L2.38115 4.78128C2.35615 4.59378 2.3999 4.42178 2.5124 4.26528C2.6249 4.10878 2.7749 4.01203 2.9624 3.97503L5.0249 3.52503L6.1124 1.68753C6.2124 1.52503 6.3499 1.41553 6.5249 1.35903C6.6999 1.30253 6.8749 1.31203 7.0499 1.38753L8.9999 2.21253L10.9499 1.38753C11.1249 1.31253 11.2999 1.30303 11.4749 1.35903C11.6499 1.41503 11.7874 1.52453 11.8874 1.68753L12.9749 3.52503L15.0374 3.97503C15.2249 4.01253 15.3749 4.10953 15.4874 4.26603C15.5999 4.42253 15.6437 4.59428 15.6187 4.78128L15.4124 6.90003L16.8187 8.51253C16.9437 8.65003 17.0062 8.81253 17.0062 9.00003C17.0062 9.18753 16.9437 9.35003 16.8187 9.48753L15.4124 11.1L15.6187 13.2188C15.6437 13.4063 15.5999 13.5783 15.4874 13.7348C15.3749 13.8913 15.2249 13.988 15.0374 14.025L12.9749 14.475L11.8874 16.3125C11.7874 16.475 11.6499 16.5845 11.4749 16.641C11.2999 16.6975 11.1249 16.688 10.9499 16.6125L8.9999 15.7875L7.0499 16.6125C6.8749 16.6875 6.6999 16.697 6.5249 16.641C6.3499 16.585 6.2124 16.4755 6.1124 16.3125Z" fill="#4DB768"/>
+                        </svg>
+                      </span>
+                    {%- endif -%}
+                  </div>
+                  <div class="if-rev__stars" aria-label="{{ stars }} out of 5 stars">
+                    {% comment %} {%- for i in (1..5) -%}
+                      <span class="if-rev__star{% if i <= stars %} is-on{% endif %}" aria-hidden="true">★</span>
+                    {%- endfor -%} {% endcomment %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="16" viewBox="0 0 80 16" fill="none">
+                    <path d="M7.56442 0.772788C7.75568 0.433466 8.24432 0.433465 8.43558 0.772787L10.4269 4.30569C10.4982 4.43228 10.6211 4.52157 10.7636 4.55031L14.7389 5.35241C15.1207 5.42945 15.2717 5.89417 15.0081 6.18092L12.2634 9.16648C12.1651 9.27346 12.1182 9.41793 12.1348 9.56228L12.6004 13.5909C12.6452 13.9778 12.2498 14.2651 11.8957 14.103L8.20808 12.4152C8.07595 12.3548 7.92405 12.3548 7.79192 12.4152L4.10434 14.103C3.75016 14.2651 3.35484 13.9778 3.39956 13.5909L3.86516 9.56228C3.88185 9.41793 3.83491 9.27346 3.73656 9.16648L0.991913 6.18093C0.728299 5.89417 0.879296 5.42945 1.26111 5.35241L5.23645 4.55031C5.37889 4.52157 5.50178 4.43228 5.57313 4.30569L7.56442 0.772788Z" fill="#F79E1B"/>
+                    <path d="M23.5644 0.772788C23.7557 0.433466 24.2443 0.433465 24.4356 0.772787L26.4269 4.30569C26.4982 4.43228 26.6211 4.52157 26.7636 4.55031L30.7389 5.35241C31.1207 5.42945 31.2717 5.89417 31.0081 6.18092L28.2634 9.16648C28.1651 9.27346 28.1182 9.41793 28.1348 9.56228L28.6004 13.5909C28.6452 13.9778 28.2498 14.2651 27.8957 14.103L24.2081 12.4152C24.076 12.3548 23.924 12.3548 23.7919 12.4152L20.1043 14.103C19.7502 14.2651 19.3548 13.9778 19.3996 13.5909L19.8652 9.56228C19.8818 9.41793 19.8349 9.27346 19.7366 9.16648L16.9919 6.18093C16.7283 5.89417 16.8793 5.42945 17.2611 5.35241L21.2364 4.55031C21.3789 4.52157 21.5018 4.43228 21.5731 4.30569L23.5644 0.772788Z" fill="#F79E1B"/>
+                    <path d="M39.5644 0.772788C39.7557 0.433466 40.2443 0.433465 40.4356 0.772787L42.4269 4.30569C42.4982 4.43228 42.6211 4.52157 42.7636 4.55031L46.7389 5.35241C47.1207 5.42945 47.2717 5.89417 47.0081 6.18092L44.2634 9.16648C44.1651 9.27346 44.1182 9.41793 44.1348 9.56228L44.6004 13.5909C44.6452 13.9778 44.2498 14.2651 43.8957 14.103L40.2081 12.4152C40.076 12.3548 39.924 12.3548 39.7919 12.4152L36.1043 14.103C35.7502 14.2651 35.3548 13.9778 35.3996 13.5909L35.8652 9.56228C35.8818 9.41793 35.8349 9.27346 35.7366 9.16648L32.9919 6.18093C32.7283 5.89417 32.8793 5.42945 33.2611 5.35241L37.2364 4.55031C37.3789 4.52157 37.5018 4.43228 37.5731 4.30569L39.5644 0.772788Z" fill="#F79E1B"/>
+                    <path d="M55.5644 0.772788C55.7557 0.433466 56.2443 0.433465 56.4356 0.772787L58.4269 4.30569C58.4982 4.43228 58.6211 4.52157 58.7636 4.55031L62.7389 5.35241C63.1207 5.42945 63.2717 5.89417 63.0081 6.18092L60.2634 9.16648C60.1651 9.27346 60.1182 9.41793 60.1348 9.56228L60.6004 13.5909C60.6452 13.9778 60.2498 14.2651 59.8957 14.103L56.2081 12.4152C56.076 12.3548 55.924 12.3548 55.7919 12.4152L52.1043 14.103C51.7502 14.2651 51.3548 13.9778 51.3996 13.5909L51.8652 9.56228C51.8818 9.41793 51.8349 9.27346 51.7366 9.16648L48.9919 6.18093C48.7283 5.89417 48.8793 5.42945 49.2611 5.35241L53.2364 4.55031C53.3789 4.52157 53.5018 4.43228 53.5731 4.30569L55.5644 0.772788Z" fill="#F79E1B"/>
+                    <path d="M71.5644 0.772788C71.7557 0.433466 72.2443 0.433465 72.4356 0.772787L74.4269 4.30569C74.4982 4.43228 74.6211 4.52157 74.7636 4.55031L78.7389 5.35241C79.1207 5.42945 79.2717 5.89417 79.0081 6.18092L76.2634 9.16648C76.1651 9.27346 76.1182 9.41793 76.1348 9.56228L76.6004 13.5909C76.6452 13.9778 76.2498 14.2651 75.8957 14.103L72.2081 12.4152C72.076 12.3548 71.924 12.3548 71.7919 12.4152L68.1043 14.103C67.7502 14.2651 67.3548 13.9778 67.3996 13.5909L67.8652 9.56228C67.8818 9.41793 67.8349 9.27346 67.7366 9.16648L64.9919 6.18093C64.7283 5.89417 64.8793 5.42945 65.2611 5.35241L69.2364 4.55031C69.3789 4.52157 69.5018 4.43228 69.5731 4.30569L71.5644 0.772788Z" fill="#F79E1B"/>
+                    </svg>
+                  </div>
+                </div>
+              </article>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'if-customer-reviews.js' | asset_url }}" defer></script>
+
+{% style %}
+  .section_{{ section.id }} {
+    {% if section.settings.section_bg != blank %}background: {{ section.settings.section_bg }};{% endif %}
+    {% if section.settings.section_gradient_bg != blank %}background: {{ section.settings.section_gradient_bg }};{% endif %}
+    {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_desk }};{% endif %}
+  }
+  @media screen and (max-width: 767px) {
+    .section_{{ section.id }} {
+      {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_mob }};{% endif %}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "IF Customer Reviews",
+  "tag": "section",
+  "class": "if_customer_reviews",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable custom class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom class",
+      "visible_if": "{{ section.settings.enable_custom_class == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_container",
+      "label": "Enable container",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by garage owners nationwide"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section background",
+      "default": "#F7F7F7"
+    },
+    {
+      "type": "color_background",
+      "id": "section_gradient_bg",
+      "label": "Section gradient background"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (nav active)",
+      "default": "#DC1C1B"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding",
+      "label": "Enable custom padding",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Padding desktop",
+      "default": "48px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Padding mobile",
+      "default": "32px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Answered all my questions"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Review text",
+          "default": "I called with questions and the team walked me through everything. Installation was straightforward and the floor looks amazing."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author name",
+          "default": "Jason Peters"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Show verified badge",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "IF Customer Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "title": "Answered all my questions",
+            "body": "I called with questions and the team walked me through everything. Installation was straightforward and the floor looks amazing.",
+            "author": "Jason Peters",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "title": "Looks factory fresh",
+            "body": "Our garage went from cracked concrete to a showroom look in one weekend. Guests always ask where we got the tiles.",
+            "author": "Maria Chen",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "title": "Worth every dollar",
+            "body": "Heavy vehicles, oil drips, and daily use — still looks sharp. Easy to clean and the colors matched exactly what we configured.",
+            "author": "Derek Walsh",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "title": "DIY friendly kit",
+            "body": "Edges and corners were pre-counted. We finished faster than expected and didn't need to order anything extra.",
+            "author": "Sam Rivera",
+            "verified": true,
+            "rating": 5
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

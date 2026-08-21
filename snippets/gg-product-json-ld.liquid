@@ -1,0 +1,134 @@
+{%- comment -%}
+  Product JSON-LD Offer for Google Merchant Center.
+  Prefers an explicit ?variant= selection when it is a real kit offer.
+  Never advertises the Custom (Per Sq Ft) unit variant as the primary Offer price.
+  Outputs a single Product + Offer with total kit purchase price.
+{%- endcomment -%}
+{%- liquid
+  assign offer_variant = product.selected_or_first_available_variant
+  assign has_kit_variant = false
+  assign force_kit_offer = false
+
+  for v in product.variants
+    assign vt = v.title | downcase
+    if vt contains '2-car' or vt contains '2 car' or vt contains '2car' or vt contains '3-car' or vt contains '3 car' or vt contains '3car'
+      assign has_kit_variant = true
+      break
+    endif
+  endfor
+
+  if has_kit_variant
+    assign ov_title = offer_variant.title | downcase
+    assign is_unit_offer = false
+    if ov_title contains 'per sq' or ov_title contains 'per-sq' or ov_title contains '/sq' or ov_title contains 'sqft' or ov_title contains 'sq ft'
+      assign is_unit_offer = true
+    endif
+    for opt in offer_variant.options
+      assign ol = opt | downcase
+      if ol contains 'per sq' or ol contains 'per-sq' or ol contains 'custom (per'
+        assign is_unit_offer = true
+      endif
+    endfor
+
+    unless product.selected_variant
+      assign force_kit_offer = true
+    endunless
+    if is_unit_offer
+      assign force_kit_offer = true
+    endif
+  endif
+
+  if force_kit_offer
+    assign kit_variant = nil
+
+    for v in product.variants
+      assign vt = v.title | downcase
+      assign v_is_unit = false
+      if vt contains 'per sq' or vt contains 'per-sq' or vt contains '/sq' or vt contains 'sqft'
+        assign v_is_unit = true
+      endif
+      unless v_is_unit
+        if vt contains '2-car' or vt contains '2 car' or vt contains '2car'
+          assign kit_variant = v
+          if v.available
+            break
+          endif
+        endif
+      endunless
+    endfor
+
+    if kit_variant == nil
+      for v in product.variants
+        assign vt = v.title | downcase
+        assign v_is_unit = false
+        if vt contains 'per sq' or vt contains 'per-sq' or vt contains '/sq' or vt contains 'sqft'
+          assign v_is_unit = true
+        endif
+        unless v_is_unit
+          if vt contains '3-car' or vt contains '3 car' or vt contains '3car'
+            assign kit_variant = v
+            if v.available
+              break
+            endif
+          endif
+        endunless
+      endfor
+    endif
+
+    if kit_variant == nil
+      assign max_price = 0
+      for v in product.variants
+        assign vt = v.title | downcase
+        assign v_is_unit = false
+        if vt contains 'per sq' or vt contains 'per-sq' or vt contains '/sq' or vt contains 'sqft'
+          assign v_is_unit = true
+        endif
+        unless v_is_unit
+          if v.price > max_price
+            assign max_price = v.price
+            assign kit_variant = v
+          endif
+        endunless
+      endfor
+    endif
+
+    if kit_variant != nil
+      assign offer_variant = kit_variant
+    endif
+  endif
+
+  if offer_variant.featured_media
+    assign seo_media = offer_variant.featured_media
+  else
+    assign seo_media = product.featured_media
+  endif
+
+  assign offer_url = request.origin | append: product.url | append: '?variant=' | append: offer_variant.id
+  assign offer_price = offer_variant.price | divided_by: 100.0
+-%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "description": {{ product.description | strip_html | strip_newlines | truncate: 5000 | json }},
+    "url": {{ offer_url | json }},
+    {%- if seo_media -%}
+    "image": [{{ seo_media | image_url: width: 1200 | prepend: "https:" | json }}],
+    {%- endif -%}
+    "sku": {{ offer_variant.sku | json }},
+    "mpn": {{ offer_variant.sku | json }},
+    "brand": {
+      "@type": "Brand",
+      "name": {{ product.vendor | default: shop.name | json }}
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": {{ offer_url | json }},
+      "priceCurrency": {{ cart.currency.iso_code | default: shop.currency | json }},
+      "price": {{ offer_price }},
+      "availability": "https://schema.org/{% if offer_variant.available %}InStock{% else %}OutOfStock{% endif %}",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+</script>

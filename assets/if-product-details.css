@@ -1,0 +1,280 @@
+/* IF Product Details — white pills + soft inner-edge blush (matches SS)
+───────────────────────────────────────── */
+
+.if-pd {
+  --if-pd-accent: #dc1c1b;
+  --if-pd-bg: #ffffff;
+  --if-pd-card-bg: #FCE9E9;
+  --if-pd-card-glow: #dc1c1b;
+  --if-pd-ink: #1a1a1a;
+  --if-pd-muted: #6e6e6e;
+  --if-pd-leader: #d45a5a;
+  font-family: "Be Vietnam Pro", sans-serif;
+  background: var(--if-pd-bg);
+  color: var(--if-pd-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.if-pd *,
+.if-pd *::before,
+.if-pd *::after {
+  box-sizing: border-box;
+}
+
+.if-pd__inner {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-inline: var(--gg-page-pad);
+}
+
+.if-pd__inner--fluid {
+  max-width: none;
+}
+
+.if-pd__heading {
+  margin: 0 0 28px;
+  text-align: center;
+  font-size: clamp(24px, 2vw + 16px, 34px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--if-pd-ink);
+}
+
+/* ── Pill: white base + soft blush on tile-facing edge ── */
+
+.if-pd__card {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+  border-radius: 16px;
+  border: 0;
+  .if-pd__card-content {
+    padding: 18px 20px;
+    background: var(--if-pd-card-bg, #ffffff);
+    border-radius: inherit;
+  }
+}
+
+/* Soft red glow clipped inside the pill — never overlaps outside */
+.if-pd__card::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 6px;
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(219.84deg, #DF2D2C -28.49%, rgba(223, 45, 44, 0) 49.04%);
+  width: 100%;
+  height: 100%;
+}
+
+.if-pd__card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.if-pd__card-title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--if-pd-ink);
+}
+
+.if-pd__card-value {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--if-pd-muted);
+}
+
+.if-pd__leader {
+  display: none;
+  color: var(--if-pd-leader);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.if-pd__media {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 22px;
+}
+
+.if-pd__media img,
+.if-pd__media .placeholder-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── Mobile ────────────────────────────── */
+
+.if-pd__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.if-pd__media {
+  grid-column: 1 / -1;
+  order: -1;
+}
+
+.if-pd__card--bottom {
+  grid-column: 1 / -1;
+}
+
+/* ── Desktop ───────────────────────────── */
+
+@media screen and (min-width: 990px) {
+  .if-pd__heading {
+    margin-bottom: 40px;
+  }
+
+  .if-pd__layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(200px, 240px) minmax(320px, 460px) minmax(200px, 240px);
+    grid-template-rows: auto auto auto;
+    column-gap: 56px;
+    row-gap: 28px;
+    align-items: center;
+    justify-content: center;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding-bottom: 8px;
+  }
+
+  .if-pd__media {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    margin: 0;
+    max-width: none;
+    width: 100%;
+    z-index: 1;
+  }
+
+  .if-pd__leader {
+    display: block;
+    position: absolute;
+    width: 72px;
+    height: 48px;
+    z-index: 3;
+  }
+
+  /* Left pills — blush on right (toward tile), text right */
+  .if-pd__card--tl,
+  .if-pd__card--ml {
+    text-align: right;
+  }
+
+  .if-pd__card--tl {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: stretch;
+    align-self: end;
+  }
+
+  .if-pd__card--ml {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: stretch;
+    align-self: start;
+  }
+
+  .if-pd__card--tl .if-pd__leader,
+  .if-pd__card--ml .if-pd__leader {
+    left: calc(100% + 2px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Right pills — blush on left (toward tile), text left */
+  .if-pd__card--tr,
+  .if-pd__card--mr {
+    text-align: left;
+  }
+
+  .if-pd__card--tr::before,
+  .if-pd__card--mr::before {
+    background: linear-gradient(133deg, #df2d2c -28.49%, #df2d2c00 49.04%);
+    right: 6px;
+    left: auto;
+  }
+
+  .if-pd__card--tr {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: stretch;
+    align-self: end;
+  }
+
+  .if-pd__card--mr {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: stretch;
+    align-self: start;
+  }
+
+  .if-pd__card--tr .if-pd__leader,
+  .if-pd__card--mr .if-pd__leader {
+    right: calc(100% + 2px);
+    left: auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Bottom — blush on top (toward tile), text center */
+  .if-pd__card--bottom {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: center;
+    width: min(100%, 248px);
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  .if-pd__card--bottom::before {
+    background: linear-gradient(167.69deg, rgba(223, 45, 44, 0.9) -57.56%, rgba(223, 45, 44, 0) 75.25%);
+    right: 6px;
+    width: calc(100% + 12px);
+    left: -6px;
+  }
+
+  .if-pd__card--bottom .if-pd__leader {
+    left: 50%;
+    bottom: calc(100% + 2px);
+    top: auto;
+    width: 24px;
+    height: 44px;
+    transform: translateX(-50%);
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .if-pd__heading {
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  .if-pd__card-title {
+    font-size: 15px;
+  }
+
+  .if-pd__card-value {
+    font-size: 13px;
+  }
+
+  .if-pd__card::before {
+    top: -4px;
+    left: auto;
+    right: 4px;
+    background: linear-gradient(133deg, #df2d2c -28.49%, #df2d2c00 49.04%);
+  }
+}

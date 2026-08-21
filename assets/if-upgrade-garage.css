@@ -1,0 +1,151 @@
+/* IF Upgrade Garage Floor
+───────────────────────────────────────── */
+
+.if-upg {
+  --if-upg-accent: #dc1c1b;
+  --if-upg-ink: #111111;
+  --if-upg-muted: #6b6b6b;
+  --if-upg-bg: #f7f7f7;
+  --if-upg-cols: 4;
+  font-family: "Be Vietnam Pro", sans-serif;
+  color: var(--if-upg-ink);
+  background: var(--if-upg-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.if-upg *,
+.if-upg *::before,
+.if-upg *::after {
+  box-sizing: border-box;
+}
+
+.if-upg__inner {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-inline: var(--gg-page-pad);
+}
+
+.if-upg__inner--fluid {
+  max-width: none;
+}
+
+.if-upg__heading {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: clamp(24px, 2vw + 16px, 34px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--if-upg-ink);
+}
+
+.if-upg__sub {
+  margin: 0 auto 28px;
+  max-width: 640px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--if-upg-muted);
+}
+
+.if-upg__heading + .if-upg__grid {
+  margin-top: 28px;
+}
+
+.if-upg__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--if-upg-cols), minmax(0, 1fr));
+  gap: 22px 20px;
+}
+
+.if-upg__card {
+  min-width: 0;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 4px 4px 20px;
+}
+
+.if-upg__media {
+  overflow: hidden;
+  border-radius: 14px;
+  aspect-ratio: 4 / 3;
+  background: #eaeaea;
+  margin-bottom: 14px;
+}
+
+.if-upg__media img,
+.if-upg__media .placeholder-svg,
+.if-upg__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.if-upg__card-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--if-upg-ink);
+  padding-inline: 10px;
+}
+
+.if-upg__card-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--if-upg-muted);
+  font-weight: 400;
+  padding-inline: 10px;
+}
+
+.if-upg__card-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--if-upg-accent);
+  text-decoration: none;
+}
+
+.if-upg__card-link:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 989px) {
+  .if-upg__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 16px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .if-upg__heading {
+    font-size: 22px;
+    text-align: left;
+  }
+
+  .if-upg__sub {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .if-upg__heading + .if-upg__grid {
+    margin-top: 20px;
+  }
+
+  .if-upg__grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .if-upg__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .if-upg__card-title {
+    font-size: 17px;
+  }
+}

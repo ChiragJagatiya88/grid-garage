@@ -1,0 +1,58 @@
+{%- comment -%}
+  Outputs a JSON array of color options for a product (swatch image / rgb).
+  Accepts: tile_product
+{%- endcomment -%}
+[
+{%- liquid
+  assign gg_color_opt = nil
+  for opt in tile_product.options_with_values
+    assign gg_has_sw = opt.values | map: 'swatch' | compact | size
+    if gg_has_sw > 0 and gg_color_opt == nil
+      assign gg_color_opt = opt
+    endif
+  endfor
+  if gg_color_opt == nil
+    for opt in tile_product.options_with_values
+      assign gg_oname = opt.name | downcase
+      if gg_oname == 'color' or gg_oname == 'colour' or gg_oname == 'tile color' or gg_oname == 'tile colour'
+        assign gg_color_opt = opt
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- if gg_color_opt -%}
+  {%- assign gg_opt_pos = gg_color_opt.position -%}
+  {%- for val in gg_color_opt.values -%}
+    {%- assign gg_val_str = val.name | default: val | strip -%}
+    {%- assign gg_mv = nil -%}
+    {%- for v in tile_product.variants -%}
+      {%- if gg_mv == nil -%}
+        {%- assign gg_v_opt = '' -%}
+        {%- if gg_opt_pos == 1 -%}{%- assign gg_v_opt = v.option1 -%}
+        {%- elsif gg_opt_pos == 2 -%}{%- assign gg_v_opt = v.option2 -%}
+        {%- elsif gg_opt_pos == 3 -%}{%- assign gg_v_opt = v.option3 -%}
+        {%- endif -%}
+        {%- if gg_v_opt == gg_val_str -%}{%- assign gg_mv = v -%}{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign gg_sw_img = blank -%}
+    {%- if val.swatch.image -%}
+      {%- assign gg_sw_img = val.swatch.image | image_url: width: 200 -%}
+    {%- elsif gg_mv.featured_media -%}
+      {%- assign gg_sw_img = gg_mv.featured_media | image_url: width: 200 -%}
+    {%- elsif gg_mv.featured_image -%}
+      {%- assign gg_sw_img = gg_mv.featured_image | image_url: width: 200 -%}
+    {%- endif -%}
+    {%- assign gg_sw_rgb = '' -%}
+    {%- if val.swatch.color -%}
+      {%- assign gg_sw_rgb = val.swatch.color.rgb -%}
+    {%- endif -%}
+    {
+      "name": {{ gg_val_str | json }},
+      "image": {{ gg_sw_img | json }},
+      "rgb": {{ gg_sw_rgb | json }}
+    }{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+{%- endif -%}
+]

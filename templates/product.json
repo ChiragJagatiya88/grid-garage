@@ -1,0 +1,776 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "text_8wrnxD": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "uppercase"
+          }
+        },
+        "short_description_z6wx8p": {
+          "type": "short_description",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "judge_me_reviews_preview_badge_wYa6HB": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "short_description_w3wmH7": {
+          "type": "short_description",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "text_ymd3VU": {
+          "type": "text",
+          "settings": {
+            "text": "<strong>Choose Your Style. One Price. No Surprises.</strong>",
+            "text_style": "body"
+          }
+        },
+        "custom_liquid_bxRWCK": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"garage-kit-dynamic-info\">\n  <div class=\"garage-kit-info-content garage-kit-info-2car\">\n    <h4>2-Car Garage Kit</h4>\n    <ul>\n      <li>Fits most garages between 400–430 sq. ft.</li>\n      <li>Includes extra tiles for cuts and installation.</li>\n      <li>Free nationwide shipping. 3–5 days delivery.</li>\n    </ul>\n  </div>\n\n  <div class=\"garage-kit-info-content garage-kit-info-3car\" style=\"display: none;\">\n    <h4>3-Car Garage Kit</h4>\n    <ul>\n      <li>Fits most garages between 600–630 sq. ft.</li>\n      <li>Includes extra tiles for cuts and installation.</li>\n      <li>Free nationwide shipping. 3–5 days delivery.</li>\n    </ul>\n  </div>\n</div>\n\n<script>\ndocument.addEventListener('DOMContentLoaded', function () {\n  function updateGarageKitInfo() {\n    var selectedGarage = '';\n\n    var checkedRadio = document.querySelector('input[type=\"radio\"][name*=\"Garage\"]:checked');\n    if (checkedRadio) {\n      selectedGarage = checkedRadio.value;\n    }\n\n    var selectedDropdown = document.querySelector('select[name*=\"Garage\"]');\n    if (!selectedGarage && selectedDropdown) {\n      selectedGarage = selectedDropdown.value;\n    }\n\n    var twoCarInfo = document.querySelector('.garage-kit-info-2car');\n    var threeCarInfo = document.querySelector('.garage-kit-info-3car');\n\n    if (!twoCarInfo || !threeCarInfo) return;\n\n    if (selectedGarage.includes('3-Car')) {\n      twoCarInfo.style.display = 'none';\n      threeCarInfo.style.display = 'block';\n    } else {\n      twoCarInfo.style.display = 'block';\n      threeCarInfo.style.display = 'none';\n    }\n  }\n\n  updateGarageKitInfo();\n\n  document.addEventListener('change', function (event) {\n    if (\n      event.target.matches('input[type=\"radio\"]') ||\n      event.target.matches('select')\n    ) {\n      updateGarageKitInfo();\n    }\n  });\n\n  document.addEventListener('click', function () {\n    setTimeout(updateGarageKitInfo, 100);\n  });\n});\n</script>\n\n<style>\n.garage-kit-dynamic-info {\n  margin: 14px 0 18px;\n  padding: 14px 16px;\n  border: 1px solid #e1e1e1;\n  background: #fafafa;\n}\n\n.garage-kit-info-content h4 {\n  margin: 0 0 8px;\n  font-size: 16px;\n  font-weight: 700;\n  color: #111;\n}\n\n.garage-kit-info-content ul {\n  margin: 0;\n  padding-left: 18px;\n}\n\n.garage-kit-info-content li {\n  font-size: 14px;\n  line-height: 1.45;\n  margin-bottom: 6px;\n  color: #222;\n}\n</style>"
+          }
+        },
+        "custom_liquid_ePdUUW": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"garage-fit-note\">\n  <div class=\"garage-fit-note-icon\">✓</div>\n  <div class=\"garage-fit-note-content\">\n    \n    <p>If your garage falls just outside these ranges, don’t worry we’ll make sure you have the right number of tiles for a perfect fit at no additional charge.</p>\n  </div>\n</div>\n\n<style>\n.garage-fit-note {\n  display: flex;\n  align-items: flex-start;\n  gap: 12px;\n  margin: 14px 0 18px;\n  padding: 14px 16px;\n  border: 1px solid #e6e6e6;\n  border-left: 4px solid #111;\n  background: #f8f8f8;\n  border-radius: 6px;\n}\n\n.garage-fit-note-icon {\n  width: 24px;\n  height: 24px;\n  min-width: 24px;\n  border-radius: 50%;\n  background: #111;\n  color: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 13px;\n  font-weight: 700;\n  margin-top: 2px;\n}\n\n.garage-fit-note-content strong {\n  display: block;\n  margin-bottom: 4px;\n  font-size: 15px;\n  font-weight: 700;\n  color: #111;\n}\n\n.garage-fit-note-content p {\n  margin: 0;\n  font-size: 14px;\n  line-height: 1.45;\n  color: #333;\n}\n</style>"
+          }
+        },
+        "text_7nnhLc": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "If your garage falls just outside these ranges, don’t worry we’ll make sure you have the right number of tiles for a perfect fit at no additional charge.",
+            "text_style": "body"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "complementary_WDkJV6": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Product Add-ons",
+            "make_collapsible_row": false,
+            "icon": "price_tag",
+            "product_list_limit": 2,
+            "products_per_page": 2,
+            "pagination_style": "counter",
+            "image_ratio": "square",
+            "enable_quick_add": false,
+            "enable_checkbox_add": true
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false,
+            "free_image": "shopify://shop_images/Icon_20.svg",
+            "free_text": "Each Grid Garage design is pre-configured to fit your selected garage size and includes all required tiles and edge pieces. No measuring. No guesswork. No hidden costs.",
+            "buy_sample": "Buy Samples",
+            "buy_sample_url": "shopify://collections/sample-packs"
+          }
+        },
+        "include_cBnzPr": {
+          "type": "include",
+          "settings": {
+            "include_title": "What's included"
+          }
+        },
+        "collapsible_tab_eRwPhG": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Product Description",
+            "icon": "none",
+            "content": "{{ product.description }}",
+            "page": ""
+          }
+        },
+        "collapsible_tab_xj3mUw": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Product Details",
+            "icon": "none",
+            "content": "{{ product.metafields.custom.product_details | metafield_tag }}",
+            "page": ""
+          }
+        },
+        "upsell_com_ex_reconvert_product_recommendations_cAXRzE": {
+          "type": "shopify://apps/upsell-com-ex-reconvert/blocks/product-recommendations/72c64c30-2f7c-4a71-ae4c-efd1d5d1d2e2",
+          "settings": {}
+        },
+        "share_EVryit": {
+          "type": "share",
+          "disabled": true,
+          "settings": {
+            "share_layout": "icons",
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_8wrnxD",
+        "short_description_z6wx8p",
+        "title",
+        "judge_me_reviews_preview_badge_wYa6HB",
+        "price",
+        "short_description_w3wmH7",
+        "variant_picker",
+        "text_ymd3VU",
+        "custom_liquid_bxRWCK",
+        "custom_liquid_ePdUUW",
+        "text_7nnhLc",
+        "quantity_selector",
+        "complementary_WDkJV6",
+        "buy_buttons",
+        "include_cBnzPr",
+        "collapsible_tab_eRwPhG",
+        "collapsible_tab_xj3mUw",
+        "upsell_com_ex_reconvert_product_recommendations_cAXRzE",
+        "share_EVryit"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": false,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "hover",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 100
+      }
+    },
+    "custom_liquid_ypqA9d": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "{% if product.metafields.custom.custom_content != blank %}\n<div class=\"page-width pdp_custom_content\">{{ product.metafields.custom.custom_content | metafield_tag }}</div>\n{% endif %}",
+        "color_scheme": "scheme-4",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "disabled": true,
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h1",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "product_card_style": "grid_garage",
+        "gg_title_position": "below_image",
+        "gg_title_size": "medium",
+        "gg_show_title": true,
+        "gg_show_swatches": true,
+        "gg_swatch_shape": "round",
+        "gg_show_unit_price": false,
+        "gg_text_align": "center",
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
+    },
+    "recently_viewed_products": {
+      "type": "recently-viewed-products",
+      "disabled": true,
+      "settings": {
+        "heading": "You also Viewed",
+        "heading_size": "h1",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-4",
+        "padding_top": 72,
+        "padding_bottom": 100
+      }
+    },
+    "gg_features_dark_VEWyRk": {
+      "type": "gg-features-dark",
+      "blocks": {
+        "feature_YKcDeb": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/Dynasty-Epoxy-Floor-Type-Slider-garage-ky-2.png",
+            "title": "No More Cracked Concrete",
+            "description": "Cover worn, stained, or damaged floors instantly."
+          }
+        },
+        "feature_HLH7fB": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/68c00668e3f5fefe9157faa0_imgi_2_How-Are-Epoxy-and-Polyaspartic-Floors-Installed.jpg",
+            "title": "Skip Epoxy Hassles",
+            "description": "No prep, no drying time, no peeling or chipping."
+          }
+        },
+        "feature_PHdrcB": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/adfb5e8dc6827d702cf2c64473153eb2c854248a.jpg",
+            "title": "No Oil Stains",
+            "description": "Resistant to spills and easy to clean."
+          }
+        },
+        "feature_i4AmpE": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/5eb6131365d2e868fcd70b34ee7790842437b048.jpg",
+            "title": "Built for More Than Garages",
+            "description": "Perfect for man caves, workshops, patios, and more."
+          }
+        }
+      },
+      "block_order": [
+        "feature_YKcDeb",
+        "feature_HLH7fB",
+        "feature_PHdrcB",
+        "feature_i4AmpE"
+      ],
+      "name": "GG: Dark Features",
+      "settings": {
+        "heading": "Upgrade Your Garage Floor",
+        "padding_top": 96,
+        "padding_bottom": 108
+      }
+    },
+    "gg_garage_size_select_fxXTgb": {
+      "type": "gg-garage-size-select",
+      "blocks": {
+        "size_card_PbkfhK": {
+          "type": "size_card",
+          "settings": {
+            "title": "2-Car Garage Kit",
+            "description": "Fits standard 2-car garage (approx. 400 sq ft)",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "size_card_ck9qnB": {
+          "type": "size_card",
+          "settings": {
+            "title": "3-Car Garage Kit",
+            "description": "Fits standard 3-car garage (approx. 600 sq ft)",
+            "link": "",
+            "open_new_tab": false
+          }
+        }
+      },
+      "block_order": [
+        "size_card_PbkfhK",
+        "size_card_ck9qnB"
+      ],
+      "disabled": true,
+      "name": "GG: Garage size select",
+      "settings": {
+        "heading": "Select Your Garage Size",
+        "background_color": "#f4f4f4",
+        "card_background_color": "#ffffff",
+        "heading_color": "#121212",
+        "title_color": "#121212",
+        "description_color": "#666666",
+        "border_color": "#e5e5e5",
+        "accent_color": "#e61e43",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "gg_benefits_bar_Py3azn": {
+      "type": "gg-benefits-bar",
+      "blocks": {
+        "benefit_7Qehch": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shopify://shop_images/Icon_17.svg",
+            "title": "One Click",
+            "description": "No measuring or calculators needed"
+          }
+        },
+        "benefit_gjN7iR": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shopify://shop_images/Icon_18.svg",
+            "title": "One Price",
+            "description": "Shipping and essentials included"
+          }
+        },
+        "benefit_jnJDjV": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shopify://shop_images/Icon_19.svg",
+            "title": "No Surprises",
+            "description": "Everything arrives ready to install"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_7Qehch",
+        "benefit_gjN7iR",
+        "benefit_jnJDjV"
+      ],
+      "name": "GG: Benefits bar",
+      "settings": {
+        "show_top_border": false,
+        "show_bottom_border": false,
+        "border_color": "#222222",
+        "max_width": 1200,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "floor_before_after_slider_C9pA6U": {
+      "type": "floor-before-after-slider",
+      "name": "Floor: Before after slider",
+      "settings": {
+        "before_image": "shopify://shop_images/IMAGE_2026-Lani_Before.jpg",
+        "after_image": "shopify://shop_images/IMAGE_2026-04-30_13_56_23.jpg",
+        "before_label": "Before",
+        "after_label": "After",
+        "initial_position": 50,
+        "accent_color": "#e11d48",
+        "aspect_ratio_w": 16,
+        "aspect_ratio_h": 9,
+        "max_height": 760,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gg_split_feature_4pdY74": {
+      "type": "gg-split-feature",
+      "blocks": {
+        "benefit_7kHWhX": {
+          "type": "benefit",
+          "settings": {
+            "text": "No glue required"
+          }
+        },
+        "benefit_8GykyC": {
+          "type": "benefit",
+          "settings": {
+            "text": "No professional installation needed"
+          }
+        },
+        "benefit_WpNtgi": {
+          "type": "benefit",
+          "settings": {
+            "text": "Tiles snap together easily"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_7kHWhX",
+        "benefit_8GykyC",
+        "benefit_WpNtgi"
+      ],
+      "disabled": true,
+      "name": "GG: Split feature",
+      "settings": {
+        "heading": "Install in Hours,Not Days",
+        "content_alignment": "left",
+        "media_type": "video",
+        "video": "shopify://files/videos/kling_20260317_作品_____projec_1072_0 (1).mp4",
+        "video_url": "",
+        "image_position": "right",
+        "background_color": "#ffffff",
+        "check_icon_color": "#e61e43",
+        "padding_top": 96,
+        "padding_bottom": 84
+      }
+    },
+    "gg_product_details_bar_9Gy3JF": {
+      "type": "gg-product-details-bar",
+      "name": "GG: Product details bar",
+      "settings": {
+        "heading": "Product Details",
+        "metafield_tile_size": "tile_size",
+        "metafield_material": "material",
+        "metafield_load_durability": "load_durability",
+        "metafield_use": "use",
+        "metafield_drainage": "drainage",
+        "label_tile_size": "Tile Size",
+        "label_material": "Material",
+        "label_load_durability": "Durability",
+        "label_use": "Use",
+        "label_drainage": "Drainage",
+        "background_color": "#000000",
+        "card_background": "#2a2a2a",
+        "border_color": "#626262",
+        "label_color": "#c6c6cd",
+        "value_color": "#ffffff",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "gg_style_grid_dmnx6B": {
+      "type": "gg-style-grid",
+      "blocks": {
+        "style_card_MfQ8TP": {
+          "type": "style_card",
+          "settings": {
+            "image": "shopify://shop_images/Red.png",
+            "title": "Grid Garage X",
+            "link": "shopify://products/gridgarage-x",
+            "open_new_tab": false
+          }
+        },
+        "style_card_gcF4Y8": {
+          "type": "style_card",
+          "settings": {
+            "image": "shopify://shop_images/RackMultipart20260427-14370-flweyu.webp",
+            "title": "DiamondTrax",
+            "link": "shopify://products/diamondtrax-12-series-1",
+            "open_new_tab": false
+          }
+        },
+        "style_card_xD4EeM": {
+          "type": "style_card",
+          "settings": {
+            "image": "shopify://shop_images/RackMultipart20260430-14733-71fyeb.webp",
+            "title": "Ribtrax Smooth",
+            "link": "shopify://products/ribtrax-smooth-12-series-6",
+            "open_new_tab": false
+          }
+        },
+        "style_card_NgV64R": {
+          "type": "style_card",
+          "settings": {
+            "image": "shopify://shop_images/Ribtrax_45_TurfGreen_1000x1000_1af55101-bae6-4da3-8a4a-4d3dae79c220.gif",
+            "title": "Ribtrax Pro",
+            "link": "shopify://products/ribtrax-pro-series",
+            "open_new_tab": false
+          }
+        }
+      },
+      "block_order": [
+        "style_card_MfQ8TP",
+        "style_card_gcF4Y8",
+        "style_card_xD4EeM",
+        "style_card_NgV64R"
+      ],
+      "name": "GG: Style grid",
+      "settings": {
+        "heading": "Choose Your Style",
+        "heading_alignment": "center",
+        "image_height_desktop": 300,
+        "image_height_mobile": 180,
+        "background_color": "#ffffff",
+        "card_background": "#f7f9fb",
+        "title_color": "#121212",
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
+    },
+    "gg_category_showcase_QU8i8d": {
+      "type": "gg-category-showcase",
+      "blocks": {
+        "category_card_VHAdXW": {
+          "type": "category_card",
+          "settings": {
+            "image": "shopify://shop_images/99c772201cadb18205af92b046c71f92a5b812ae.jpg",
+            "title": "Garages",
+            "link": "/pages/gallery#garages"
+          }
+        },
+        "category_card_fa4d9t": {
+          "type": "category_card",
+          "settings": {
+            "image": "shopify://shop_images/2007-01_Home_Gym-Black_Red_Grey-RT_1.png",
+            "title": "Home Gyms",
+            "link": "/pages/gallery#homegyms"
+          }
+        },
+        "category_card_ARnmYP": {
+          "type": "category_card",
+          "settings": {
+            "image": "shopify://shop_images/edfb13f3ef4bdaabbffe6ed9269efeb044895aeb.jpg",
+            "title": "Man caves",
+            "link": "/pages/gallery#mancaves"
+          }
+        },
+        "category_card_cRHFKj": {
+          "type": "category_card",
+          "settings": {
+            "image": "shopify://shop_images/30d1f3e5dd8339d274b204743895b101596ae1c6.jpg",
+            "title": "Workshops",
+            "link": "/pages/gallery#workshops"
+          }
+        },
+        "category_card_wrKHMX": {
+          "type": "category_card",
+          "settings": {
+            "image": "shopify://shop_images/e531acc9b5bcb94bb78a6701107b73b14904c517.jpg",
+            "title": "Basements",
+            "link": "/pages/gallery#basements"
+          }
+        },
+        "category_card_4C33YM": {
+          "type": "category_card",
+          "settings": {
+            "image": "shopify://shop_images/4a278475ddb4d746d2b5680b47ea4dfaa3b411b4.jpg",
+            "title": "Patios",
+            "link": "/pages/gallery#patios"
+          }
+        }
+      },
+      "block_order": [
+        "category_card_VHAdXW",
+        "category_card_fa4d9t",
+        "category_card_ARnmYP",
+        "category_card_cRHFKj",
+        "category_card_wrKHMX",
+        "category_card_4C33YM"
+      ],
+      "name": "GG: Category showcase",
+      "settings": {
+        "heading": "More Than Just a Garage Floor",
+        "heading_alignment": "center",
+        "card_width_desktop": 220,
+        "card_height_desktop": 220,
+        "card_width_mobile": 160,
+        "card_height_mobile": 140,
+        "enable_snap_scroll": true,
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
+    },
+    "gg_gallery_grid_UjBcN6": {
+      "type": "gg-gallery-grid",
+      "blocks": {
+        "gallery_image_CgH7LR": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/f1699b6fa43c0c1e98a38e0855f2f19c137213ec.jpg",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "gallery_image_tUKEBW": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/e88c12d6cbde1df50c2b315000b750947473a3f9.jpg",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "gallery_image_yefWf4": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/bd5387f384c57e9a7d07548dae4e53e6e93b5e72.jpg",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "gallery_image_gWBk9W": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/4df858a5213aaadf8b090ea9b9244ab40093b7bd.png",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "gallery_image_b3XhRe": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/6045f9d6e5ee3170db6a50c89a5ce4e6e2c2772c.jpg",
+            "alt": "",
+            "link": ""
+          }
+        },
+        "gallery_image_6Vn73E": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2984893a5475b3db62b3b4243915fd8064eb6f31.jpg",
+            "alt": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_CgH7LR",
+        "gallery_image_tUKEBW",
+        "gallery_image_yefWf4",
+        "gallery_image_gWBk9W",
+        "gallery_image_b3XhRe",
+        "gallery_image_6Vn73E"
+      ],
+      "disabled": true,
+      "name": "GG: Gallery grid",
+      "settings": {
+        "heading": "Built For Real Garages",
+        "heading_alignment": "center",
+        "image_aspect_ratio": "1:1",
+        "image_height_desktop": 400,
+        "image_height_tablet": 220,
+        "image_height_mobile": 280,
+        "grid_gap": 16,
+        "background_color": "#ffffff",
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
+    },
+    "gg_faq_accordion_B4ahAV": {
+      "type": "gg-faq-accordion",
+      "blocks": {
+        "faq_item_qtY7D4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do I need to measure my garage?",
+            "answer": "<p>No, our standard kits are designed to fit most 2-car and 3-car garages. Each kit includes tiles that can be easily trimmed to fit your exact space.</p>"
+          }
+        },
+        "faq_item_KfEx9i": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is shipping really included?",
+            "answer": "<p>Yes! All our garage flooring kits include free shipping within the continental United States. No hidden fees or surprises at checkout.</p>"
+          }
+        },
+        "faq_item_yqDtYd": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I install this myself?",
+            "answer": "<p>Absolutely. Our modular tiles snap together easily without any special tools, glue, or professional help. Most installations take just a few hours.</p>"
+          }
+        },
+        "faq_item_UpafPJ": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What if my garage is slightly different in size?",
+            "answer": "<p>Our tiles can be easily cut with a utility knife or saw to fit any space. We also offer expansion kits for larger garages.</p>"
+          }
+        },
+        "faq_item_gVUC3t": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Most orders arrive within 3-6 business days. You'll receive tracking information as soon as your order ships.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_qtY7D4",
+        "faq_item_KfEx9i",
+        "faq_item_yqDtYd",
+        "faq_item_UpafPJ",
+        "faq_item_gVUC3t"
+      ],
+      "name": "GG: FAQ accordion",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "heading_alignment": "center",
+        "container_max_width": 700,
+        "open_first_item": false,
+        "background_color": "#fafbfd",
+        "question_color": "#191c1e",
+        "answer_color": "#191c1e",
+        "border_color": "#eceef0",
+        "padding_top": 80,
+        "padding_bottom": 96
+      }
+    },
+    "1781013416dbc95f67": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_DCWQ8z": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_DCWQ8z"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "gg_hero_cta_KgjkNn": {
+      "type": "gg-hero-cta",
+      "name": "GG: Hero CTA",
+      "settings": {
+        "image": "shopify://shop_images/2c36fcf2bb672d7e00bd99797468d2fb5dbd162d_1.jpg",
+        "image_alt": "",
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "heading": "Choose Your Style. One Price. No Surprises. Shipping is included.",
+        "heading_size_mobile": 28,
+        "heading_size_desktop": 40,
+        "content_max_width": 700,
+        "button_label": "",
+        "button_link": "",
+        "button_product": "tsnritor-6-piece-garage-storage-cabinet-system-steel-black-red",
+        "button_style": "primary",
+        "section_height_mobile": 350,
+        "section_height_desktop": 450,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "custom_liquid_ypqA9d",
+    "related-products",
+    "recently_viewed_products",
+    "gg_features_dark_VEWyRk",
+    "gg_garage_size_select_fxXTgb",
+    "gg_benefits_bar_Py3azn",
+    "floor_before_after_slider_C9pA6U",
+    "gg_split_feature_4pdY74",
+    "gg_product_details_bar_9Gy3JF",
+    "gg_style_grid_dmnx6B",
+    "gg_category_showcase_QU8i8d",
+    "gg_gallery_grid_UjBcN6",
+    "gg_faq_accordion_B4ahAV",
+    "1781013416dbc95f67",
+    "gg_hero_cta_KgjkNn"
+  ]
+}

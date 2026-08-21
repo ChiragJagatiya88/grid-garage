@@ -1,0 +1,135 @@
+/* Grid Garage — Benefits bar section
+   Black background, 3 feature items, subtle borders, accent red icons */
+
+.gg-bb {
+  background-color: rgb(var(--gg-black));
+}
+
+/* Border variants */
+.gg-bb--border-top {
+  border-top: 1px solid rgb(var(--gg-bb-border, 34, 34, 34));
+}
+
+.gg-bb--border-bottom {
+  border-bottom: 1px solid rgb(var(--gg-bb-border, 34, 34, 34));
+}
+
+/* Container */
+.gg-bb__container {
+  max-width: var(--gg-bb-max-width, 1200px);
+  margin: 0 auto;
+  padding: 0 var(--gg-page-pad);
+}
+
+/* Grid Layout */
+.gg-bb__grid {
+  display: grid;
+  gap: 3.2rem;
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-bb__grid {
+    gap: 2.4rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .gg-bb__grid {
+    gap: 4rem;
+  }
+}
+
+/* Feature Item */
+.gg-bb__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 28rem;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-bb__item {
+    max-width: none;
+  }
+}
+
+/* Icon */
+.gg-bb__icon {
+  color: rgb(var(--gg-accent));
+  transition: opacity 200ms ease;
+}
+
+.gg-bb__icon:hover {
+  opacity: 1;
+}
+
+.gg-bb__icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.gg-bb__icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Title */
+.gg-bb__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgb(var(--gg-white));
+    margin: 1.3rem 0;
+    line-height: 31px;
+    letter-spacing: -0.6px;
+}
+@media screen and (min-width: 750px) {
+  .gg-bb__title {
+    font-size: 2.4rem;
+  }
+}
+
+/* Description */
+.gg-bb__desc {
+  font-size: 1.3rem;
+  margin: 0;
+      line-height: normal;
+    color: #fff;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-bb__desc {
+    font-size: 1.6rem;
+  }
+}
+
+/* Hover effect on item */
+.gg-bb__item:hover .gg-bb__icon {
+  opacity: 1;
+}
+
+.gg-bb__item:hover .gg-bb__title {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Animation stagger delay */
+.gg-bb__item.scroll-trigger {
+  animation-delay: calc(var(--animation-order, 1) * 100ms);
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 749px) {
+  .gg-bb__title {
+    font-size: 1.4rem;
+  }
+
+  .gg-bb__desc {
+    font-size: 1.2rem;
+  }
+}

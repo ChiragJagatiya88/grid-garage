@@ -1,0 +1,167 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "announcement_bar_A6rTEp": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_eFUAyE": {
+          "type": "announcement",
+          "settings": {
+            "text": "✓ Choose Your Style. One Price. No Surprises.",
+            "link": ""
+          }
+        },
+        "announcement_tY7gGy": {
+          "type": "announcement",
+          "settings": {
+            "text": "✓ Free Shipping on All 2-Car & 3-Car Garage Kits",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_eFUAyE",
+        "announcement_tY7gGy"
+      ],
+      "disabled": true,
+      "name": "t:sections.announcement-bar.presets.name",
+      "settings": {
+        "auto_rotate": true,
+        "change_slides_speed": 3,
+        "color_scheme": "scheme-8d609a1d-b638-42a1-9c82-57b42d022b1c",
+        "show_line_separator": true,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "disabled": true,
+      "settings": {
+        "logo_position": "middle-left",
+        "mobile_logo_position": "center",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "enable_customer_avatar": true,
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "gg_figma_header_npDxNx": {
+      "type": "gg-figma-header",
+      "blocks": {
+        "usp_EA37da": {
+          "type": "usp",
+          "settings": {
+            "text": "✓ Free Shipping on All 2-Car & 3-Car Garage Kits",
+            "link": ""
+          }
+        },
+        "usp_zbdeQE": {
+          "type": "usp",
+          "settings": {
+            "text": "✓ Choose Your Style. One Price. No Surprises.",
+            "link": ""
+          }
+        },
+        "usp_cyK3Rq": {
+          "type": "usp",
+          "settings": {
+            "text": "✓ Free Shipping on Cabinets",
+            "link": ""
+          }
+        },
+        "usp_9JgxWX": {
+          "type": "usp",
+          "settings": {
+            "text": "✓ Choose from 5 Tile Design Patterns",
+            "link": ""
+          }
+        },
+        "usp_mzmeYN": {
+          "type": "usp",
+          "settings": {
+            "text": "✓ DIY Installation in Hours",
+            "link": ""
+          }
+        },
+        "usp_6xXJYq": {
+          "type": "usp",
+          "settings": {
+            "text": "✓ 30 Day Money Back Guarantee ",
+            "link": ""
+          }
+        },
+        "usp_fin4NcE": {
+          "type": "usp",
+          "settings": {
+            "text": "✓ Financing options available at checkout",
+            "link": ""
+          }
+        },
+        "usp_phone1A": {
+          "type": "usp",
+          "settings": {
+            "text": "(888) 898-8022",
+            "link": "tel:+18888988022"
+          }
+        },
+        "usp_email1B": {
+          "type": "usp",
+          "settings": {
+            "text": "✉️ info@gridgarageinc.com",
+            "link": "mailto:info@gridgarageinc.com"
+          }
+        }
+      },
+      "block_order": [
+        "usp_EA37da",
+        "usp_zbdeQE",
+        "usp_cyK3Rq",
+        "usp_9JgxWX",
+        "usp_mzmeYN",
+        "usp_6xXJYq",
+        "usp_fin4NcE",
+        "usp_phone1A",
+        "usp_email1B"
+      ],
+      "name": "GG: Figma header",
+      "settings": {
+        "accent_color": "#e61e43",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_enabled": true,
+        "sticky_header_type": "on-scroll-up",
+        "color_scheme": "",
+        "menu_color_scheme": "",
+        "help_link": "shopify://pages/contact",
+        "announcement_autoplay": true,
+        "announcement_speed": 8,
+        "announcement_arrows_mobile": false
+      }
+    }
+  },
+  "order": [
+    "announcement_bar_A6rTEp",
+    "header",
+    "gg_figma_header_npDxNx"
+  ]
+}

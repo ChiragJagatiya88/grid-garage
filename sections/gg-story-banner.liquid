@@ -1,0 +1,398 @@
+{%- comment -%}
+  Figma node 289:3090 — full-width banner: background image, dark overlay, single centered heading (“Our Story”).
+{%- endcomment -%}
+{{ 'gg-story-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  case section.settings.align_h_mobile
+    when 'left'
+      assign justify_m = 'flex-start'
+      assign text_m = 'left'
+    when 'right'
+      assign justify_m = 'flex-end'
+      assign text_m = 'right'
+    else
+      assign justify_m = 'center'
+      assign text_m = 'center'
+  endcase
+
+  case section.settings.align_v_mobile
+    when 'top'
+      assign align_m = 'flex-start'
+    when 'bottom'
+      assign align_m = 'flex-end'
+    else
+      assign align_m = 'center'
+  endcase
+
+  case section.settings.align_h_desktop
+    when 'left'
+      assign justify_d = 'flex-start'
+      assign text_d = 'left'
+    when 'right'
+      assign justify_d = 'flex-end'
+      assign text_d = 'right'
+    else
+      assign justify_d = 'center'
+      assign text_d = 'center'
+  endcase
+
+  case section.settings.align_v_desktop
+    when 'top'
+      assign align_d = 'flex-start'
+    when 'bottom'
+      assign align_d = 'flex-end'
+    else
+      assign align_d = 'center'
+  endcase
+
+  assign overlay_op = section.settings.overlay_opacity | times: 0.01
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-story {
+    --gg-story-overlay-rgb: {{ section.settings.overlay_color.red }},{{ section.settings.overlay_color.green }},{{ section.settings.overlay_color.blue }};
+    --gg-story-overlay-opacity: {{ overlay_op }};
+    --gg-story-heading-rgb: {{ section.settings.heading_color.red }},{{ section.settings.heading_color.green }},{{ section.settings.heading_color.blue }};
+    --gg-story-img-pos: {{ section.settings.image_position }};
+    --gg-story-inner-max: {% if section.settings.content_max_width == 0 %}none{% else %}{{ section.settings.content_max_width }}rem{% endif %};
+    --gg-story-align-m: {{ align_m }};
+    --gg-story-justify-m: {{ justify_m }};
+    --gg-story-text-m: {{ text_m }};
+    --gg-story-align-d: {{ align_d }};
+    --gg-story-justify-d: {{ justify_d }};
+    --gg-story-text-d: {{ text_d }};
+    --gg-story-min-m: {{ section.settings.min_height_mobile }}rem;
+    --gg-story-min-d: {{ section.settings.min_height_desktop }}rem;
+    --gg-story-inner-y-m: {{ section.settings.inner_pad_y_mobile }}rem;
+    --gg-story-inner-y-d-t: {{ section.settings.inner_pad_y_desktop_top }}rem;
+    --gg-story-inner-y-d-b: {{ section.settings.inner_pad_y_desktop_bottom }}rem;
+    --gg-story-fs-m: {{ section.settings.heading_size_mobile }}rem;
+    --gg-story-fs-d: {{ section.settings.heading_size_desktop }}rem;
+    --gg-story-lh-m: {% if section.settings.heading_lh_mobile <= 0 %}1.127{% else %}{{ section.settings.heading_lh_mobile }}rem{% endif %};
+    --gg-story-lh-d: {% if section.settings.heading_lh_desktop <= 0 %}1.127{% else %}{{ section.settings.heading_lh_desktop }}rem{% endif %};
+    --gg-story-track-m: {{ section.settings.heading_tracking_mobile }}em;
+    --gg-story-track-d: {{ section.settings.heading_tracking_desktop }}em;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-story section-{{ section.id }}-padding"
+  {% if section.settings.heading != blank %}
+    aria-labelledby="gg-story-title-{{ section.id }}"
+  {% endif %}
+>
+  <div class="gg-story__media" aria-hidden="true">
+    {%- if section.settings.image != blank -%}
+      {%- liquid
+        assign story_alt = section.settings.image.alt | default: section.settings.image_alt
+      -%}
+      {{
+        section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'lazy',
+          sizes: '100vw',
+          widths: '375,550,750,1100,1500,1780,2000,3000,3840',
+          alt: story_alt | escape
+      }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+  <div class="gg-story__overlay"></div>
+
+  <div class="gg-story__inner">
+    {%- if section.settings.heading != blank -%}
+      <h1 class="gg-story__heading gg-font-heading" id="gg-story-title-{{ section.id }}">
+        {{- section.settings.heading | escape -}}
+      </h1>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Story banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Grid Garage team and flooring"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image focal point",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our story"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 2.4,
+      "max": 8,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading size — large screens",
+      "default": 5.5,
+      "info": "Matches Figma ~55px at 5.5rem (Dawn html scale). Desktop from 990px up."
+    },
+    {
+      "type": "range",
+      "id": "heading_lh_desktop",
+      "min": 0,
+      "max": 9,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading line height — large",
+      "default": 6.2,
+      "info": "Set to 0 for automatic (1.13)."
+    },
+    {
+      "type": "range",
+      "id": "heading_tracking_desktop",
+      "min": -0.1,
+      "max": 0.3,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Letter spacing — large",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 1.8,
+      "max": 5.5,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading size — mobile",
+      "default": 3.2,
+      "info": "Smaller on small screens to avoid overflow."
+    },
+    {
+      "type": "range",
+      "id": "heading_lh_mobile",
+      "min": 0,
+      "max": 6,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading line height — mobile",
+      "default": 0,
+      "info": "0 = automatic (1.13)."
+    },
+    {
+      "type": "range",
+      "id": "heading_tracking_mobile",
+      "min": -0.1,
+      "max": 0.3,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Letter spacing — mobile",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Layout — large screens"
+    },
+    {
+      "type": "select",
+      "id": "align_h_desktop",
+      "label": "Horizontal alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "align_v_desktop",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "min": 20,
+      "max": 80,
+      "step": 1,
+      "unit": "rem",
+      "label": "Minimum height — large",
+      "default": 44,
+      "info": "Figma artboard ~440px ≈ 44rem."
+    },
+    {
+      "type": "range",
+      "id": "inner_pad_y_desktop_top",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Inner padding top — large",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "inner_pad_y_desktop_bottom",
+      "min": 0,
+      "max": 12,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Inner padding bottom — large",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Layout — mobile"
+    },
+    {
+      "type": "select",
+      "id": "align_h_mobile",
+      "label": "Horizontal alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "align_v_mobile",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "min": 16,
+      "max": 60,
+      "step": 1,
+      "unit": "rem",
+      "label": "Minimum height — mobile",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "inner_pad_y_mobile",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Inner padding vertical — mobile",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Width"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "unit": "rem",
+      "label": "Max heading width",
+      "default": 0,
+      "info": "0 = full width of content area."
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Story banner"
+    }
+  ]
+}
+{% endschema %}

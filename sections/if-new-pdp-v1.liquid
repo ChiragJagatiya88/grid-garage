@@ -1,0 +1,714 @@
+{{ 'if-new-pdp-v1.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign if_accent = section.settings.accent_color | default: '#e61e43'
+  assign if_use_product_media = section.settings.use_product_media
+  assign if_gallery_blocks = section.blocks | where: 'type', 'gallery_image'
+  assign if_benefit_blocks = section.blocks | where: 'type', 'benefit'
+  assign if_accordion_blocks = section.blocks | where: 'type', 'accordion'
+  assign if_slide_count = 0
+-%}
+
+<div
+  class="section_{{ section.id }} if-pdp{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  data-if-pdp
+  style="--if-accent: {{ if_accent }}; --if-accent-soft: {{ section.settings.accent_soft | default: '#fce9eb' }};"
+>
+  <div class="{% if section.settings.enable_container %}if-pdp__inner{% else %}if-pdp__inner if-pdp__inner--fluid{% endif %}">
+    <div class="if-pdp__grid">
+
+      {%- comment -%} LEFT: Gallery {%- endcomment -%}
+      <div class="if-pdp__gallery" data-if-gallery>
+        <div class="if-pdp__gallery-frame">
+          <div class="if-pdp__gallery-track" data-if-gallery-track>
+            {%- if if_gallery_blocks.size > 0 -%}
+              {%- for block in if_gallery_blocks -%}
+                {%- if block.settings.image != blank -%}
+                  {%- assign if_slide_count = if_slide_count | plus: 1 -%}
+                  <figure class="if-pdp__slide" {{ block.shopify_attributes }}>
+                    {{
+                      block.settings.image
+                      | image_url: width: 1600
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '(min-width: 990px) 50vw, 100vw',
+                        widths: '400,600,800,1000,1200,1600',
+                        alt: block.settings.image.alt | default: product.title | escape
+                    }}
+                  </figure>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- elsif if_use_product_media and product.media.size > 0 -%}
+              {%- for media in product.media -%}
+                {%- if media.media_type == 'image' -%}
+                  {%- assign if_slide_count = if_slide_count | plus: 1 -%}
+                  <figure class="if-pdp__slide">
+                    {{
+                      media
+                      | image_url: width: 1600
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '(min-width: 990px) 50vw, 100vw',
+                        widths: '400,600,800,1000,1200,1600',
+                        alt: media.alt | default: product.title | escape
+                    }}
+                  </figure>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- if if_slide_count == 0 -%}
+              {%- assign if_slide_count = 1 -%}
+              <figure class="if-pdp__slide">
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              </figure>
+            {%- endif -%}
+          </div>
+
+          {%- if if_slide_count > 1 -%}
+            <button type="button" class="if-pdp__nav if-pdp__nav--prev" data-if-gallery-prev aria-label="Previous image">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button type="button" class="if-pdp__nav if-pdp__nav--next" data-if-gallery-next aria-label="Next image">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          {%- endif -%}
+        </div>
+
+        {%- if if_slide_count > 1 -%}
+          <div class="if-pdp__dots" data-if-gallery-dots role="tablist" aria-label="Gallery slides">
+            {%- for i in (1..if_slide_count) -%}
+              <button
+                type="button"
+                class="if-pdp__dot{% if forloop.first %} is-active{% endif %}"
+                data-if-gallery-dot="{{ forloop.index0 }}"
+                aria-label="Go to slide {{ forloop.index }}"
+              ></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} RIGHT: Product info {%- endcomment -%}
+      <div class="if-pdp__info">
+
+        {%- if section.settings.show_rating or section.settings.badge_text != blank -%}
+          <div class="if-pdp__meta">
+            {%- if section.settings.show_rating -%}
+              <div class="if-pdp__rating">
+                <span class="if-pdp__stars" aria-hidden="true">
+                  {% comment %} {%- assign if_star_n = section.settings.rating_stars | default: 5 | plus: 0 -%}
+                  {%- for i in (1..5) -%}
+                    {%- if i <= if_star_n -%}★{%- else -%}☆{%- endif -%}
+                  {%- endfor -%} {% endcomment %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="84" height="16" viewBox="0 0 84 16" fill="none">
+                    <path d="M14.9527 6.87536L11.8382 9.91136L12.5737 14.1994C12.5895 14.2913 12.5792 14.3858 12.544 14.4722C12.5089 14.5587 12.4502 14.6335 12.3747 14.6883C12.2993 14.7432 12.2099 14.7758 12.1169 14.7825C12.0239 14.7892 11.9308 14.7698 11.8482 14.7264L7.99721 12.7019L4.14671 14.7259C4.06413 14.7693 3.97106 14.7887 3.87801 14.782C3.78496 14.7753 3.69565 14.7427 3.62017 14.6878C3.54469 14.633 3.48606 14.5582 3.4509 14.4717C3.41574 14.3853 3.40545 14.2908 3.42121 14.1989L4.15671 9.91086L1.04171 6.87536C0.974844 6.81022 0.927554 6.72766 0.905188 6.63703C0.882823 6.5464 0.886275 6.45132 0.915153 6.36255C0.944032 6.27378 0.997184 6.19487 1.06859 6.13475C1.14 6.07462 1.22681 6.03569 1.31921 6.02236L5.62371 5.39736L7.54871 1.49636C7.71721 1.15486 8.27721 1.15486 8.44571 1.49636L10.3707 5.39736L14.6752 6.02236C14.7674 6.03604 14.8539 6.07516 14.9251 6.13533C14.9963 6.1955 15.0492 6.27432 15.0781 6.36294C15.1069 6.45156 15.1104 6.54646 15.0883 6.63698C15.0661 6.72751 15.0192 6.81006 14.9527 6.87536Z" fill="#FF783F"/>
+                    <path d="M31.9527 6.87536L28.8382 9.91136L29.5737 14.1994C29.5895 14.2913 29.5792 14.3858 29.544 14.4722C29.5089 14.5587 29.4502 14.6335 29.3747 14.6883C29.2993 14.7432 29.2099 14.7758 29.1169 14.7825C29.0239 14.7892 28.9308 14.7698 28.8482 14.7264L24.9972 12.7019L21.1467 14.7259C21.0641 14.7693 20.9711 14.7887 20.878 14.782C20.785 14.7753 20.6956 14.7427 20.6202 14.6878C20.5447 14.633 20.4861 14.5582 20.4509 14.4717C20.4157 14.3853 20.4055 14.2908 20.4212 14.1989L21.1567 9.91086L18.0417 6.87536C17.9748 6.81022 17.9276 6.72766 17.9052 6.63703C17.8828 6.5464 17.8863 6.45132 17.9152 6.36255C17.944 6.27378 17.9972 6.19487 18.0686 6.13475C18.14 6.07462 18.2268 6.03569 18.3192 6.02236L22.6237 5.39736L24.5487 1.49636C24.7172 1.15486 25.2772 1.15486 25.4457 1.49636L27.3707 5.39736L31.6752 6.02236C31.7674 6.03604 31.8539 6.07516 31.9251 6.13533C31.9963 6.1955 32.0492 6.27432 32.0781 6.36294C32.1069 6.45156 32.1104 6.54646 32.0883 6.63698C32.0661 6.72751 32.0192 6.81006 31.9527 6.87536Z" fill="#FF783F"/>
+                    <path d="M48.9527 6.87536L45.8382 9.91136L46.5737 14.1994C46.5895 14.2913 46.5792 14.3858 46.544 14.4722C46.5089 14.5587 46.4502 14.6335 46.3747 14.6883C46.2993 14.7432 46.2099 14.7758 46.1169 14.7825C46.0239 14.7892 45.9308 14.7698 45.8482 14.7264L41.9972 12.7019L38.1467 14.7259C38.0641 14.7693 37.9711 14.7887 37.878 14.782C37.785 14.7753 37.6956 14.7427 37.6202 14.6878C37.5447 14.633 37.4861 14.5582 37.4509 14.4717C37.4157 14.3853 37.4055 14.2908 37.4212 14.1989L38.1567 9.91086L35.0417 6.87536C34.9748 6.81022 34.9276 6.72766 34.9052 6.63703C34.8828 6.5464 34.8863 6.45132 34.9152 6.36255C34.944 6.27378 34.9972 6.19487 35.0686 6.13475C35.14 6.07462 35.2268 6.03569 35.3192 6.02236L39.6237 5.39736L41.5487 1.49636C41.7172 1.15486 42.2772 1.15486 42.4457 1.49636L44.3707 5.39736L48.6752 6.02236C48.7674 6.03604 48.8539 6.07516 48.9251 6.13533C48.9963 6.1955 49.0492 6.27432 49.0781 6.36294C49.1069 6.45156 49.1104 6.54646 49.0883 6.63698C49.0661 6.72751 49.0192 6.81006 48.9527 6.87536Z" fill="#FF783F"/>
+                    <path d="M65.9527 6.87536L62.8382 9.91136L63.5737 14.1994C63.5895 14.2913 63.5792 14.3858 63.544 14.4722C63.5089 14.5587 63.4502 14.6335 63.3747 14.6883C63.2993 14.7432 63.2099 14.7758 63.1169 14.7825C63.0239 14.7892 62.9308 14.7698 62.8482 14.7264L58.9972 12.7019L55.1467 14.7259C55.0641 14.7693 54.9711 14.7887 54.878 14.782C54.785 14.7753 54.6956 14.7427 54.6202 14.6878C54.5447 14.633 54.4861 14.5582 54.4509 14.4717C54.4157 14.3853 54.4055 14.2908 54.4212 14.1989L55.1567 9.91086L52.0417 6.87536C51.9748 6.81022 51.9276 6.72766 51.9052 6.63703C51.8828 6.5464 51.8863 6.45132 51.9152 6.36255C51.944 6.27378 51.9972 6.19487 52.0686 6.13475C52.14 6.07462 52.2268 6.03569 52.3192 6.02236L56.6237 5.39736L58.5487 1.49636C58.7172 1.15486 59.2772 1.15486 59.4457 1.49636L61.3707 5.39736L65.6752 6.02236C65.7674 6.03604 65.8539 6.07516 65.9251 6.13533C65.9963 6.1955 66.0492 6.27432 66.0781 6.36294C66.1069 6.45156 66.1104 6.54646 66.0883 6.63698C66.0661 6.72751 66.0192 6.81006 65.9527 6.87536Z" fill="#FF783F"/>
+                    <path d="M82.9527 6.87536L79.8382 9.91136L80.5737 14.1994C80.5895 14.2913 80.5792 14.3858 80.544 14.4722C80.5089 14.5587 80.4502 14.6335 80.3747 14.6883C80.2993 14.7432 80.2099 14.7758 80.1169 14.7825C80.0239 14.7892 79.9308 14.7698 79.8482 14.7264L75.9972 12.7019L72.1467 14.7259C72.0641 14.7693 71.9711 14.7887 71.878 14.782C71.785 14.7753 71.6956 14.7427 71.6202 14.6878C71.5447 14.633 71.4861 14.5582 71.4509 14.4717C71.4157 14.3853 71.4055 14.2908 71.4212 14.1989L72.1567 9.91086L69.0417 6.87536C68.9748 6.81022 68.9276 6.72766 68.9052 6.63703C68.8828 6.5464 68.8863 6.45132 68.9152 6.36255C68.944 6.27378 68.9972 6.19487 69.0686 6.13475C69.14 6.07462 69.2268 6.03569 69.3192 6.02236L73.6237 5.39736L75.5487 1.49636C75.7172 1.15486 76.2772 1.15486 76.4457 1.49636L78.3707 5.39736L82.6752 6.02236C82.7674 6.03604 82.8539 6.07516 82.9251 6.13533C82.9963 6.1955 83.0492 6.27432 83.0781 6.36294C83.1069 6.45156 83.1104 6.54646 83.0883 6.63698C83.0661 6.72751 83.0192 6.81006 82.9527 6.87536Z" fill="#FF783F"/>
+                  </svg>
+                </span>
+                {%- if section.settings.rating_text != blank -%}
+                  <span class="if-pdp__rating-text">{{ section.settings.rating_text }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.badge_text != blank -%}
+              <span class="if-pdp__badge">
+                <span class="if-pdp__badge-icon" aria-hidden="true">
+                  {%- if section.settings.badge_icon != blank -%}
+                    {{
+                      section.settings.badge_icon
+                      | image_url: width: 48
+                      | image_tag: loading: 'lazy', width: 14, height: 14, alt: ''
+                    }}
+                  {%- else -%}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8.25-2.5A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+                  {%- endif -%}
+                </span>
+                {{ section.settings.badge_text | escape }}
+              </span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="if-pdp__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h1 class="if-pdp__title">{{ section.settings.heading | escape }}</h1>
+        {%- elsif product.title != blank -%}
+          <h1 class="if-pdp__title">{{ product.title | escape }}</h1>
+        {%- endif -%}
+
+        {%- comment -%}
+          Static kit total price for Google Merchant Center / crawlers.
+          Prefer 2-Car kit Offer; never use Custom (Per Sq Ft) as the primary price.
+        {%- endcomment -%}
+        {%- unless product.tags contains 'price by consultation' -%}
+          {%- capture gg_offer_vid_raw -%}{% render 'gg-kit-variant-id', product: product %}{%- endcapture -%}
+          {%- assign gg_offer_vid_num = gg_offer_vid_raw | strip | plus: 0 -%}
+          {%- assign gg_offer_variant = product.selected_or_first_available_variant -%}
+          {%- for v in product.variants -%}
+            {%- if v.id == gg_offer_vid_num -%}
+              {%- assign gg_offer_variant = v -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <div
+            class="if-pdp__price"
+            data-gg-offer-price="{{ gg_offer_variant.price | divided_by: 100.0 }}"
+            data-gg-offer-variant="{{ gg_offer_variant.id }}"
+          >
+            <span class="if-pdp__price-main">
+              {%- if settings.currency_code_enabled -%}
+                {{ gg_offer_variant.price | money_with_currency }}
+              {%- else -%}
+                {{ gg_offer_variant.price | money }}
+              {%- endif -%}
+            </span>
+            <span class="if-pdp__price-note">2-Car kit starting price</span>
+          </div>
+        {%- endunless -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="if-pdp__desc">{{ section.settings.description }}</div>
+        {%- elsif product.description != blank and section.settings.use_product_description -%}
+          <div class="if-pdp__desc">{{ product.description | strip_html | truncatewords: 55 }}</div>
+        {%- endif -%}
+
+        {%- if if_benefit_blocks.size > 0 -%}
+          <div class="if-pdp__benefits">
+            <div class="if-pdp__benefits-head">
+              <span class="if-pdp__benefits-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M22 22L2 22" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M3 22.0001V11.3472C3 10.4903 3.36644 9.67432 4.00691 9.10502L10.0069 3.77169C11.1436 2.76133 12.8564 2.76133 13.9931 3.77169L19.9931 9.10502C20.6336 9.67432 21 10.4903 21 11.3472V22.0001" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M10 9H14" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"/>
+                <path opacity="0.5" d="M9 15.5H15" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"/>
+                <path opacity="0.5" d="M9 18.5H15" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"/>
+                <path opacity="0.5" d="M18 22V16C18 14.1144 18 13.1716 17.4142 12.5858C16.8284 12 15.8856 12 14 12H10C8.11438 12 7.17157 12 6.58579 12.5858C6 13.1716 6 14.1144 6 16V22" stroke="#0E100F" stroke-width="1.5"/>
+                </svg>
+              </span>
+              {%- if section.settings.benefits_heading != blank -%}
+                <h2 class="if-pdp__benefits-title">{{ section.settings.benefits_heading | escape }}</h2>
+              {%- endif -%}
+            </div>
+            <ul class="if-pdp__benefits-grid" role="list">
+              {%- for block in if_benefit_blocks -%}
+                <li class="if-pdp__benefit" {{ block.shopify_attributes }}>
+                  <span class="if-pdp__benefit-icon" aria-hidden="true">
+                    {%- if block.settings.icon != blank -%}
+                      {{
+                        block.settings.icon
+                        | image_url: width: 88
+                        | image_tag: loading: 'lazy', width: 22, height: 22, alt: ''
+                      }}
+                    {%- else -%}
+                      {%- case block.settings.icon_preset -%}
+                        {%- when 'truck' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        {%- when 'clean' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                        {%- when 'package' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5L12 12l8.7-4.5"/><path d="M12 22V12"/></svg>
+                        {%- when 'return' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/></svg>
+                        {%- when 'clock' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        {%- when 'water' -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5S6 9 6 13.5a6 6 0 0 0 12 0C18 9 12 2.5 12 2.5z"/></svg>
+                        {%- else -%}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                      {%- endcase -%}
+                    {%- endif -%}
+                  </span>
+                  {%- if block.settings.text != blank -%}
+                    <span class="if-pdp__benefit-text">{{ block.settings.text | escape }}</span>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.primary_btn_label != blank or section.settings.secondary_btn_label != blank -%}
+          <div class="if-pdp__cta" data-if-pdp-cta>
+            <div class="if-pdp__cta-row">
+              {%- if section.settings.primary_btn_label != blank -%}
+                <a
+                  class="if-pdp__btn if-pdp__btn--primary"
+                  href="#if-configure"
+                  data-if-kit="custom"
+                  data-if-kit-cta
+                  aria-pressed="false"
+                >
+                  {{ section.settings.primary_btn_label | escape }}
+                </a>
+              {%- endif -%}
+              {%- if section.settings.secondary_btn_label != blank -%}
+                <a
+                  class="if-pdp__btn if-pdp__btn--secondary is-selected"
+                  href="#if-configure"
+                  data-if-kit="2car"
+                  data-if-kit-cta
+                  aria-pressed="true"
+                >
+                  {{ section.settings.secondary_btn_label | escape }}
+                </a>
+              {%- endif -%}
+            </div>
+            {%- if section.settings.finance_text != blank -%}
+              <p class="if-pdp__finance">{{ section.settings.finance_text | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if if_accordion_blocks.size > 0 -%}
+          <div class="if-pdp__accordion" data-if-accordion>
+            {%- for block in if_accordion_blocks -%}
+              <div class="if-pdp__acc-item" {{ block.shopify_attributes }} data-if-acc-item>
+                <button
+                  type="button"
+                  class="if-pdp__acc-btn"
+                  data-if-acc-btn
+                  aria-expanded="false"
+                  id="if-acc-btn-{{ section.id }}-{{ block.id }}"
+                  aria-controls="if-acc-panel-{{ section.id }}-{{ block.id }}"
+                >
+                  <span class="if-pdp__acc-title">{{ block.settings.title | escape }}</span>
+                  <span class="if-pdp__acc-icon" aria-hidden="true"></span>
+                </button>
+                <div
+                  class="if-pdp__acc-panel"
+                  id="if-acc-panel-{{ section.id }}-{{ block.id }}"
+                  role="region"
+                  aria-labelledby="if-acc-btn-{{ section.id }}-{{ block.id }}"
+                  hidden
+                >
+                  {{ block.settings.content }}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% style %}
+  .section_{{ section.id }} {
+    {% if section.settings.section_bg != blank %}background: {{ section.settings.section_bg }};{% endif %}
+    {% if section.settings.section_gradient_bg != blank %}background: {{ section.settings.section_gradient_bg }};{% endif %}
+    {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_desk }};{% endif %}
+  }
+  @media screen and (max-width: 767px) {
+    .section_{{ section.id }} {
+      {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_mob }};{% endif %}
+    }
+  }
+{% endstyle %}
+
+<script>
+  (function () {
+    var root = document.querySelector('.section_{{ section.id }}[data-if-pdp]');
+    if (!root) return;
+
+    /* Gallery */
+    var gallery = root.querySelector('[data-if-gallery]');
+    if (gallery) {
+      var track = gallery.querySelector('[data-if-gallery-track]');
+      var slides = track ? track.querySelectorAll('.if-pdp__slide') : [];
+      var prev = gallery.querySelector('[data-if-gallery-prev]');
+      var next = gallery.querySelector('[data-if-gallery-next]');
+      var dots = gallery.querySelectorAll('[data-if-gallery-dot]');
+      var index = 0;
+
+      function goTo(i) {
+        if (!slides.length) return;
+        index = (i + slides.length) % slides.length;
+        track.style.transform = 'translateX(' + (-index * 100) + '%)';
+        dots.forEach(function (dot, di) {
+          dot.classList.toggle('is-active', di === index);
+        });
+      }
+
+      if (prev) prev.addEventListener('click', function () { goTo(index - 1); });
+      if (next) next.addEventListener('click', function () { goTo(index + 1); });
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          goTo(parseInt(dot.getAttribute('data-if-gallery-dot'), 10) || 0);
+        });
+      });
+    }
+
+    /* Accordion */
+    root.querySelectorAll('[data-if-acc-item]').forEach(function (item) {
+      var btn = item.querySelector('[data-if-acc-btn]');
+      var panel = item.querySelector('.if-pdp__acc-panel');
+      if (!btn || !panel) return;
+      btn.addEventListener('click', function () {
+        var open = item.classList.contains('is-open');
+        root.querySelectorAll('[data-if-acc-item]').forEach(function (other) {
+          other.classList.remove('is-open');
+          var ob = other.querySelector('[data-if-acc-btn]');
+          var op = other.querySelector('.if-pdp__acc-panel');
+          if (ob) ob.setAttribute('aria-expanded', 'false');
+          if (op) op.hidden = true;
+        });
+        if (!open) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          panel.hidden = false;
+        }
+      });
+    });
+  })();
+</script>
+
+{%- render 'gg-product-json-ld', product: product -%}
+
+{% schema %}
+{
+  "name": "IF New PDP v1",
+  "class": "if_new_pdp_v1",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable Custom Class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom Class For Section",
+      "visible_if": "{{ section.settings.enable_custom_class == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_container",
+      "label": "Enable Container",
+      "default": true
+    },
+
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_product_media",
+      "label": "Use product media (when no Gallery Image blocks)",
+      "default": true
+    },
+
+    {
+      "type": "header",
+      "content": "Rating & Badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show rating",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "rating_stars",
+      "label": "Star count",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5,
+      "visible_if": "{{ section.settings.show_rating == true }}"
+    },
+    {
+      "type": "richtext",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "<p><b>4.9/5</b> Based on (<b>286+</b> Verified Reviews)</p>",
+      "visible_if": "{{ section.settings.show_rating == true }}"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "SUMMER COLLECTION"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_icon",
+      "label": "Badge icon (optional)"
+    },
+
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "PREMIUM GARAGE FLOOR KIT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Transform Your Garage Into a Space You're Proud to Show Off."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Upgrade cracked concrete into a clean, professional floor that looks sharp and handles everyday garage life — heavy vehicles, tools, spills, and constant foot traffic. Modular interlocking tiles install easily and create a finished space you'll actually want to show off.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_product_description",
+      "label": "Fallback to product description if empty",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "benefits_heading",
+      "label": "Benefits heading",
+      "default": "Key Benefits"
+    },
+
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_btn_label",
+      "label": "Primary button label",
+      "default": "LET'S START CUSTOMIZING"
+    },
+    {
+      "type": "url",
+      "id": "primary_btn_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_btn_label",
+      "label": "Secondary button label",
+      "default": "2-CAR GARAGE KIT"
+    },
+    {
+      "type": "url",
+      "id": "secondary_btn_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "finance_text",
+      "label": "Finance text",
+      "default": "Finance Available at Checkout"
+    },
+
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "section_gradient_bg",
+      "label": "Section Gradient Background"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#e61e43"
+    },
+    {
+      "type": "color",
+      "id": "accent_soft",
+      "label": "Benefit card background",
+      "default": "#fce9eb"
+    },
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding",
+      "label": "Enable Section Custom Padding",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Padding Desktop",
+      "default": "40px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Padding Mobile",
+      "default": "24px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gallery_image",
+      "name": "Gallery Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free Shipping Included"
+        },
+        {
+          "type": "select",
+          "id": "icon_preset",
+          "label": "Icon preset",
+          "options": [
+            { "value": "check", "label": "Check" },
+            { "value": "truck", "label": "Truck / Shipping" },
+            { "value": "clean", "label": "Tiles / Clean" },
+            { "value": "package", "label": "Package / Delivery" },
+            { "value": "return", "label": "Return / Guarantee" },
+            { "value": "clock", "label": "Clock / DIY" },
+            { "value": "water", "label": "Water Resistant" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Custom icon (overrides preset)"
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Why It Works"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Add accordion content here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "IF New PDP v1",
+      "category": "IF Section",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Free Shipping Included",
+            "icon_preset": "truck"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Stain Resistant and Easy to Clean",
+            "icon_preset": "clean"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "DIY Installation in Hours",
+            "icon_preset": "clock"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Delivered in 2-6 days",
+            "icon_preset": "package"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "30-Day Money-Back",
+            "icon_preset": "return"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Water Resistant",
+            "icon_preset": "water"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "Why It Works",
+            "content": "<p>Interlocking tiles create a clean, durable surface that stands up to vehicles, tools, and daily garage use.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "How to Apply",
+            "content": "<p>Clear the floor, dry-fit your layout, then lock tiles together row by row. Most installs finish in a few hours.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "Specifications",
+            "content": "<p>Premium interlocking tiles with matching edge pieces. Built for residential and light commercial garage floors.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "Shipping & Returns",
+            "content": "<p>Free shipping nationwide. Orders typically ship in 2–6 business days. 30-day money-back guarantee.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

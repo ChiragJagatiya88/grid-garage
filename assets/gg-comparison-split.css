@@ -1,0 +1,308 @@
+/* Grid Garage — comparison table + image (Figma node 279:3340) */
+
+.gg-comp {
+  --gg-comp-border: 25, 25, 25;
+  --gg-comp-cell-bg: 17, 17, 17;
+  --gg-comp-muted: 218, 218, 218;
+  --gg-comp-heading: 241, 245, 249;
+  background-color: rgb(var(--gg-black));
+  color: rgb(var(--gg-white));
+}
+
+.gg-comp__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: var(--gg-comp-min-h, 56rem);
+}
+
+@media screen and (min-width: 990px) {
+  .gg-comp__layout {
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    min-height: var(--gg-comp-min-h, 93.2rem);
+  }
+
+  .gg-comp--media-left .gg-comp__copy {
+    order: 2;
+  }
+
+  .gg-comp--media-left .gg-comp__media {
+    order: 1;
+  }
+}
+
+/* Image first on small screens */
+@media screen and (max-width: 989px) {
+  .gg-comp__media {
+    order: -1;
+  }
+}
+
+.gg-comp__copy {
+    padding: var(--gg-section-y) var(--gg-page-pad);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 76rem;
+    margin: 0 auto;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-comp__copy {
+    padding-left: max(var(--gg-page-pad), 4rem);
+    padding-right: 3.2rem;
+  }
+}
+
+.gg-comp__heading {
+    font-size: clamp(2.8rem, 3.5vw, 4rem);
+    font-weight: 700;
+    line-height: 5rem;
+    letter-spacing: -.18rem;
+    margin: 0 0 1.2rem;
+        color: #F1F5F9;
+}
+
+.gg-comp__heading p {
+ font-size: clamp(2.8rem, 3.5vw, 4rem);
+    font-weight: 700;
+    line-height: 5rem;
+    letter-spacing: -.18rem;
+    margin: 0 0 1.2rem;
+        color: #F1F5F9;
+margin:0;
+}
+
+.gg-comp__heading p:last-child {
+  margin-bottom: 0;
+}
+
+.gg-comp__intro {
+    font-size: var(--gg-comp-intro-size, 1.8rem);
+    line-height: 2.8rem;
+    font-weight: 400;
+    margin: 0 0 3.1rem;
+    color: rgb(var(--gg-white));
+    max-width: 100%;
+}
+
+.gg-comp__intro p {
+  margin: 0 0 0.8rem;
+}
+
+.gg-comp__intro p:last-child {
+  margin-bottom: 0;
+}
+
+.gg-comp__table-wrap {
+  overflow-x: auto;
+  margin-bottom: 3.7rem;
+  -webkit-overflow-scrolling: touch;
+  margin-left: -0.2rem;
+  margin-right: -0.2rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+.gg-comp__table-wrap::-webkit-scrollbar {
+  height: 0.4rem;
+}
+
+.gg-comp__table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(var(--gg-white), 0.2);
+  border-radius: 999px;
+}
+
+.gg-comp__table {
+    width: 100%;
+    min-width: 52rem;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 1px solid #191919;
+    background-color: #000;
+}
+
+.gg-comp__table th,
+.gg-comp__table td {
+  border: 1px solid #191919;;
+  vertical-align: middle;
+  padding: 0 1.2rem;
+  min-height: 7rem;
+  height: 7rem;
+  box-sizing: border-box;
+}
+
+.gg-comp__table thead th {
+    background-color: rgb(var(--gg-comp-cell-bg));
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-size: 1.2rem;
+    line-height: 16px;
+    color: #DADADA;
+}
+
+.gg-comp__table thead th.gg-comp__th--feature {
+  text-align: left;
+  width: 24%;
+  padding-left: 2rem;
+}
+
+.gg-comp__table thead th.gg-comp__th--brand {
+    text-align: center;
+    width: 26%;
+    color: rgb(var(--gg-white));
+    font-size: 1.4rem;
+    letter-spacing: 1.4px;
+    line-height: 20px;
+}
+.gg-comp__table .gg-comp__th--proxy{
+  text-align: center;
+  width: 25%;
+}
+.gg-comp__table thead th.gg-comp__th--comp {
+  text-align: center;
+  width: 20%;
+}
+.gg-comp__table tbody tr:nth-child(even) td {
+    background: #111111;
+}
+.gg-comp__table tbody td {
+  background-color: #000;
+  font-size: 1.6rem;
+  line-height: normal;
+}
+
+.gg-comp__table tbody td.gg-comp__td--feature {
+  text-align: left;
+  padding-left: 2rem;
+  font-weight: 600;
+  color: rgb(var(--gg-white));
+}
+
+.gg-comp__table tbody td.gg-comp__td--brand {
+  text-align: center;
+  font-weight: 800;
+  color: rgb(var(--gg-white));
+}
+
+.gg-comp__table tbody td.gg-comp__td--comp {
+  text-align: center;
+  font-weight: 600;
+  color: rgb(var(--gg-comp-muted));
+}
+
+.gg-comp__subheading {
+    font-size: var(--gg-comp-subheading-size, 2.2rem);
+    font-weight: 700;
+    margin: 0 0 1.2rem;
+    color: rgb(var(--gg-comp-heading));
+    line-height: 32px;
+}
+
+.gg-comp__subtext {
+    font-size: var(--gg-comp-subtext-size, 1.8rem);
+    font-weight: 400;
+    line-height: 2.8rem;
+    margin: 0 0 2rem;
+    color: rgb(var(--gg-white));
+}
+
+.gg-comp__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.8rem;
+  padding: 1.7rem 3.2rem;
+  width: fit-content;
+  max-width: 100%;
+  background-color: rgb(var(--gg-accent));
+  color: rgb(var(--gg-white));
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--gg-radius-btn);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.gg-comp__btn:hover {
+  opacity: 0.92;
+}
+
+.gg-comp__btn:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-white));
+  outline-offset: 0.2rem;
+}
+
+.gg-comp__media {
+  position: relative;
+  min-height: 32rem;
+  background-color: rgb(var(--gg-gray-200));
+}
+
+@media screen and (min-width: 990px) {
+  .gg-comp__media {
+    min-height: 100%;
+  }
+}
+
+.gg-comp__media img {
+  width: 100%;
+  height: 100%;
+  min-height: 32rem;
+  object-fit: cover;
+  display: block;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-comp__media img {
+    min-height: 100%;
+    position: absolute;
+    inset: 0;
+  }
+}
+@media screen and (max-width: 749px) {
+  .gg-comp__table {
+    min-width: auto;
+}
+.gg-comp__heading p {
+    font-size: clamp(2.3rem, 3.5vw, 4rem);
+    line-height: 3rem;
+}
+.gg-comp__subtext {
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    margin: 0 0 1rem;
+}
+.gg-comp__btn {
+    min-height: 3.8rem;
+    padding: 1.2rem 2.2rem;
+}
+.gg-comp__table tbody td {
+    font-size: 1.2rem;
+}
+.gg-comp__table th, .gg-comp__table td {
+    padding: 0 1rem;
+    min-height: 2rem;
+    height: 6rem;    font-size: 10px;
+    line-height: normal;
+}
+.gg-comp__table thead th.gg-comp__th--brand {
+    font-size: 10px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+.gg-comp__table-wrap {
+    margin-bottom: 1rem;
+}
+.gg-comp__intro {
+    margin: 0 0 1rem;
+}
+.gg-comp__table tbody td.gg-comp__td--feature, .gg-comp__table thead th.gg-comp__th--feature {
+    padding-left: 1rem;
+}
+}

@@ -1,0 +1,587 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_title": true,
+        "show_collection_description": true,
+        "show_custom_description": true,
+        "custom_description": "<p>Upgrade your garage with premium interlocking floor tiles designed for durability, style, and performance. Whether you’re creating a professional workspace or a polished home garage, our tiles deliver a sleek, finished look that stands up to daily wear.<br/><br/>Engineered for heavy loads, chemical resistance, and easy maintenance, these tiles are perfect for cars, trucks, and high-traffic environments. The simple snap-together installation means you can transform your space quickly—no adhesives or special tools required.<br/><br/>Choose from a range of colors and patterns to create a custom layout that reflects your style. From bold statement designs to clean, modern finishes, our garage floor tiles combine function and aesthetics to elevate any space.</p>",
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "disabled": true,
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "product_card_style": "grid_garage",
+        "gg_contain_image_padding_mobile": 12,
+        "gg_contain_image_padding_desktop": 16,
+        "gg_title_position": "below_image",
+        "gg_title_size": "medium",
+        "gg_show_title": true,
+        "gg_show_swatches": true,
+        "gg_swatch_shape": "square",
+        "gg_show_unit_price": false,
+        "gg_text_align": "center",
+        "enable_filtering": true,
+        "filter_type": "drawer",
+        "enable_sorting": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_banner_dXUnhT": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_8rU848": {
+          "type": "heading",
+          "settings": {
+            "heading": "Choose Your Style. One Price. No Surprises.",
+            "heading_size": "hxxl"
+          }
+        },
+        "text_HJEEfy": {
+          "type": "text",
+          "settings": {
+            "text": "Premium pre-sized garage floor kits designed for a fast DIY installation and a professional showroom finish.",
+            "text_style": "body"
+          }
+        },
+        "buttons_QfEChb": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Shop garage kits",
+            "button_link_1": "#shopify-section-template--21881926189285__featured_collection_4rzGRw",
+            "button_style_secondary_1": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_8rU848",
+        "text_HJEEfy",
+        "buttons_QfEChb"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/PATTERNS_BANNER-LABEL_2.png",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": false,
+        "color_scheme": "scheme-6474612f-f797-4d5c-8f01-2e068ed15f6a",
+        "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "gg_garage_kit_hero_qYFLaP": {
+      "type": "gg-garage-kit-hero",
+      "name": "GG: Garage kit hero",
+      "settings": {
+        "image": "shopify://shop_images/Untitled_design_7.png",
+        "image_alt": "Garage flooring installation",
+        "layer_image_opacity": 100,
+        "layer_blend_mode": "multiply",
+        "image_position": "center center",
+        "overlay_color": "#2c291d",
+        "overlay_opacity": 45,
+        "show_vignette": true,
+        "vignette_opacity": 35,
+        "heading": "Choose Your Style. One Price. No Surprises.",
+        "heading_size_desktop": 7.2,
+        "heading_line_height_desktop": 1.1,
+        "heading_size_mobile": 2.8,
+        "heading_line_height_mobile": 1.1,
+        "heading_letter_spacing": 0,
+        "subheading": "Premium pre-sized garage floor kits designed for a fast DIY installation and a professional showroom finish.",
+        "subheading_size_desktop": 2,
+        "subheading_size_mobile": 1.4,
+        "text_color": "#ffffff",
+        "content_max_width": 0,
+        "button_label": "Shop garage kits",
+        "button_link": "#shopify-section-template--21881926189285__featured_collection_4rzGRw",
+        "button_background": "#e11d48",
+        "button_text_color": "#ffffff",
+        "button_full_width_mobile": true,
+        "align_h_desktop": "center",
+        "align_v_desktop": "center",
+        "min_height_desktop": 41,
+        "align_h_mobile": "center",
+        "align_v_mobile": "center",
+        "min_height_mobile": 36,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "multicolumn_DEMrLQ": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_GGjryf": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/IMG-4676.jpg",
+            "title": "Solid",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_XKwqQ3": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/IMG-4674.jpg",
+            "title": "Checkered Classic",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_f9AQUa": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/IMG-4670.jpg",
+            "title": "Racetrack",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_JfJF8J": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-05-13_at_5.39.32_PM.png",
+            "title": "Showroom",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_xCiBPc": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/racedeck-garage-floors-home-garage-that-is-red-hot-racedeck-img_e3c14a380b846e2b_9-6206-1-c64ab49.jpg",
+            "title": "Double Border",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_GGjryf",
+        "column_XKwqQ3",
+        "column_f9AQUa",
+        "column_JfJF8J",
+        "column_xCiBPc"
+      ],
+      "name": "Design Style",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "square",
+        "button_label": "",
+        "button_link": "",
+        "columns_desktop": 5,
+        "column_alignment": "left",
+        "background_style": "none",
+        "color_scheme": "scheme-2",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 12,
+        "padding_bottom": 12
+      }
+    },
+    "featured_collection_4rzGRw": {
+      "type": "featured-collection",
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "complete-garage-floor-kits",
+        "products_to_show": 6,
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 5,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "product_card_style": "grid_garage",
+        "gg_title_position": "below_image",
+        "gg_title_size": "medium",
+        "gg_show_title": true,
+        "gg_show_swatches": true,
+        "gg_swatch_shape": "square",
+        "gg_show_unit_price": true,
+        "gg_unit_label_suffix": "",
+        "gg_image_padding_mobile": 6,
+        "gg_image_padding_desktop": 8,
+        "gg_text_align": "center",
+        "gg_slider_accent": "#e61e43",
+        "gg_slider_pagination_label": "Product slides",
+        "gg_slider_go_to_slide_prefix": "Go to slide",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "show_footer_cta": false,
+        "show_footer_border": true,
+        "footer_border_width": 1,
+        "footer_border_color": "#d4d4d4",
+        "footer_space_above_border": 24,
+        "footer_space_below_border": 20,
+        "footer_button_1_label": "Shop Garage Kits",
+        "footer_button_1_link": "shopify://collections/complete-garage-floor-kits",
+        "footer_button_1_bg": "#e92c4c",
+        "footer_button_1_text": "#ffffff",
+        "footer_button_2_label": "Build your garage",
+        "footer_button_2_link": "",
+        "footer_button_2_bg": "#e6e6e6",
+        "footer_button_2_text": "#000000",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "gg_garage_kit_compare_4fwRiE": {
+      "type": "gg-garage-kit-compare",
+      "blocks": {
+        "garage_kit_card_ExAqFX": {
+          "type": "garage_kit_card",
+          "settings": {
+            "product": "2-car-garage-kit",
+            "product_body_mode": "full_description",
+            "placeholder_link": "",
+            "show_badge": true,
+            "badge_text": "",
+            "title_source": "product",
+            "title_custom": "",
+            "subtitle_source": "custom",
+            "subtitle_custom": "<p>Fits most standard 2-car garages</p>",
+            "features_source": "custom",
+            "features_custom": "<p>Covers up to 400 sq ft<br/>Includes 8% extra tiles<br/>Installs in hours, no tools</p>",
+            "button_label_source": "custom",
+            "button_label_custom": "Shop 2-Car Kit",
+            "image_alt_override": ""
+          }
+        },
+        "garage_kit_card_BmLn3d": {
+          "type": "garage_kit_card",
+          "settings": {
+            "product": "3-car-garage-kit",
+            "product_body_mode": "subtitle_features",
+            "placeholder_link": "",
+            "show_badge": true,
+            "badge_text": "",
+            "title_source": "product",
+            "title_custom": "",
+            "subtitle_source": "custom",
+            "subtitle_custom": "<p>For larger garages</p>",
+            "features_source": "custom",
+            "features_custom": "<ul><li>Covers up to 600 sq ft</li><li>Includes 8% extra tiles</li><li>Includes edge pieces</li><li>Ideal for storage/gym/man caves</li></ul>",
+            "button_label_source": "custom",
+            "button_label_custom": "Shop 3-Car Kit",
+            "image_alt_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "garage_kit_card_ExAqFX",
+        "garage_kit_card_BmLn3d"
+      ],
+      "disabled": true,
+      "name": "GG: Garage kit compare",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Choose your garage size",
+        "heading_alignment": "center",
+        "heading_size_mobile": 2.8,
+        "heading_size_desktop": 4,
+        "price_label_override": "",
+        "color_accent": "#e11d48",
+        "color_card_bg": "#fafafa",
+        "color_heading": "#1b1c1c",
+        "color_title": "#1b1c1c",
+        "color_body": "#0a0a0a",
+        "color_price_label": "#5f5e5e",
+        "color_border": "#e4e2e1",
+        "color_media_bg": "#f0f0f0",
+        "color_button_text": "#ffffff",
+        "color_badge_text": "#ffffff",
+        "color_check_icon": "#ffffff",
+        "grid_gap_mobile": 16,
+        "grid_gap_desktop": 25,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "gg_size_guide_banner_b4mWP6": {
+      "type": "gg-size-guide-banner",
+      "disabled": true,
+      "name": "GG: Size guide banner",
+      "settings": {
+        "image": "shopify://shop_images/Size_guide_banner.png",
+        "image_alt": "Garage floor with grid tiles",
+        "image_position": "center center",
+        "image_loading": "lazy",
+        "overlay_color": "#000000",
+        "overlay_opacity": 60,
+        "gradient_strength": 50,
+        "show_icon": true,
+        "icon_width_min": 36,
+        "icon_width_max": 50,
+        "heading": "Not sure which size you need?",
+        "heading_font_mobile": 30,
+        "heading_font_desktop": 40,
+        "subtext_line_1": "2-car garage = most homes",
+        "subtext_line_2": "3-car garage = larger or extended garages",
+        "subtext_font_mobile": 17,
+        "subtext_font_desktop": 20,
+        "highlight_text": "When in doubt, size up — every kit includes extra tiles",
+        "highlight_font_mobile": 18,
+        "highlight_font_desktop": 22,
+        "stack_gap_mobile": 14,
+        "stack_gap_desktop": 20,
+        "gap_before_highlight_mobile": 28,
+        "gap_before_highlight_desktop": 40,
+        "sublist_row_gap_mobile": 24,
+        "sublist_row_gap_desktop": 40,
+        "highlight_bg_color": "#222222",
+        "accent_color": "#e53935",
+        "content_max_width": 90,
+        "min_height_desktop": 50,
+        "inner_padding_top_mobile": 4,
+        "inner_padding_bottom_mobile": 5.5,
+        "inner_padding_top_desktop": 5,
+        "inner_padding_bottom_desktop": 5,
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
+    "gg_image_content_split_anMHj9": {
+      "type": "gg-image-content-split",
+      "blocks": {
+        "bullet_mz4mUn": {
+          "type": "bullet",
+          "settings": {
+            "text": "Snap-together system"
+          }
+        },
+        "bullet_qWDb3k": {
+          "type": "bullet",
+          "settings": {
+            "text": "Extra tiles included (no shortages)"
+          }
+        },
+        "bullet_dwAptE": {
+          "type": "bullet",
+          "settings": {
+            "text": "Free shipping nationwide"
+          }
+        },
+        "bullet_6Rjip4": {
+          "type": "bullet",
+          "settings": {
+            "text": "DIY installation"
+          }
+        }
+      },
+      "block_order": [
+        "bullet_mz4mUn",
+        "bullet_qWDb3k",
+        "bullet_dwAptE",
+        "bullet_6Rjip4"
+      ],
+      "name": "GG: Image content split",
+      "settings": {
+        "background_style": "light",
+        "light_background": "white",
+        "layout_direction": "image_right",
+        "mobile_text_alignment": "left",
+        "image": "shopify://shop_images/2016-08_Home_Patio-Mocha-RT_1.png",
+        "heading": "Everything you need —nothing you don’t",
+        "column_gap": 64,
+        "column_gap_tablet": 48,
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "gg_image_content_split_en7PKQ": {
+      "type": "gg-image-content-split",
+      "blocks": {
+        "bullet_n3fQtp": {
+          "type": "bullet",
+          "settings": {
+            "text": "Snap-together system"
+          }
+        },
+        "bullet_mycHUK": {
+          "type": "bullet",
+          "settings": {
+            "text": "No glue or special tools required"
+          }
+        },
+        "bullet_qjLNLt": {
+          "type": "bullet",
+          "settings": {
+            "text": "Beginner-friendly"
+          }
+        }
+      },
+      "block_order": [
+        "bullet_n3fQtp",
+        "bullet_mycHUK",
+        "bullet_qjLNLt"
+      ],
+      "name": "GG: Image content split",
+      "settings": {
+        "background_style": "dark",
+        "light_background": "off_white",
+        "layout_direction": "image_left",
+        "mobile_text_alignment": "left",
+        "image": "shopify://shop_images/2019-07_Joe_Dupree_RT_Ivory_Island_Blue_2_1.png",
+        "heading": "Installs in Hours, Not Days",
+        "column_gap": 64,
+        "column_gap_tablet": 48,
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "gg_category_grid_pPQ6wi": {
+      "type": "gg-category-grid",
+      "blocks": {
+        "card_d7Gbrn": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/collection-img1.png",
+            "title": "Daily Parking",
+            "link": "https://grid-garage.myshopify.com/pages/gallery#garages",
+            "open_new_tab": false
+          }
+        },
+        "card_V4xW4n": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/collection-img2.png",
+            "title": "Home Gyms",
+            "link": "https://grid-garage.myshopify.com/pages/gallery#homegyms",
+            "open_new_tab": false
+          }
+        },
+        "card_qcbhRQ": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/collection-img3.png",
+            "title": "Workshops",
+            "link": "https://grid-garage.myshopify.com/pages/gallery#workshops",
+            "open_new_tab": false
+          }
+        },
+        "card_Ybc6hY": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/collection-img4.png",
+            "title": "Man Caves",
+            "link": "https://grid-garage.myshopify.com/pages/gallery#mancaves",
+            "open_new_tab": false
+          }
+        }
+      },
+      "block_order": [
+        "card_d7Gbrn",
+        "card_V4xW4n",
+        "card_qcbhRQ",
+        "card_Ybc6hY"
+      ],
+      "name": "GG: Category image grid",
+      "settings": {
+        "heading": "Designed For Real Garages",
+        "heading_alignment": "center",
+        "card_title_size_mobile": 18,
+        "card_title_size_desktop": 20,
+        "grid_gap_mobile": 16,
+        "grid_gap_tablet": 24,
+        "grid_gap_desktop": 24,
+        "padding_top": 92,
+        "padding_bottom": 92
+      }
+    },
+    "gg_cta_hero_k7mdJU": {
+      "type": "gg-cta-hero",
+      "disabled": true,
+      "name": "GG: CTA hero banner",
+      "settings": {
+        "image": "shopify://shop_images/Mask_group.png",
+        "image_alt": "Garage with interlocking tile flooring",
+        "image_position": "center center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 55,
+        "show_gradient_overlay": false,
+        "gradient_opacity": 40,
+        "content_alignment": "center",
+        "content_max_width": 800,
+        "heading": "Pick Your Kit. Transform Your Garage.",
+        "button_1_label": "SHOP 2-CAR KIT",
+        "button_1_link": "shopify://products/2-car-garage-kit",
+        "button_2_label": "SHOP 3-CAR KIT",
+        "button_2_link": "shopify://products/3-car-garage-kit",
+        "button_color": "#e11d2e",
+        "button_hover_color": "#b91522",
+        "min_height_desktop": 320,
+        "inner_padding_horizontal": 20,
+        "heading_button_gap": 26,
+        "button_gap": 14,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid",
+    "image_banner_dXUnhT",
+    "gg_garage_kit_hero_qYFLaP",
+    "multicolumn_DEMrLQ",
+    "featured_collection_4rzGRw",
+    "gg_garage_kit_compare_4fwRiE",
+    "gg_size_guide_banner_b4mWP6",
+    "gg_image_content_split_anMHj9",
+    "gg_image_content_split_en7PKQ",
+    "gg_category_grid_pPQ6wi",
+    "gg_cta_hero_k7mdJU"
+  ]
+}

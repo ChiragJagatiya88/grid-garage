@@ -1,0 +1,33 @@
+{%- comment -%}
+  Loaded via Section Rendering API by recently-viewed-products.js only.
+  The list row must be ul > li so parsers accept markup inside the shopify-section div wrapper.
+{%- endcomment -%}
+<ul class="recently-viewed-product-card__extract" hidden>
+  <li class="grid__item">
+    {% render 'gg-product-card',
+      card_product: product,
+      section_id: section.id,
+      lazy_load: true,
+      skip_styles: true,
+      placeholder_image: '',
+      title_position: 'below_image',
+      title_size: 'medium',
+      show_title: true,
+      show_swatches: true,
+      swatch_shape: 'round',
+      show_unit_price: false,
+      text_align: 'center'
+    %}
+  </li>
+</ul>
+{% schema %}
+{
+  "name": "t:sections.recently-viewed-product-card.name",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.recently-viewed-product-card.settings.paragraph__1.content"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,170 @@
+/* Grid Garage — Garage size selector section
+   Light grey background, white cards, centered icon + title + description */
+
+.gg-gss {
+  background-color: rgb(var(--gg-gss-bg, var(--gg-gray-100)));
+}
+
+/* Container */
+.gg-gss__container {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--gg-page-pad);
+}
+
+/* Heading */
+.gg-gss__heading {
+  font-size: var(--gg-text-xl);
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 3.2rem;
+  color: rgb(var(--gg-gss-heading, var(--gg-black)));
+  line-height: var(--gg-line-tight);
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gss__heading {
+    margin-bottom: 4rem;
+  }
+}
+
+/* Grid Layout */
+.gg-gss__grid {
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: 1fr;
+  max-width: 68rem;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gss__grid {
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .gg-gss__grid {
+    gap: 2.4rem;
+  }
+}
+
+/* Card */
+.gg-gss__card {
+  display: flex;
+}
+
+.gg-gss__card-link,
+.gg-gss__card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 2.4rem;
+  background-color: rgb(var(--gg-gss-card-bg, var(--gg-white)));
+  border: 1px solid rgb(var(--gg-gss-border, 229, 229, 229));
+  border-radius: var(--gg-radius-card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+  will-change: transform;
+}
+
+.gg-gss__card-link:hover {
+  transform: scale(1.03);
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.gg-gss__card-link:active {
+  transform: scale(1.01);
+}
+
+/* Icon */
+.gg-gss__card-icon {
+  margin-bottom: 1.6rem;
+}
+
+.gg-gss__card-icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+}
+
+.gg-gss__card-icon-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gg-gss__card-icon-placeholder svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* Title */
+.gg-gss__card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: rgb(var(--gg-gss-title, var(--gg-black)));
+  margin: 0 0 0.8rem;
+  line-height: var(--gg-line-tight);
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gss__card-title {
+    font-size: 2rem;
+  }
+}
+
+/* Description */
+.gg-gss__card-desc {
+  font-size: 1.4rem;
+  color: rgb(var(--gg-gss-desc, 102, 102, 102));
+  margin: 0;
+  line-height: var(--gg-line-body);
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gss__card-desc {
+    font-size: 1.5rem;
+  }
+}
+
+/* Focus states */
+.gg-gss__card-link:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-gss-accent, var(--gg-accent)));
+  outline-offset: 0.2rem;
+}
+
+/* Active/Selected state (for JS enhancement) */
+.gg-gss__card.is-selected .gg-gss__card-link,
+.gg-gss__card.is-selected .gg-gss__card-inner {
+  border: 2px solid rgb(var(--gg-gss-accent, var(--gg-accent)));
+  background-color: rgba(var(--gg-gss-accent, var(--gg-accent)), 0.02);
+}
+
+/* Animation stagger delay */
+.gg-gss__card.scroll-trigger {
+  animation-delay: calc(var(--animation-order, 1) * 100ms);
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 749px) {
+  .gg-gss__card-link,
+  .gg-gss__card-inner {
+    padding: 2rem;
+  }
+
+  .gg-gss__card-title {
+    font-size: 1.6rem;
+  }
+
+  .gg-gss__card-desc {
+    font-size: 1.3rem;
+  }
+}

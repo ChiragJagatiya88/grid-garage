@@ -1,0 +1,119 @@
+/* Grid Garage — split text + image slider */
+
+.gg-split-show {
+  background-color: rgb(var(--gg-black));
+  color: rgb(var(--gg-white));
+}
+
+.gg-split-show__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 48rem;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-split-show__layout {
+    grid-template-columns: 1fr 1fr;
+    min-height: 56rem;
+  }
+}
+
+.gg-split-show__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--gg-section-y) var(--gg-page-pad);
+  position: relative;
+}
+
+.gg-split-show__heading {
+  font-size: var(--gg-split-heading-size);
+  font-weight: 700;
+  line-height: var(--gg-line-tight);
+  margin: 0 0 1.6rem;
+}
+
+.gg-split-show__text {
+  font-size: var(--gg-split-body-size);
+  line-height: var(--gg-line-body);
+  opacity: 0.9;
+  margin: 0;
+}
+
+.gg-split-show__controls {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 3.2rem;
+  padding: 0.8rem 1.2rem;
+  background-color: rgba(var(--gg-white), 0.12);
+  border-radius: 10rem;
+  width: fit-content;
+}
+
+.gg-split-show__controls .slider-button {
+  color: rgb(var(--gg-white));
+  border-color: rgba(var(--gg-white), 0.4);
+  background: transparent;
+}
+
+.gg-split-show__controls .slider-button--prev .svg-wrapper {
+  transform: rotate(90deg);
+}
+
+.gg-split-show__controls .slider-button--next .svg-wrapper {
+  transform: rotate(-90deg);
+}
+
+.gg-split-show__text-panel {
+  display: none;
+}
+
+.gg-split-show__text-panel.is-active {
+  display: block;
+}
+
+.gg-split-show__counter {
+  font-size: var(--gg-text-sm);
+  font-weight: 600;
+  min-width: 4ch;
+  text-align: center;
+}
+
+.gg-split-show__media {
+  position: relative;
+  min-height: 32rem;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-split-show__media {
+    min-height: auto;
+  }
+}
+
+.gg-split-show__slide {
+  width: 100%;
+  height: 100%;
+}
+
+.gg-split-show__slide img {
+  width: 100%;
+  height: 100%;
+  min-height: 32rem;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-split-show__slide img {
+    min-height: 100%;
+  }
+}
+
+.gg-split-show .slider.slider--tablet-up {
+  height: 100%;
+}
+
+.gg-split-show .slider__slide {
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,493 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "gg_story_banner_VzY66n": {
+      "type": "gg-story-banner",
+      "name": "GG: Story banner",
+      "settings": {
+        "image": "shopify://shop_images/about-banner.png",
+        "image_alt": "Grid Garage team and flooring",
+        "image_position": "center center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30,
+        "heading": "{{ page.title }}",
+        "heading_color": "#ffffff",
+        "heading_size_desktop": 5.5,
+        "heading_lh_desktop": 6.2,
+        "heading_tracking_desktop": 0,
+        "heading_size_mobile": 3.2,
+        "heading_lh_mobile": 0,
+        "heading_tracking_mobile": 0,
+        "align_h_desktop": "center",
+        "align_v_desktop": "center",
+        "min_height_desktop": 44,
+        "inner_pad_y_desktop_top": 0,
+        "inner_pad_y_desktop_bottom": 0,
+        "align_h_mobile": "center",
+        "align_v_mobile": "center",
+        "min_height_mobile": 20,
+        "inner_pad_y_mobile": 0,
+        "content_max_width": 0,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gg_breadcrumbs_t7HE7g": {
+      "type": "gg-breadcrumbs",
+      "blocks": {
+        "crumb_3rrB6z": {
+          "type": "crumb",
+          "settings": {
+            "label": "Home",
+            "link": "/",
+            "is_current": false
+          }
+        }
+      },
+      "block_order": [
+        "crumb_3rrB6z"
+      ],
+      "name": "GG: Breadcrumbs",
+      "settings": {
+        "breadcrumb_mode": "auto",
+        "hide_on_home": true,
+        "home_label": "Home",
+        "separator": "|",
+        "aria_label": "Breadcrumb",
+        "label_cart": "",
+        "label_search": "",
+        "label_collections": "",
+        "label_404": "",
+        "background_color": "#ffffff",
+        "text_color": "#222222",
+        "separator_color": "#222222",
+        "font_size_desktop": 1.2,
+        "font_size_mobile": 1.1,
+        "line_height": 1.5,
+        "font_weight": 700,
+        "letter_spacing": 0,
+        "align_desktop": "left",
+        "align_mobile": "left",
+        "padding_top": 20,
+        "padding_bottom": 12
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "gg_gallery_grid_bpTGH9": {
+      "type": "gg-gallery-grid",
+      "blocks": {
+        "gallery_image_yNJ3BC": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/21-2021-01_ShawnCrozatJetBlackPearlSilverRTAshPineVT_garagegym.jpg",
+            "alt": "Garage gym with premium flooring and workout equipment",
+            "link": ""
+          }
+        },
+        "gallery_image_ta8hEg": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/image64690_800x_d70bb1e7-848a-421c-9f7e-16dbae69bdd1.jpg",
+            "alt": "Yellow sports car in a garage with checkered floor and Corvette-themed decor",
+            "link": ""
+          }
+        },
+        "gallery_image_rjTaPM": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/56-327273605_581204046945520_3759874699286875864_n.jpg",
+            "alt": "Garage interior with a silver convertible car on a checkered floor, American flag on the wall, and various items.",
+            "link": ""
+          }
+        },
+        "gallery_image_xRyjy4": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/42-image78209.jpg",
+            "alt": "Garage floor with swisstrax flooring, showing a checkered pattern.",
+            "link": ""
+          }
+        },
+        "gallery_image_3xKXEM": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/Ribtrax_Lifestyle_6_1000x1000_1000x_6b096714-8262-46c7-b1d7-5cd71a0bef15.jpg",
+            "alt": "Two blue race cars in a garage with checkered floor",
+            "link": ""
+          }
+        },
+        "gallery_image_3xYBT4": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/60-image81509.jpg",
+            "alt": "Garage with checkered floor and Swisstrax branding",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_yNJ3BC",
+        "gallery_image_ta8hEg",
+        "gallery_image_rjTaPM",
+        "gallery_image_xRyjy4",
+        "gallery_image_3xKXEM",
+        "gallery_image_3xYBT4"
+      ],
+      "name": "GG: Gallery grid",
+      "settings": {
+        "heading": "Garages",
+        "heading_alignment": "center",
+        "image_aspect_ratio": "1:1",
+        "image_height_desktop": 280,
+        "image_height_tablet": 220,
+        "image_height_mobile": 280,
+        "grid_gap": 16,
+        "background_color": "#f5f5f5",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "gg_gallery_grid_fEWFc6": {
+      "type": "gg-gallery-grid",
+      "blocks": {
+        "gallery_image_APe7ht": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/1fc908fefbc29e95dd00ab740a6f8294d34a1e6f.jpg",
+            "alt": "Home gym with red weight rack and bench, featuring Swisstrax branding.",
+            "link": ""
+          }
+        },
+        "gallery_image_YWPPMV": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2007-01_Home_Gym-Black_Red_Grey-RT.jpg",
+            "alt": "Swisstrax checkered floor tiles in a gym setting with equipment.",
+            "link": ""
+          }
+        },
+        "gallery_image_hrVQt8": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2020-12_David_DTH_Pearl_Silver_Jet_Black_Island_Blue_8.jpg",
+            "alt": "Garage interior with exercise equipment, mats, and wall-mounted weights.",
+            "link": ""
+          }
+        },
+        "gallery_image_jiUtiK": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2020-12_David_DTH_Pearl_Silver_Jet_Black_Island_Blue_36.jpg",
+            "alt": "Gym setup with weightlifting bench, pull-up bar, and weight plates on a rubber mat.",
+            "link": ""
+          }
+        },
+        "gallery_image_PNenF7": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2021-05_Rachel_Wilson_DTF_Slate_Grey_2.jpg",
+            "alt": "Home gym with various equipment including a bike, weights, and a squat rack on a Swisstrax floor.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_APe7ht",
+        "gallery_image_YWPPMV",
+        "gallery_image_hrVQt8",
+        "gallery_image_jiUtiK",
+        "gallery_image_PNenF7"
+      ],
+      "name": "GG: Gallery grid",
+      "settings": {
+        "heading": "Home Gyms",
+        "heading_alignment": "center",
+        "image_aspect_ratio": "1:1",
+        "image_height_desktop": 280,
+        "image_height_tablet": 220,
+        "image_height_mobile": 280,
+        "grid_gap": 16,
+        "background_color": "#f5f5f5",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "gg_gallery_grid_AnRX6e": {
+      "type": "gg-gallery-grid",
+      "blocks": {
+        "gallery_image_fcG6tT": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2010-06_NL_Terra_Cotta_Balcony-RT.jpg",
+            "alt": "Outdoor seating area with red patterned floor tiles and a view of a waterfront cityscape.",
+            "link": ""
+          }
+        },
+        "gallery_image_AhTQpy": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2018-11_Ron_Evans_Showroom-VT_Reclaimed_Pine_2.jpg",
+            "alt": "Automotive-themed room with vintage signs and decor, featuring a counter and hallway.",
+            "link": ""
+          }
+        },
+        "gallery_image_hMrzAp": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2018-09_Gordon_Music_Room-DarkOak-VT_3_EDIT.jpg",
+            "alt": "Drum set in a music studio with soundproofing panels on the wall.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_fcG6tT",
+        "gallery_image_AhTQpy",
+        "gallery_image_hMrzAp"
+      ],
+      "name": "GG: Gallery grid",
+      "settings": {
+        "heading": "Man Caves",
+        "heading_alignment": "center",
+        "image_aspect_ratio": "1:1",
+        "image_height_desktop": 280,
+        "image_height_tablet": 220,
+        "image_height_mobile": 280,
+        "grid_gap": 16,
+        "background_color": "#f5f5f5",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "gg_gallery_grid_kmTMEx": {
+      "type": "gg-gallery-grid",
+      "blocks": {
+        "gallery_image_HRrGxt": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2c36fcf2bb672d7e00bd99797468d2fb5dbd162d.jpg",
+            "alt": "Automotive repair shop with a car on a lift and checkered floor.",
+            "link": ""
+          }
+        },
+        "gallery_image_ENh4qL": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2015-07_Rockstar-RT_3.jpg",
+            "alt": "Swisstraxx off-road vehicle in a warehouse setting with forklift and various equipment.",
+            "link": ""
+          }
+        },
+        "gallery_image_hpcMmk": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2014-05_ACD-RT_2.jpg",
+            "alt": "Industrial workshop with equipment and tools on a checkered floor",
+            "link": ""
+          }
+        },
+        "gallery_image_fQxGdA": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2014-08_Lincoln_Electric_Warehouse-RT.jpg",
+            "alt": "Automotive workshop with red and black equipment and a checkered floor.",
+            "link": ""
+          }
+        },
+        "gallery_image_fepUCJ": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2010-09_Level5_Stone_Racing_Kelly_Moss-RT_1_EDIT.jpg",
+            "alt": "Brown car on a lift in a workshop with checkered floor",
+            "link": ""
+          }
+        },
+        "gallery_image_txEB8a": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2016-01_Westminister_Speed_and_Sound-FT_1.jpg",
+            "alt": "Garage with cars on a checkered floor, featuring the Swisstrax logo.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_HRrGxt",
+        "gallery_image_ENh4qL",
+        "gallery_image_hpcMmk",
+        "gallery_image_fQxGdA",
+        "gallery_image_fepUCJ",
+        "gallery_image_txEB8a"
+      ],
+      "name": "GG: Gallery grid",
+      "settings": {
+        "heading": "Workshops",
+        "heading_alignment": "center",
+        "image_aspect_ratio": "1:1",
+        "image_height_desktop": 280,
+        "image_height_tablet": 220,
+        "image_height_mobile": 280,
+        "grid_gap": 16,
+        "background_color": "#f5f5f5",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "gg_gallery_grid_dGQXeU": {
+      "type": "gg-gallery-grid",
+      "blocks": {
+        "gallery_image_HkRgB7": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/34-image77007.jpg",
+            "alt": "Swisstrax floor tiles arranged in a geometric pattern on a wooden floor.",
+            "link": ""
+          }
+        },
+        "gallery_image_JAUzVq": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/54-IMG_0879_002.jpg",
+            "alt": "Checkered floor with black, gray, and red pattern in a room with geometric ceiling lights.",
+            "link": ""
+          }
+        },
+        "gallery_image_cLPAnq": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/50-upload2094715-2.jpg",
+            "alt": "Garage interior with checkered floor, refrigerator, and various items.",
+            "link": ""
+          }
+        },
+        "gallery_image_QeA43E": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/57-IMG_0550.jpg",
+            "alt": "Modern interior with red and black ceiling design, gray walls, and a black floor.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_HkRgB7",
+        "gallery_image_JAUzVq",
+        "gallery_image_cLPAnq",
+        "gallery_image_QeA43E"
+      ],
+      "name": "GG: Gallery grid",
+      "settings": {
+        "heading": "Basements",
+        "heading_alignment": "center",
+        "image_aspect_ratio": "1:1",
+        "image_height_desktop": 280,
+        "image_height_tablet": 220,
+        "image_height_mobile": 280,
+        "grid_gap": 16,
+        "background_color": "#f5f5f5",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "gg_gallery_grid_87eGDr": {
+      "type": "gg-gallery-grid",
+      "blocks": {
+        "gallery_image_qaXFJK": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/6045f9d6e5ee3170db6a50c89a5ce4e6e2c2772c.jpg",
+            "alt": "Outdoor patio with wicker chairs, red cushions, and hanging planters on a checkered floor.",
+            "link": ""
+          }
+        },
+        "gallery_image_TJtqzz": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/4df858a5213aaadf8b090ea9b9244ab40093b7bd.png",
+            "alt": "Outdoor patio with dining table, chairs, and grill on a Swisstrax patio deck.",
+            "link": ""
+          }
+        },
+        "gallery_image_qnL8Yq": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/4a278475ddb4d746d2b5680b47ea4dfaa3b411b4.jpg",
+            "alt": "High-gloss epoxy garage floor coating with seamless durable finish.",
+            "link": ""
+          }
+        },
+        "gallery_image_faNzae": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/Ribtrax_Lifestyle_5_1000x1000_1000x_1034379f-4950-4be9-9a15-de26e911d394.jpg",
+            "alt": "Outdoor patio with wooden furniture on a checkered floor mat",
+            "link": ""
+          }
+        },
+        "gallery_image_pLfkMM": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2010-09_NL_Grey_Balcony-RT_3.jpg",
+            "alt": "Outdoor patio with wicker furniture, cushions, and potted plants on a checkered floor.",
+            "link": ""
+          }
+        },
+        "gallery_image_YpNDWE": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/2017-05_Ginsburg_Pool_and_Patio-Terra_Cotta_Mocha_and_Brown-RT_7_copy.jpg",
+            "alt": "Outdoor patio area with wicker furniture and a pool in the background",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_qaXFJK",
+        "gallery_image_TJtqzz",
+        "gallery_image_qnL8Yq",
+        "gallery_image_faNzae",
+        "gallery_image_pLfkMM",
+        "gallery_image_YpNDWE"
+      ],
+      "name": "GG: Gallery grid",
+      "settings": {
+        "heading": "Patios",
+        "heading_alignment": "center",
+        "image_aspect_ratio": "1:1",
+        "image_height_desktop": 280,
+        "image_height_tablet": 220,
+        "image_height_mobile": 280,
+        "grid_gap": 16,
+        "background_color": "#f5f5f5",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "gg_story_banner_VzY66n",
+    "gg_breadcrumbs_t7HE7g",
+    "main",
+    "gg_gallery_grid_bpTGH9",
+    "gg_gallery_grid_fEWFc6",
+    "gg_gallery_grid_AnRX6e",
+    "gg_gallery_grid_kmTMEx",
+    "gg_gallery_grid_dGQXeU",
+    "gg_gallery_grid_87eGDr"
+  ]
+}

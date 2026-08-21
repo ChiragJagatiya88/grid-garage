@@ -1,0 +1,501 @@
+{%- comment -%}
+  Figma node 288:1630 — uppercase bold 12px / 18px line, #222, pipe separators.
+  Automatic trail from template, or custom blocks (preset matches Figma demo).
+{%- endcomment -%}
+{{ 'gg-breadcrumbs.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign mode_auto = false
+  if section.settings.breadcrumb_mode == 'auto'
+    assign mode_auto = true
+  endif
+
+  assign render_section = true
+  if mode_auto and template.name == 'index' and section.settings.hide_on_home
+    assign render_section = false
+  endif
+
+  case section.settings.align_mobile
+    when 'center'
+      assign justify_m = 'center'
+    when 'right'
+      assign justify_m = 'flex-end'
+    else
+      assign justify_m = 'flex-start'
+  endcase
+
+  case section.settings.align_desktop
+    when 'center'
+      assign justify_d = 'center'
+    when 'right'
+      assign justify_d = 'flex-end'
+    else
+      assign justify_d = 'flex-start'
+  endcase
+
+  assign sep_char = section.settings.separator | strip
+  if sep_char == blank
+    assign sep_char = '|'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-bc {
+    --gg-bc-bg: {{ section.settings.background_color.red }},{{ section.settings.background_color.green }},{{ section.settings.background_color.blue }};
+    --gg-bc-text: {{ section.settings.text_color.red }},{{ section.settings.text_color.green }},{{ section.settings.text_color.blue }};
+    --gg-bc-sep: {{ section.settings.separator_color.red }},{{ section.settings.separator_color.green }},{{ section.settings.separator_color.blue }};
+    --gg-bc-fs-m: {{ section.settings.font_size_mobile }}rem;
+    --gg-bc-fs-d: {{ section.settings.font_size_desktop }}rem;
+    --gg-bc-lh: {{ section.settings.line_height }};
+    --gg-bc-fw: {{ section.settings.font_weight }};
+    --gg-bc-track: {{ section.settings.letter_spacing }}em;
+    --gg-bc-justify-m: {{ justify_m }};
+    --gg-bc-justify-d: {{ justify_d }};
+  }
+{%- endstyle -%}
+
+{%- if render_section -%}
+  {%- if mode_auto -%}
+    {%- capture bc_inner -%}
+      <ol class="gg-bc__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+        {%- assign bc_pos = 1 -%}
+        <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          {%- if template.name == 'index' -%}
+            <span class="gg-bc__current" itemprop="name">{{ section.settings.home_label | escape }}</span>
+            <link itemprop="item" href="{{ request.origin }}{{ routes.root_url }}">
+            <meta itemprop="position" content="{{ bc_pos }}">
+          {%- else -%}
+            <a href="{{ routes.root_url }}" class="gg-bc__link" itemprop="item">
+              <span itemprop="name">{{ section.settings.home_label | escape }}</span>
+            </a>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <span class="gg-bc__sep" aria-hidden="true">{{ sep_char }}</span>
+          {%- endif -%}
+        </li>
+
+        {%- if template.name == 'product' -%}
+          {%- assign col = product.collections.first -%}
+          {%- if col != blank -%}
+            {%- assign bc_pos = bc_pos | plus: 1 -%}
+            <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+              <a href="{{ col.url }}" class="gg-bc__link" itemprop="item">
+                <span itemprop="name">{{ col.title | escape }}</span>
+              </a>
+              <meta itemprop="position" content="{{ bc_pos }}">
+              <span class="gg-bc__sep" aria-hidden="true">{{ sep_char }}</span>
+            </li>
+          {%- endif -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ product.title | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ product.url }}">
+          </li>
+
+        {%- elsif template.name == 'collection' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ collection.title | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ collection.url }}">
+          </li>
+
+        {%- elsif template.name == 'page' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ page.title | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ page.url }}">
+          </li>
+
+        {%- elsif template.name == 'blog' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ blog.title | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ blog.url }}">
+          </li>
+
+        {%- elsif template.name == 'article' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="{{ blog.url }}" class="gg-bc__link" itemprop="item">
+              <span itemprop="name">{{ blog.title | escape }}</span>
+            </a>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <span class="gg-bc__sep" aria-hidden="true">{{ sep_char }}</span>
+          </li>
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ article.title | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ article.url }}">
+          </li>
+
+        {%- elsif template.name == 'cart' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ section.settings.label_cart | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ routes.cart_url }}">
+          </li>
+
+        {%- elsif template.name == 'search' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ section.settings.label_search | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ routes.search_url }}">
+          </li>
+
+        {%- elsif template.name == 'list-collections' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ section.settings.label_collections | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+            <link itemprop="item" href="{{ request.origin }}{{ routes.collections_url }}">
+          </li>
+
+        {%- elsif template.name == '404' -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ section.settings.label_404 | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+          </li>
+
+        {%- else -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          <li class="gg-bc__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="gg-bc__current" itemprop="name">{{ page_title | escape }}</span>
+            <meta itemprop="position" content="{{ bc_pos }}">
+          </li>
+        {%- endif -%}
+      </ol>
+    {%- endcapture -%}
+
+  {%- else -%}
+    {%- comment -%} Custom: blocks only {%- endcomment -%}
+    {%- assign crumb_count = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'crumb' -%}
+        {%- assign crumb_count = crumb_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if crumb_count > 0 -%}
+      {%- capture bc_inner -%}
+        <ol class="gg-bc__list">
+          {%- assign crumb_i = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'crumb' -%}
+              {%- assign crumb_i = crumb_i | plus: 1 -%}
+              <li class="gg-bc__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.is_current or block.settings.link == blank -%}
+                  <span class="gg-bc__current">{{ block.settings.label | escape }}</span>
+                {%- else -%}
+                  <a href="{{ block.settings.link }}" class="gg-bc__link">{{ block.settings.label | escape }}</a>
+                {%- endif -%}
+                {%- if crumb_i < crumb_count -%}
+                  <span class="gg-bc__sep" aria-hidden="true">{{ sep_char }}</span>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ol>
+      {%- endcapture -%}
+    {%- else -%}
+      {%- assign bc_inner = '' -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- assign bc_trim = bc_inner | strip -%}
+  {%- if bc_trim != blank -%}
+    <nav
+      class="gg-bc section-{{ section.id }}-padding"
+      aria-label="{{ section.settings.aria_label | escape }}"
+    >
+      <div class="gg-bc__inner page-width">
+        {{ bc_inner }}
+      </div>
+    </nav>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GG: Breadcrumbs",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "breadcrumb_mode",
+      "label": "Source",
+      "options": [
+        { "value": "custom", "label": "Custom (blocks)" },
+        { "value": "auto", "label": "Automatic (by page)" }
+      ],
+      "default": "auto",
+      "info": "Preset uses Custom to match the Figma demo. Switch to Automatic on product and collection templates."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_home",
+      "label": "Hide when automatic and only home",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Home label",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator character",
+      "default": "|"
+    },
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Navigation label (accessibility)",
+      "default": "Breadcrumb"
+    },
+    {
+      "type": "header",
+      "content": "Automatic labels"
+    },
+    {
+      "type": "text",
+      "id": "label_cart",
+      "label": "Cart page title",
+      "default": "Shopping cart"
+    },
+    {
+      "type": "text",
+      "id": "label_search",
+      "label": "Search page title",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "label_collections",
+      "label": "List collections title",
+      "default": "Collections"
+    },
+    {
+      "type": "text",
+      "id": "label_404",
+      "label": "404 page title",
+      "default": "Page not found"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator",
+      "default": "#222222"
+    },
+    {
+      "type": "range",
+      "id": "font_size_desktop",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Font size — large screens",
+      "default": 1.2,
+      "info": "Figma 12px ≈ 1.2rem (Dawn scale)."
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "min": 0.9,
+      "max": 1.8,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Font size — mobile",
+      "default": 1.1
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "min": 1,
+      "max": 2.2,
+      "step": 0.1,
+      "label": "Line height",
+      "default": 1.5,
+      "info": "Figma 18px on 12px ≈ 1.5."
+    },
+    {
+      "type": "range",
+      "id": "font_weight",
+      "min": 600,
+      "max": 800,
+      "step": 100,
+      "label": "Font weight",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "min": -0.1,
+      "max": 0.3,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Letter spacing",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Alignment"
+    },
+    {
+      "type": "select",
+      "id": "align_desktop",
+      "label": "Large screens (990px+)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left",
+      "info": "Figma uses left-aligned crumbs."
+    },
+    {
+      "type": "select",
+      "id": "align_mobile",
+      "label": "Mobile",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "crumb",
+      "name": "Crumb",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Home"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Leave empty for current page (no link)."
+        },
+        {
+          "type": "checkbox",
+          "id": "is_current",
+          "label": "Current page (no link)",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Breadcrumbs",
+      "settings": {
+        "breadcrumb_mode": "custom",
+        "hide_on_home": true,
+        "font_size_desktop": 1.2,
+        "font_size_mobile": 1.1,
+        "line_height": 1.5,
+        "font_weight": 700,
+        "letter_spacing": 0,
+        "align_desktop": "left",
+        "align_mobile": "left",
+        "padding_top": 12,
+        "padding_bottom": 12
+      },
+      "blocks": [
+        {
+          "type": "crumb",
+          "settings": {
+            "label": "Home",
+            "link": "/",
+            "is_current": false
+          }
+        },
+        {
+          "type": "crumb",
+          "settings": {
+            "label": "Solid",
+            "link": "/collections/solid",
+            "is_current": false
+          }
+        },
+        {
+          "type": "crumb",
+          "settings": {
+            "label": "Swisstrax Ribtrax Smooth 12-SERIES",
+            "link": "/collections/all",
+            "is_current": false
+          }
+        },
+        {
+          "type": "crumb",
+          "settings": {
+            "label": "Durable smooth garage floor tiles",
+            "link": "",
+            "is_current": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

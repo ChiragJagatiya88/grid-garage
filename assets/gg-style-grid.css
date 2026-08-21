@@ -1,0 +1,149 @@
+/* Grid Garage — Style Grid section
+   Light grey background, white cards with image + title. */
+
+.gg-sg {
+  background-color: rgb(var(--gg-sg-bg, 245, 245, 245));
+}
+
+/* Container */
+.gg-sg__container {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--gg-page-pad);
+}
+
+/* Heading */
+.gg-sg__heading {
+    font-size: clamp(2.4rem, 4vw, 4rem);
+    font-weight: 700;
+    text-align: var(--gg-sg-head-align, center);
+    margin: 0 0 3.6rem;
+    line-height: 38.4px;
+    letter-spacing: -0.8px;
+    color: #191C1E;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-sg__heading {
+    margin-bottom: 4rem;
+  }
+}
+
+/* Grid Layout */
+.gg-sg__grid {
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 550px) {
+  .gg-sg__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .gg-sg__grid {
+    gap: 2.6rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Card */
+.gg-sg__card {
+  display: flex;
+}
+
+.gg-sg__card-link, .gg-sg__card-inner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow .3s ease, border-color .3s ease;
+    will-change: box-shadow;
+    border-radius: 8px;
+    border: 1px solid #E0E3E5;
+    background: #F7F9FB;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.gg-sg__card-link:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.gg-sg__card-link:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-accent));
+  outline-offset: 0.2rem;
+}
+
+/* Image Container */
+.gg-sg__card-image {
+  position: relative;
+  width: 100%;
+  height: var(--gg-sg-img-h-m, 180px);
+  overflow: hidden;
+  background-color: rgba(var(--gg-black), 0.05);
+}
+
+@media screen and (min-width: 750px) {
+  .gg-sg__card-image {
+    height: var(--gg-sg-img-h-d, 220px);
+  }
+}
+
+/* Image */
+.gg-sg__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: scale(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gg-sg__card-link:hover .gg-sg__img {
+    transform: scale(1.05);
+  }
+}
+
+/* Placeholder SVG */
+.gg-sg__card-image .placeholder-svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+/* Title */
+.gg-sg__card-title {
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 0;
+    padding: 1.6rem;
+    color: #191C1E;
+    font-weight: 700;
+    line-height: 28px;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-sg__card-title {
+    font-size: 1.7rem;
+    padding: 3rem;
+  }
+}
+
+/* Animation stagger delay */
+.gg-sg__card.scroll-trigger {
+  animation-delay: calc(var(--animation-order, 1) * 80ms);
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 549px) {
+  .gg-sg__card-title {
+    font-size: 1.5rem;
+    padding: 1.4rem;
+  }
+}

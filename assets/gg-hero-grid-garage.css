@@ -1,0 +1,283 @@
+/* Grid Garage — full-bleed hero slider (image / muted autoplay video) */
+
+.gg-hero-gg {
+  position: relative;
+  min-height: var(--gg-hero-min-mobile, 36rem);
+  color: rgb(var(--gg-white));
+  overflow: hidden;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-hero-gg {
+    min-height: var(--gg-hero-min-desktop, 52rem);
+  }
+}
+
+.gg-hero-gg__slides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.gg-hero-gg__slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.55s ease, visibility 0.55s ease;
+  z-index: 0;
+  inset:0;
+}
+
+.gg-hero-gg__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gg-hero-gg__slide {
+    transition: none;
+  }
+}
+
+.gg-hero-gg__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+}
+.gg-hero-gg__video, .gg-hero-gg__media img,.gg-hero-gg__media .placeholder-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;    position: absolute;inset: 0;top:0;left:0;
+}
+
+.gg-hero-gg__overlay {
+  position: absolute;
+  inset: 0;
+  /* --gg-overlay-rgb set on section (Dawn-style triplet); falls back to black */
+  background: linear-gradient(
+    90deg,
+    rgba(var(--gg-overlay-rgb, var(--gg-black)), 0.72) 0%,
+    rgba(var(--gg-overlay-rgb, var(--gg-black)), 0.35) 55%,
+    rgba(var(--gg-overlay-rgb, var(--gg-black)), 0.2) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.gg-hero-gg__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: var(--gg-section-y) var(--gg-page-pad);
+  text-align: left;
+}
+
+.gg-hero-gg__eyebrow {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  font-size: var(--gg-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--gg-white));
+  background-color: rgba(var(--gg-black), 0.3);
+  border: 0.1rem solid rgba(var(--gg-white), 0.36);
+  border-radius: var(--gg-radius-btn);
+  margin-bottom: 2rem;
+}
+
+.gg-hero-gg__heading {
+  font-size: clamp(
+    var(--gg-hero-heading-min, 3.2rem),
+    5vw,
+    var(--gg-hero-heading-max, 7.2rem)
+  );
+  font-weight: 700;
+  line-height: var(--gg-line-tight);
+  margin: 0 0 1.6rem;
+  color: #fff;
+  max-width: 90rem;
+}
+
+.gg-hero-gg__heading-line {
+  display: block;
+}
+
+/* --gg-hero-heading-accent on .gg-hero-gg__content; falls back to --gg-accent for older themes */
+.gg-hero-gg__heading .gg-hero-gg__accent {
+  color: rgb(var(--gg-hero-heading-accent, var(--gg-accent)));
+}
+
+.gg-hero-gg__subtext {
+  font-size: var(--gg-hero-sub-size);
+  line-height: var(--gg-line-body);
+  max-width: 54rem;
+  margin: 0 0 2.8rem;
+}
+.gg-hero-gg__content.center .gg-hero-gg__subtext {
+    margin: 0 auto 2.8rem;
+    text-align: center;
+}
+.gg-hero-gg__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-bottom: 3.2rem;
+}
+
+.gg-hero-gg__samples {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: rgb(var(--gg-white));
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    letter-spacing: 1.2px;
+}
+
+.gg-hero-gg__samples:hover {
+  text-decoration: underline;
+}
+
+/* Slider navigation — below header sticky (10) and menu-drawer (3) so mobile menu covers arrows */
+.gg-hero-gg__nav {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.gg-hero-gg__arrows {
+  pointer-events: none;
+}
+
+.gg-hero-gg__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4.4rem;
+  height: 4.4rem;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+  border-radius: 50%;
+  border: 0.1rem solid rgba(var(--gg-white), 0.45);
+  background: rgba(var(--gg-black), 0.35);
+  color: rgb(var(--gg-white));
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.gg-hero-gg__arrow:hover {
+  background: rgba(var(--gg-black), 0.55);
+  border-color: rgba(var(--gg-white), 0.75);
+}
+
+.gg-hero-gg__arrow:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-white));
+  outline-offset: 0.2rem;
+}
+
+.gg-hero-gg__arrow--prev {
+  left: max(1.2rem, var(--gg-page-pad));
+}
+
+.gg-hero-gg__arrow--next {
+  right: max(1.2rem, var(--gg-page-pad));
+}
+
+.gg-hero-gg__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 2.4rem;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  pointer-events: auto;
+}
+
+.gg-hero-gg__dot {
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 0.1rem solid rgba(var(--gg-white), 0.65);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.gg-hero-gg__dot.is-active {
+  background: rgb(var(--gg-white));
+  border-color: rgb(var(--gg-white));
+  transform: scale(1.15);
+}
+
+.gg-hero-gg__dot:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-white));
+  outline-offset: 0.2rem;
+}
+
+/* Arrows at bottom center */
+.gg-hero-gg--arrows-bottom .gg-hero-gg__arrows {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 5.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.6rem;
+  pointer-events: none;
+}
+
+.gg-hero-gg--arrows-bottom .gg-hero-gg__arrow {
+  position: static;
+  transform: none;
+}
+
+.gg-hero-gg--arrows-bottom .gg-hero-gg__dots {
+  bottom: 2rem;
+}
+
+/* Dots only: keep dots clear of content */
+.gg-hero-gg--dots-only .gg-hero-gg__dots {
+  bottom: 2.4rem;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-hero-gg__content {
+    padding-left: var(--gg-page-pad);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .gg-hero-gg__arrow {
+    width: 4rem;
+    height: 4rem;
+    min-width: 4rem;
+    min-height: 4rem;
+  }
+
+  .gg-hero-gg--arrows-bottom .gg-hero-gg__arrows {
+    bottom: 5rem;
+  }
+  .gg-hero-gg__arrows{
+    display:none;
+  }
+}

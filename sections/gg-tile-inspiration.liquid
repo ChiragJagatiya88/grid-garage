@@ -1,0 +1,120 @@
+{%- comment -%}
+  Figma: Modular interlocking tile inspiration (node 279:3960).
+{%- endcomment -%}
+{{ 'gg-tile-inspiration.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section class="gg-ti section-{{ section.id }}-padding">
+  <div class="gg-ti__intro">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="gg-ti__title gg-font-heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="gg-ti__sub gg-font-body">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="gg-ti__grid">
+    {%- for block in section.blocks -%}
+      <article class="gg-ti__card" {{ block.shopify_attributes }}>
+        <div class="gg-ti__media">
+          {%- if block.settings.image != blank -%}
+            {{
+              block.settings.image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                sizes: '(min-width: 1200px) 22vw, (min-width: 750px) 45vw, 100vw',
+                widths: '375,550,750,1100',
+                alt: block.settings.image.alt | default: block.settings.title | escape
+            }}
+          {%- else -%}
+            {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+        {%- if block.settings.title != blank -%}
+          <div class="gg-ti__card-title gg-font-heading rte">{{ block.settings.title }}</div>
+        {%- endif -%}
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Tile inspiration",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Modular interlocking tile inspiration"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Explore different garage flooring tile categories and find inspiration for your unique space"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "title",
+          "label": "Title",
+          "default": "<p>Garage diamond</p><p>plate tiles</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Tile inspiration",
+      "blocks": [
+        { "type": "tile", "settings": { "title": "<p>Garage diamond</p><p>plate tiles</p>" } },
+        { "type": "tile", "settings": { "title": "<p>Garage smooth</p><p>interlocking tiles</p>" } },
+        { "type": "tile", "settings": { "title": "<p>Wood look garage</p><p>flooring</p>" } },
+        { "type": "tile", "settings": { "title": "<p>Perforated garage</p><p>tiles</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

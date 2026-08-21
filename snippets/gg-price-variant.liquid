@@ -1,0 +1,64 @@
+{% doc %}
+  Minimal price block for one variant (Grid Garage card JS swaps).
+
+  @param variant {Object} Variant (required)
+  @param product {Object} Parent product (for sale / compare flags)
+  @param unit_label_suffix {String} Optional label e.g. sq ft when Shopify measurement is not set
+{% enddoc %}
+{%- liquid
+  assign v = variant
+  assign compare_at_price = v.compare_at_price
+  assign price = v.price
+  assign available = v.available | default: false
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+  assign ulab = unit_label_suffix | default: ''
+-%}
+<div
+  class="
+    price
+    {%- if available == false %} price--sold-out{% endif -%}
+    {%- if compare_at_price > price and product.quantity_price_breaks_configured? != true %} price--on-sale{% endif -%}
+    {%- if compare_at_price > price and product.quantity_price_breaks_configured? %} volume-pricing--sale-badge{% endif -%}
+    {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
+  "
+>
+  <div class="price__container">
+    <div class="price__regular">
+      <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+      <span class="price-item price-item--regular">
+        {{ money_price }}
+      </span>
+    </div>
+    <div class="price__sale">
+      {%- unless product.price_varies == false and product.compare_at_price_varies -%}
+        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+        <span>
+          <s class="price-item price-item--regular">
+            {% if settings.currency_code_enabled %}
+              {{ compare_at_price | money_with_currency }}
+            {% else %}
+              {{ compare_at_price | money }}
+            {% endif %}
+          </s>
+        </span>
+      {%- endunless -%}
+      <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+      <span class="price-item price-item--sale price-item--last">
+        {{ money_price }}
+      </span>
+    </div>
+  </div>
+</div>
+{%- if v.unit_price_measurement != blank or ulab != blank -%}
+  <span class="gg-pc__price-unit gg-pc__price-unit--after-price" data-gg-pc-unit-suffix>
+    {%- if v.unit_price_measurement != blank -%}
+      {{- v.unit_price_measurement.reference_value -}}
+      {{- v.unit_price_measurement.reference_unit -}}
+    {%- else -%}
+      {{- ulab -}}
+    {%- endif -%}
+  </span>
+{%- endif -%}

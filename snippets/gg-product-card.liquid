@@ -1,0 +1,927 @@
+{% doc %}
+  Grid Garage product card — image, title, price, optional color swatches (Figma-style).
+
+  @param card_product {Object} Product (required unless placeholder)
+  @param section_id {String} Section id for unique anchors
+  @param lazy_load {Boolean} Lazy-load image (default true)
+  @param skip_styles {Boolean} Skip CSS tags when false on first card only (default false)
+  @param title_position {String} above_image | below_image
+  @param title_size {String} small | medium
+  @param show_title {Boolean}
+  @param show_swatches {Boolean}
+  @param swatch_shape {String} round | square
+  @param show_unit_price {Boolean} Show per-unit (e.g. sq ft) when variant has unit pricing
+  @param text_align {String} center | left
+  @param placeholder_image {String} Placeholder name when product blank
+  @param media_aspect_ratio {String} adapt | portrait | square — image box ratio (optional; featured collection passes section image_ratio)
+  @param unit_label_suffix {String} e.g. "sq ft" when unit measurement is not set in Shopify (optional)
+  @param card_layout {String} blank (default Dawn/Grid order) or kits_carousel — image first, optional rating and excerpt
+  @param show_rating {Boolean} Star rating + review count (Shopify Reviews metafields); kits layout only
+  @param show_excerpt {Boolean} Truncated product description below title; kits layout only
+  @param excerpt_word_limit {Number} Words for excerpt (default 18)
+  @param promo_badge_text {String} If set, show pill badge on image (e.g. Free shipping)
+  @param promo_badge_tag {String} If set, badge only when product has this tag; if blank, badge on all products when text set
+  @param rounded_media {Boolean} Rounded corners on image frame
+
+  @example
+  {% render 'gg-product-card',
+    card_product: product,
+    section_id: section.id,
+    lazy_load: true,
+    skip_styles: false,
+    title_position: section.settings.gg_title_position,
+    title_size: section.settings.gg_title_size,
+    show_title: section.settings.gg_show_title,
+    show_swatches: section.settings.gg_show_swatches,
+    swatch_shape: section.settings.gg_swatch_shape,
+    show_unit_price: section.settings.gg_show_unit_price,
+    text_align: section.settings.gg_text_align
+  %}
+{% enddoc %}
+
+{%- liquid
+  assign do_lazy = true
+  if lazy_load == false
+    assign do_lazy = false
+  endif
+
+  assign pos = title_position | default: 'below_image'
+  assign tsize = title_size | default: 'medium'
+  assign show_t = show_title
+  if show_t == nil
+    assign show_t = true
+  endif
+  assign show_sw = show_swatches
+  if show_sw == nil
+    assign show_sw = true
+  endif
+  assign sw_shape = swatch_shape | default: 'square'
+  assign align = text_align | default: 'center'
+  assign unit_px = show_unit_price
+  if unit_px == nil
+    assign unit_px = false
+  endif
+
+  assign unit_lbl = unit_label_suffix | default: ''
+
+  assign gg_swatch_option = nil
+  if card_product != blank
+    for option in card_product.options_with_values
+      assign swatch_count = option.values | map: 'swatch' | compact | size
+      if swatch_count > 0
+        assign gg_swatch_option = option
+        break
+      endif
+    endfor
+    if gg_swatch_option == nil
+      for option in card_product.options_with_values
+        assign oname = option.name | downcase
+        if oname == 'color' or oname == 'colour'
+          assign gg_swatch_option = option
+          break
+        endif
+      endfor
+    endif
+    if gg_swatch_option == nil
+      for option in card_product.options_with_values
+        if option.values.size > 1
+          assign gg_swatch_option = option
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  assign gg_opt_position = 1
+  if gg_swatch_option
+    assign gg_opt_position = gg_swatch_option.position | default: 1
+  endif
+
+  assign img_sizes = '(min-width: 990px) 180px, 33vw'
+
+  assign mar_setting = media_aspect_ratio | default: 'square'
+
+  assign sr = show_rating
+  if sr == nil
+    assign sr = false
+  endif
+  assign se = show_excerpt
+  if se == nil
+    assign se = false
+  endif
+  assign excerpt_n = excerpt_word_limit | default: 18
+  assign lay = card_layout | default: ''
+  assign is_kits = false
+  if lay == 'kits_carousel'
+    assign is_kits = true
+  endif
+  assign media_rounded = rounded_media
+  if media_rounded == nil
+    assign media_rounded = false
+  endif
+  assign pb_text = promo_badge_text | default: ''
+  assign pb_tag = promo_badge_tag | default: ''
+-%}
+{% # theme-check-disable UndefinedObject %}
+{%- liquid
+  assign show_jdg = gg_show_judgeme_preview_badge
+  if show_jdg == nil
+    assign show_jdg = false
+  endif
+  assign jdg_desk = gg_judgeme_preview_desktop
+  if jdg_desk == nil
+    assign jdg_desk = true
+  endif
+  assign jdg_mob = gg_judgeme_preview_mobile
+  if jdg_mob == nil
+    assign jdg_mob = true
+  endif
+-%}
+{% # theme-check-enable UndefinedObject %}
+
+
+{%- unless skip_styles -%}
+  <link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  {{ 'gg-product-card.css' | asset_url | stylesheet_tag }}
+  {%- if sr -%}
+    {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
+{%- endunless -%}
+
+{%- if card_product != blank -%}
+  {%- liquid
+    assign v = card_product.selected_or_first_available_variant
+    assign stack_class = 'gg-pc__stack--below'
+    if pos == 'above_image'
+      assign stack_class = 'gg-pc__stack--above'
+    endif
+    assign title_class = 'gg-pc--title-md'
+    if tsize == 'small'
+      assign title_class = 'gg-pc--title-sm'
+    endif
+    assign align_class = ''
+    if align == 'left'
+      assign align_class = ' gg-pc--align-left'
+    endif
+    assign swatch_mod = 'gg-pc__swatch--square'
+    if sw_shape == 'round'
+      assign swatch_mod = 'gg-pc__swatch--round'
+    endif
+    assign price_simple_class = ''
+    if unit_px == false
+      assign price_simple_class = ' gg-pc__price--simple'
+    elsif unit_px and card_product.quantity_price_breaks_configured?
+      assign price_simple_class = ' gg-pc__price--simple'
+    endif
+
+    assign cur_opt = ''
+    if gg_opt_position == 1
+      assign cur_opt = v.option1 | strip
+    elsif gg_opt_position == 2
+      assign cur_opt = v.option2 | strip
+    elsif gg_opt_position == 3
+      assign cur_opt = v.option3 | strip
+    endif
+
+    assign feat_media = v.featured_media
+    if feat_media == blank and v.featured_image != blank
+      assign feat_media = v.featured_image
+    endif
+    if feat_media == blank
+      assign feat_media = card_product.featured_media
+    endif
+
+    assign gg_media_ar = 1.0
+    if feat_media
+      if mar_setting == 'adapt'
+        assign gg_media_ar = feat_media.aspect_ratio | default: 1
+      elsif mar_setting == 'portrait'
+        assign gg_media_ar = 0.8
+      endif
+    endif
+    if gg_media_ar == 0 or gg_media_ar == blank
+      assign gg_media_ar = 1
+    endif
+
+    assign show_promo_badge = false
+    if pb_text != blank
+      assign show_promo_badge = true
+      if pb_tag != blank
+        assign show_promo_badge = false
+        if card_product.tags contains pb_tag
+          assign show_promo_badge = true
+        endif
+      endif
+    endif
+  -%}
+
+  <article
+    class="gg-pc {{ title_class }}{{ align_class }}{% if is_kits %} gg-pc--kits gg-pc--title-sentence{% endif %}"
+    id="gg-pc-{{ section_id }}-{{ card_product.id }}"
+    {% if show_sw and gg_swatch_option %}
+      data-gg-interactive
+    {% endif %}
+  >
+    <div class="gg-pc__stack{% if is_kits %} gg-pc__stack--kits{% else %} {{ stack_class }}{% endif %}">
+      {%- if is_kits -%}
+        <div class="gg-pc__media-slot">
+          {% if card_product.tags contains 'Most Popular' %}
+            <div class="badge badge--popular">
+              Most Popular
+            </div>
+          {% endif %}
+          {% if card_product.tags contains 'Premium' %}
+            <div class="badge badge--popular">
+              Premium
+            </div>
+          {% endif %}
+          <a href="{{ v.url }}" class="gg-pc__media-link" data-gg-pc-media-link>
+            <div class="gg-pc__media{% if media_rounded %} gg-pc__media--rounded{% endif %}" style="aspect-ratio: {{ gg_media_ar }};">
+              {%- if show_promo_badge -%}
+                <span class="gg-pc__promo-badge">{{ pb_text | escape }}</span>
+              {%- endif -%}
+              {%- if feat_media -%}
+                {{
+                  feat_media
+                  | image_url: width: 320
+                  | image_tag:
+                    loading: do_lazy,
+                    class: 'gg-pc__img',
+                    sizes: img_sizes,
+                    widths: '120,180,240,320',
+                    alt: feat_media.alt | default: card_product.title | escape
+                }}
+              {%- endif -%}
+            </div>
+          </a>
+        </div>
+        {%- if sr and card_product.metafields.reviews.rating.value != blank -%}
+          {%- liquid
+            assign rating_decimal = 0
+            assign decimal = card_product.metafields.reviews.rating.value.rating | modulo: 1
+            if decimal >= 0.3 and decimal <= 0.7
+              assign rating_decimal = 0.5
+            elsif decimal > 0.7
+              assign rating_decimal = 1
+            endif
+          -%}
+          <div class="gg-pc__rating-slot">
+            <div class="gg-pc__rating-row">
+              <div
+                class="rating"
+                role="img"
+                aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: card_product.metafields.reviews.rating.value, rating_max: card_product.metafields.reviews.rating.value.scale_max }}"
+              >
+                <span
+                  aria-hidden="true"
+                  class="rating-star"
+                  style="--rating: {{ card_product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ card_product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+                ></span>
+              </div>
+              <p class="gg-pc__reviews-count caption">
+                <span aria-hidden="true">
+                  {{- 'sections.gg_garage_floor_kits_carousel.reviews_line' | t: count: card_product.metafields.reviews.rating_count -}}
+                </span>
+                <span class="visually-hidden">
+                  {{- card_product.metafields.reviews.rating_count }}
+                  {{ 'accessibility.total_reviews' | t -}}
+                </span>
+              </p>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- unless is_kits -%}
+        <div class="gg-pc__title-slot">
+          {%- if show_t -%}
+            <h3 class="gg-pc__title">
+              <a href="{{ v.url }}" class="gg-pc__title-link">{{ card_product.title | escape }}</a>
+            </h3>
+          {%- endif -%}
+          {% if card_product.metafields.custom.tile_size != blank %}
+            <p class="title_zie">{{ card_product.metafields.custom.tile_size }}</p>
+          {% endif %}
+          {% assign two_car_price = '' %}
+          {% assign three_car_price = '' %}
+
+          {% for variant in card_product.variants %}
+            {% if variant.option1 == '2-Car Garage Kit' %}
+              {% assign two_car_price = variant.price | money %}
+            {% endif %}
+
+            {% if variant.option1 == '3-Car Garage Kit' %}
+              {% assign three_car_price = variant.price | money %}
+            {% endif %}
+          {% endfor %}
+
+          {% if card_product.tags contains 'price by consultation' %}
+            <div class="custom-variant-prices" style="margin-top:8px;">
+              <a href="https://www.gridgarageinc.com/pages/contact" class="price-by-consultation-link" style="text-decoration: underline; color: inherit;">Please Call or Email for Pricing</a>
+            </div>
+            {% assign price_by_consultation_rendered = true %}
+          {% elsif two_car_price != '' or three_car_price != '' %}
+            <div class="custom-variant-prices">
+              {% if two_car_price != '' %}
+                <span>2-Car Kit: {{ two_car_price }}</span>
+              {% endif %}
+
+              {% comment %} {% if two_car_price != '' and three_car_price != '' %}
+                <span class="divider"> | </span>
+              {% endif %} {% endcomment %}
+
+              {% if three_car_price != '' %}
+                <span>3-Car Kit: {{ three_car_price }}</span>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {%- endunless -%}
+
+      
+
+      
+
+      {%- if is_kits -%}
+        {%- if show_jdg -%}
+          {%- comment -%}
+            Judge.me preview badge (no judgeme_widgets.liquid required). Core app embed must be on.
+            See Judge.me: Widgets → Star Rating Badge / Preview Badge — same markup as their install code.
+          {%- endcomment -%}
+          <div
+            class="gg-pc__judgeme-wrap{% if jdg_mob == false %} gg-pc__judgeme--hide-mobile{% endif %}{% if jdg_desk == false %} gg-pc__judgeme--hide-desktop{% endif %}"
+          >
+            <div class="jdgm-widget jdgm-preview-badge" data-id="{{ card_product.id }}">
+              {{- card_product.metafields.judgeme.badge -}}
+            </div>
+          </div>
+        {%- endif -%}
+        <div class="gg-pc__title-slot">
+          {%- if show_t -%}
+            <h3 class="gg-pc__title">
+              <a href="{{ v.url }}" class="gg-pc__title-link">{{ card_product.title | escape }}</a>
+            </h3>
+          {%- endif -%}
+          
+        </div>
+        {%- if se and card_product.description != blank -%}
+          <div class="gg-pc__excerpt-slot">
+            <p class="gg-pc__excerpt">{{ card_product.description | strip_html | truncatewords: excerpt_n, '' | escape }}</p>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- unless is_kits -%}
+        <div class="gg-pc__media-slot">
+          {% if card_product.tags contains 'Most Popular' %}
+            <div class="badge badge--popular">
+              Most Popular
+            </div>
+          {% endif %}
+          {% if card_product.tags contains 'Premium' %}
+            <div class="badge badge--popular">
+              Premium
+            </div>
+          {% endif %}
+          <a href="{{ v.url }}" class="gg-pc__media-link" data-gg-pc-media-link>
+            <div class="gg-pc__media{% if media_rounded %} gg-pc__media--rounded{% endif %}" style="aspect-ratio: {{ gg_media_ar }};">
+              {%- if show_promo_badge -%}
+                <span class="gg-pc__promo-badge">{{ pb_text | escape }}</span>
+              {%- endif -%}
+              {%- if feat_media -%}
+                {{
+                  feat_media
+                  | image_url: width: 320
+                  | image_tag:
+                    loading: do_lazy,
+                    class: 'gg-pc__img',
+                    sizes: img_sizes,
+                    widths: '120,180,240,320',
+                    alt: feat_media.alt | default: card_product.title | escape
+                }}
+              {%- endif -%}
+            </div>
+          </a>
+        </div>
+      {%- endunless -%}
+
+      <div class="gg-pc__price-slot">
+        {%- if card_product.tags contains 'price by consultation' -%}
+          {%- if price_by_consultation_rendered != true -%}
+            <div style="margin-top: 8px;">
+              <a href="https://www.gridgarageinc.com/pages/contact" class="price-by-consultation-link" style="text-decoration: underline; color: inherit;">Please Call or Email for Pricing</a>
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="gg-pc__price{{ price_simple_class }}" data-gg-pc-price-root>
+            {%- if unit_px and v.unit_price -%}
+              <span class="gg-pc__price-main">
+                {%- if settings.currency_code_enabled -%}
+                  {{- v.unit_price | money_with_currency -}}
+                {%- else -%}
+                  {{- v.unit_price | money -}}
+                {%- endif -%}
+              </span>
+              {%- if v.unit_price_measurement != blank -%}
+                <span class="gg-pc__price-unit">
+                  {{- v.unit_price_measurement.reference_value -}}
+                  {{- v.unit_price_measurement.reference_unit -}}
+                </span>
+              {%- elsif unit_lbl != blank -%}
+                <span class="gg-pc__price-unit">{{ unit_lbl }}</span>
+              {%- endif -%}
+            {%- elsif unit_px and card_product.quantity_price_breaks_configured? -%}
+              {% render 'price', product: card_product, use_variant: true, show_badges: false, price_class: '' %}
+            {%- elsif unit_px -%}
+              {%- liquid
+                assign cmp = v.compare_at_price
+                assign pr = v.price
+              -%}
+              {%- if cmp > pr -%}
+                <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+                <s class="gg-pc__price-compare">
+                  {%- if settings.currency_code_enabled -%}
+                    {{- cmp | money_with_currency -}}
+                  {%- else -%}
+                    {{- cmp | money -}}
+                  {%- endif -%}
+                </s>
+                <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+                <span class="gg-pc__price-main">
+                  {%- if settings.currency_code_enabled -%}
+                    {{- pr | money_with_currency -}}
+                  {%- else -%}
+                    {{- pr | money -}}
+                  {%- endif -%}
+                </span>
+              {%- else -%}
+                <span class="gg-pc__price-main">
+                  {%- if settings.currency_code_enabled -%}
+                    {{- pr | money_with_currency -}}
+                  {%- else -%}
+                    {{- pr | money -}}
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+              {%- if v.unit_price_measurement != blank -%}
+                <span class="gg-pc__price-unit">
+                  {{- v.unit_price_measurement.reference_value -}}
+                  {{- v.unit_price_measurement.reference_unit -}}
+                </span>
+              {%- elsif unit_lbl != blank -%}
+                <span class="gg-pc__price-unit">{{ unit_lbl }}</span>
+              {%- endif -%}
+            {%- else -%}
+              {% render 'price', product: card_product, use_variant: true, show_badges: false, price_class: '' %}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="gg-pc__swatch-slot">
+        {%- if show_sw and gg_swatch_option -%}
+          {%- liquid
+            assign sw_total_r = 0
+          -%}
+          {%- for value in gg_swatch_option.values -%}
+            {%- assign value_name = value.name | default: value | strip -%}
+            {%- liquid
+              assign rep_variant = nil
+              assign rep_fallback = nil
+              for variant in card_product.variants
+                assign opt_match = ''
+                if gg_opt_position == 1
+                  assign opt_match = variant.option1 | strip
+                elsif gg_opt_position == 2
+                  assign opt_match = variant.option2 | strip
+                elsif gg_opt_position == 3
+                  assign opt_match = variant.option3 | strip
+                endif
+                if opt_match == value_name
+                  if rep_fallback == nil
+                    assign rep_fallback = variant
+                  endif
+                  if variant.available
+                    assign rep_variant = variant
+                    break
+                  endif
+                endif
+              endfor
+              if rep_variant == nil
+                assign rep_variant = rep_fallback
+              endif
+              if rep_variant
+                assign sw_total_r = sw_total_r | plus: 1
+              endif
+            -%}
+          {%- endfor -%}
+          {%- liquid
+            assign sw_overflow_n = 0
+            assign sw_visible_max = sw_total_r
+            if sw_total_r >= 8
+              assign sw_visible_max = 7
+              assign sw_overflow_n = sw_total_r | minus: 7
+            endif
+          -%}
+          <ul class="gg-pc__swatches" role="list">
+            {%- assign sw_slot_idx = 0 -%}
+            {%- for value in gg_swatch_option.values -%}
+              {%- liquid
+                assign value_name = value.name | default: value | strip
+                assign is_external_listing = false
+                if value.product_url != blank
+                  assign pu = value.product_url | split: '?' | first
+                  assign cu = card_product.url | split: '?' | first
+                  if pu != cu
+                    assign is_external_listing = true
+                  endif
+                endif
+
+                assign rep_variant = nil
+                assign rep_fallback = nil
+                for variant in card_product.variants
+                  assign opt_match = ''
+                  if gg_opt_position == 1
+                    assign opt_match = variant.option1 | strip
+                  elsif gg_opt_position == 2
+                    assign opt_match = variant.option2 | strip
+                  elsif gg_opt_position == 3
+                    assign opt_match = variant.option3 | strip
+                  endif
+                  if opt_match == value_name
+                    if rep_fallback == nil
+                      assign rep_fallback = variant
+                    endif
+                    if variant.available
+                      assign rep_variant = variant
+                      break
+                    endif
+                  endif
+                endfor
+                if rep_variant == nil
+                  assign rep_variant = rep_fallback
+                endif
+              -%}
+              {%- if rep_variant -%}
+                {%- liquid
+                  assign sw_slot_idx = sw_slot_idx | plus: 1
+                  assign show_swatch_cell = true
+                  if sw_overflow_n > 0 and sw_slot_idx > sw_visible_max
+                    assign show_swatch_cell = false
+                  endif
+                -%}
+                {%- if show_swatch_cell -%}
+                {%- liquid
+                  assign card_img_media = rep_variant.featured_media
+                  if card_img_media == blank and rep_variant.featured_image != blank
+                    assign card_img_media = rep_variant.featured_image
+                  endif
+                  if card_img_media == blank
+                    assign card_img_media = card_product.featured_media
+                  endif
+                  assign card_img_src = ''
+                  assign card_img_srcset = ''
+                  assign card_img_alt = card_product.title | escape
+                  if card_img_media != blank
+                    assign card_img_src = card_img_media | image_url: width: 800
+                    assign c165 = card_img_media | image_url: width: 165
+                    assign c360 = card_img_media | image_url: width: 360
+                    assign c533 = card_img_media | image_url: width: 533
+                    assign c720 = card_img_media | image_url: width: 720
+                    assign c800 = card_img_media | image_url: width: 800
+                    assign card_img_srcset = c165 | append: ' 165w, ' | append: c360 | append: ' 360w, ' | append: c533 | append: ' 533w, ' | append: c720 | append: ' 720w, ' | append: c800 | append: ' 800w'
+                    assign card_img_alt = card_img_media.alt | default: card_product.title | escape
+                  endif
+
+                  assign swatch_value = null
+                  if value.swatch
+                    if value.swatch.image
+                      assign sw_img = value.swatch.image | image_url: width: 80
+                      assign swatch_value = 'url(' | append: sw_img | append: ')'
+                    elsif value.swatch.color
+                      assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                    endif
+                  elsif rep_variant.featured_media
+                    assign sw_img = rep_variant.featured_media | image_url: width: 80
+                    assign swatch_value = 'url(' | append: sw_img | append: ')'
+                  elsif rep_variant.featured_image != blank
+                    assign sw_img = rep_variant.featured_image | image_url: width: 80
+                    assign swatch_value = 'url(' | append: sw_img | append: ')'
+                  elsif card_product.featured_media
+                    assign sw_img = card_product.featured_media | image_url: width: 80
+                    assign swatch_value = 'url(' | append: sw_img | append: ')'
+                  endif
+                  assign swatch_unavailable = true
+                  if value.available
+                    assign swatch_unavailable = false
+                  endif
+                  assign is_selected = false
+                  if value_name == cur_opt
+                    assign is_selected = true
+                  endif
+                -%}
+                <li>
+                  {%- if is_external_listing -%}
+                    <a
+                      href="{{ value.product_url }}"
+                      class="gg-pc__swatch {{ swatch_mod }}{% if swatch_unavailable %} gg-pc__swatch--unavailable{% endif %}{% if is_selected %} gg-pc__swatch--selected{% endif %}"
+                      title="{{ value_name | escape }}"
+                      style="{% if swatch_value %}background: {{ swatch_value }}; background-size: cover; background-position: center;{% endif %}"
+                      {% if is_selected %}
+                        aria-current="true"
+                      {% endif %}
+                    >
+                      <span class="visually-hidden">{{ value_name | escape }}</span>
+                      <span class="gg-pc__swatch-tip" aria-hidden="true">{{ value_name | upcase }}</span>
+                    </a>
+                  {%- else -%}
+                    <a
+                      href="{{ rep_variant.url }}"
+                      class="gg-pc__swatch {{ swatch_mod }}{% if swatch_unavailable %} gg-pc__swatch--unavailable{% endif %}{% if is_selected %} gg-pc__swatch--selected{% endif %}"
+                      title="{{ value_name | escape }}"
+                      style="{% if swatch_value %}background: {{ swatch_value }}; background-size: cover; background-position: center;{% endif %}"
+                      data-gg-pc-swatch
+                      data-option-value="{{ value_name | escape }}"
+                      {% if card_img_src != blank %}
+                        data-variant-src="{{ card_img_src | escape }}"
+                        data-variant-srcset="{{ card_img_srcset | escape }}"
+                        data-variant-alt="{{ card_img_alt | escape }}"
+                        data-img-sizes="{{ img_sizes | escape }}"
+                      {% endif %}
+                      {% if is_selected %}
+                        aria-current="true"
+                      {% endif %}
+                    >
+                      <span class="visually-hidden">{{ value_name | escape }}</span>
+                      <span class="gg-pc__swatch-tip" aria-hidden="true">{{ value_name | upcase }}</span>
+                    </a>
+                  {%- endif -%}
+                </li>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if sw_overflow_n > 0 -%}
+              <li class="gg-pc__swatches__more" role="listitem">
+                <a
+                  href="{{ card_product.url }}"
+                  class="gg-pc__swatch-more gg-pc__swatch-more--{{ sw_shape }}"
+                  aria-label="{{ 'grid_garage.product_card.more_swatches_label' | t: count: sw_overflow_n }}"
+                >
+                  <span class="gg-pc__swatch-more__text" aria-hidden="true">+{{ sw_overflow_n }}</span>
+                  <span class="gg-pc__swatch-tip gg-pc__swatch-tip--more" aria-hidden="true">
+                    {{- 'grid_garage.product_card.more_swatches_tooltip' | t: count: sw_overflow_n -}}
+                  </span>
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+
+          <script type="application/json" class="gg-pc__json">
+            {
+              "sizes": {{ img_sizes | json }},
+              "values": [
+                {%- assign jfirst = true -%}
+                {%- assign sw_slot_idx = 0 -%}
+                {%- for value in gg_swatch_option.values -%}
+                  {%- liquid
+                    assign value_name = value.name | default: value | strip
+                    assign is_external_listing = false
+                    if value.product_url != blank
+                      assign pu = value.product_url | split: '?' | first
+                      assign cu = card_product.url | split: '?' | first
+                      if pu != cu
+                        assign is_external_listing = true
+                      endif
+                    endif
+
+                    assign rep_variant = nil
+                    assign rep_fallback = nil
+                    for variant in card_product.variants
+                      assign opt_match = ''
+                      if gg_opt_position == 1
+                        assign opt_match = variant.option1 | strip
+                      elsif gg_opt_position == 2
+                        assign opt_match = variant.option2 | strip
+                      elsif gg_opt_position == 3
+                        assign opt_match = variant.option3 | strip
+                      endif
+                      if opt_match == value_name
+                        if rep_fallback == nil
+                          assign rep_fallback = variant
+                        endif
+                        if variant.available
+                          assign rep_variant = variant
+                          break
+                        endif
+                      endif
+                    endfor
+                    if rep_variant == nil
+                      assign rep_variant = rep_fallback
+                    endif
+                  -%}
+                  {%- unless is_external_listing -%}
+                    {%- if rep_variant -%}
+                      {%- liquid
+                        assign sw_slot_idx = sw_slot_idx | plus: 1
+                        assign include_in_json = true
+                        if sw_overflow_n > 0 and sw_slot_idx > sw_visible_max
+                          assign include_in_json = false
+                        endif
+                      -%}
+                      {%- if include_in_json -%}
+                      {%- liquid
+                        assign img_media = rep_variant.featured_media
+                        if img_media == blank and rep_variant.featured_image != blank
+                          assign img_media = rep_variant.featured_image
+                        endif
+                        if img_media == blank
+                          assign img_media = card_product.featured_media
+                        endif
+                        assign src_u = ''
+                        assign srcset_u = ''
+                        assign alt_u = card_product.title | escape
+                        if img_media
+                          assign src_u = img_media | image_url: width: 800
+                          assign s165 = img_media | image_url: width: 165
+                          assign s360 = img_media | image_url: width: 360
+                          assign s533 = img_media | image_url: width: 533
+                          assign s720 = img_media | image_url: width: 720
+                          assign s800 = img_media | image_url: width: 800
+                          assign srcset_u = s165 | append: ' 165w, ' | append: s360 | append: ' 360w, ' | append: s533 | append: ' 533w, ' | append: s720 | append: ' 720w, ' | append: s800 | append: ' 800w'
+                          assign alt_u = img_media.alt | default: card_product.title | escape
+                        endif
+
+                        assign use_simple = true
+                        if unit_px
+                          assign use_simple = false
+                        endif
+                      -%}
+                      {%- capture price_inner -%}
+                        {%- if unit_px and rep_variant.unit_price -%}
+                          <span class="gg-pc__price-main">
+                            {%- if settings.currency_code_enabled -%}
+                              {{- rep_variant.unit_price | money_with_currency -}}
+                            {%- else -%}
+                              {{- rep_variant.unit_price | money -}}
+                            {%- endif -%}
+                          </span>
+                          {%- if rep_variant.unit_price_measurement != blank -%}
+                            <span class="gg-pc__price-unit">
+                              {{- rep_variant.unit_price_measurement.reference_value -}}
+                              {{- rep_variant.unit_price_measurement.reference_unit -}}
+                            </span>
+                          {%- elsif unit_lbl != blank -%}
+                            <span class="gg-pc__price-unit">{{ unit_lbl }}</span>
+                          {%- endif -%}
+                        {%- else -%}
+                          {% render 'gg-price-variant',
+                            variant: rep_variant,
+                            product: card_product,
+                            unit_label_suffix: unit_lbl
+                          %}
+                        {%- endif -%}
+                      {%- endcapture -%}
+                      {%- unless jfirst -%},{%- endunless -%}
+                      {%- assign jfirst = false -%}
+                      {
+                        "name": {{ value_name | json }},
+                        "variantId": {{ rep_variant.id | json }},
+                        "href": {{ rep_variant.url | json }},
+                        "priceHtml": {{ price_inner | json }},
+                        "useSimplePriceClass": {{ use_simple | json }},
+                        "src": {{ src_u | json }},
+                        "srcSet": {{ srcset_u | json }},
+                        "alt": {{ alt_u | json }}
+                      }
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endunless -%}
+                {%- endfor -%}
+              ]
+            }
+          </script>
+        {%- endif -%}
+      </div>
+    </div>
+  </article>
+{%- else -%}
+  {%- liquid
+    assign ph = placeholder_image | default: 'product-apparel-2'
+    assign stack_class = 'gg-pc__stack--below'
+    if pos == 'above_image'
+      assign stack_class = 'gg-pc__stack--above'
+    endif
+    assign title_class = 'gg-pc--title-md'
+    if tsize == 'small'
+      assign title_class = 'gg-pc--title-sm'
+    endif
+    assign align_class = ''
+    if align == 'left'
+      assign align_class = ' gg-pc--align-left'
+    endif
+    assign gg_media_ar = 1.0
+    if mar_setting == 'portrait'
+      assign gg_media_ar = 0.8
+    endif
+    assign ph_show_badge = false
+    if pb_text != blank
+      assign ph_show_badge = true
+    endif
+  -%}
+  <article
+    class="gg-pc {{ title_class }}{{ align_class }}{% if is_kits %} gg-pc--kits gg-pc--title-sentence{% endif %}"
+    id="gg-pc-{{ section_id }}-placeholder"
+  >
+    <div class="gg-pc__stack{% if is_kits %} gg-pc__stack--kits{% else %} {{ stack_class }}{% endif %}">
+      {%- if is_kits -%}
+        <div class="gg-pc__media-slot">
+          {% if card_product.tags contains 'Most Popular' %}
+            <div class="badge badge--popular">
+              Most Popular
+            </div>
+          {% endif %}
+          {% if card_product.tags contains 'Premium' %}
+            <div class="badge badge--popular">
+              Premium
+            </div>
+          {% endif %}
+          <div class="gg-pc__media-link" aria-disabled="true">
+            <div class="gg-pc__media{% if media_rounded %} gg-pc__media--rounded{% endif %}" style="aspect-ratio: {{ gg_media_ar }};">
+              {%- if ph_show_badge -%}
+                <span class="gg-pc__promo-badge">{{ pb_text | escape }}</span>
+              {%- endif -%}
+              {{ ph | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        </div>
+        {%- if sr -%}
+          <div class="gg-pc__rating-slot">
+            <div class="gg-pc__rating-row">
+              <div class="rating" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: 5, rating_max: 5 }}">
+                <span aria-hidden="true" class="rating-star" style="--rating: 5; --rating-max: 5; --rating-decimal: 0;"></span>
+              </div>
+              <p class="gg-pc__reviews-count caption">
+                <span aria-hidden="true">{{ 'sections.gg_garage_floor_kits_carousel.reviews_line' | t: count: 0 }}</span>
+              </p>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- unless is_kits -%}
+        <div class="gg-pc__title-slot">
+          {%- if show_t -%}
+            <h3 class="gg-pc__title">
+              <span class="gg-pc__title-link" role="text">{{ 'onboarding.product_title' | t }}</span>
+            </h3>
+          {%- endif -%}
+        </div>
+      {%- endunless -%}
+
+      {%- if is_kits -%}
+        <div class="gg-pc__title-slot">
+          {%- if show_t -%}
+            <h3 class="gg-pc__title">
+              <span class="gg-pc__title-link" role="text">{{ 'onboarding.product_title' | t }}</span>
+            </h3>
+          {%- endif -%}
+        </div>
+        {%- if se -%}
+          <div class="gg-pc__excerpt-slot">
+            <p class="gg-pc__excerpt">{{ 'sections.gg_garage_floor_kits_carousel.placeholder_excerpt' | t }}</p>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- unless is_kits -%}
+        <div class="gg-pc__media-slot">
+          {% if card_product.tags contains 'Most Popular' %}
+            <div class="badge badge--popular">
+              Most Popular
+            </div>
+          {% endif %}
+          {% if card_product.tags contains 'Premium' %}
+            <div class="badge badge--popular">
+              Premium
+            </div>
+          {% endif %}
+          <div class="gg-pc__media-link" aria-disabled="true">
+            <div class="gg-pc__media{% if media_rounded %} gg-pc__media--rounded{% endif %}" style="aspect-ratio: {{ gg_media_ar }};">
+              {%- if ph_show_badge -%}
+                <span class="gg-pc__promo-badge">{{ pb_text | escape }}</span>
+              {%- endif -%}
+              {{ ph | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        </div>
+      {%- endunless -%}
+
+      <div class="gg-pc__price-slot">
+        <div class="gg-pc__price gg-pc__price--simple">
+          {% render 'price', placeholder: true, show_compare_at_price: true %}
+        </div>
+      </div>
+      <div class="gg-pc__swatch-slot"></div>
+    </div>
+  </article>
+{%- endif -%}

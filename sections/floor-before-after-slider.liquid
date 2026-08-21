@@ -1,0 +1,180 @@
+{%- comment -%}
+  Figma node 551:1095 — Floor page: draggable before/after image comparison.
+{%- endcomment -%}
+{{ 'floor-garage-sections.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'floor-before-after-slider.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} [data-floor-bas-root] {
+    --floor-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};
+    --floor-bas-pos: {{ section.settings.initial_position }}%;
+    --floor-bas-ratio-w: {{ section.settings.aspect_ratio_w }};
+    --floor-bas-ratio-h: {{ section.settings.aspect_ratio_h }};
+    --floor-bas-max-h: {{ section.settings.max_height }}px;
+  }
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section class="floor-sec flr-bas flr-bas--bleed section-{{ section.id }}-padding">
+  <div data-floor-bas-root style="--floor-bas-pos: {{ section.settings.initial_position }}%;">
+    <div
+      class="flr-bas__viewport"
+      data-floor-bas-viewport
+      role="region"
+      aria-label="{{ 'sections.floor_garage.before_after_region' | t }}"
+    >
+    <div class="flr-bas__layer" aria-hidden="true">
+      {%- if section.settings.after_image != blank -%}
+        {{
+          section.settings.after_image
+          | image_url: width: 2400
+          | image_tag:
+            loading: 'lazy',
+            sizes: '100vw',
+            widths: '750,1100,1500,2000,2400',
+            alt: section.settings.after_image.alt | default: section.settings.after_label | escape
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    <div class="flr-bas__before-wrap">
+      {%- if section.settings.before_image != blank -%}
+        {{
+          section.settings.before_image
+          | image_url: width: 2400
+          | image_tag:
+            loading: 'lazy',
+            sizes: '100vw',
+            widths: '750,1100,1500,2000,2400',
+            alt: section.settings.before_image.alt | default: section.settings.before_label | escape
+        }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    <span class="flr-bas__label flr-bas__label--before">{{ section.settings.before_label | escape }}</span>
+    <span class="flr-bas__label flr-bas__label--after">{{ section.settings.after_label | escape }}</span>
+
+    <button
+      type="button"
+      class="flr-bas__handle"
+      data-floor-bas-handle
+      aria-label="{{ 'sections.floor_garage.before_after_drag' | t }}"
+    >
+      <span class="flr-bas__handle-line" aria-hidden="true"></span>
+      <span class="flr-bas__handle-knob" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 14" fill="none" aria-hidden="true">
+          <path d="M8 1L3 7l5 6M16 1l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </button>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Floor: Before/after",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    },
+    {
+      "type": "range",
+      "id": "initial_position",
+      "min": 5,
+      "max": 95,
+      "step": 1,
+      "unit": "%",
+      "label": "Starting position",
+      "default": 50
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Handle color",
+      "default": "#E11D48"
+    },
+    {
+      "type": "range",
+      "id": "aspect_ratio_w",
+      "min": 1,
+      "max": 32,
+      "step": 1,
+      "label": "Aspect ratio width",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "aspect_ratio_h",
+      "min": 1,
+      "max": 24,
+      "step": 1,
+      "label": "Aspect ratio height",
+      "default": 9
+    },
+    {
+      "type": "range",
+      "id": "max_height",
+      "min": 200,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum height",
+      "default": 760
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floor: Before after slider"
+    }
+  ]
+}
+{% endschema %}

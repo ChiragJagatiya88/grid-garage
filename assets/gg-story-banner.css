@@ -1,0 +1,79 @@
+/* Grid Garage — full-bleed story / page banner (Figma node 289:3090) */
+
+.gg-story {
+  position: relative;
+  background-color: transparent;
+  display: flex;
+  align-items: var(--gg-story-align-m, center);
+  justify-content: var(--gg-story-justify-m, center);
+  min-height: var(--gg-story-min-m, 28rem);
+  padding: var(--gg-story-inner-y-m, 0) var(--gg-page-pad, 1.5rem);
+  color: rgb(var(--gg-story-heading-rgb, 255, 255, 255));
+  overflow: hidden;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-story {
+    align-items: var(--gg-story-align-d, center);
+    justify-content: var(--gg-story-justify-d, center);
+    min-height: var(--gg-story-min-d, 44rem);
+    padding-top: var(--gg-story-inner-y-d-t, 0);
+    padding-bottom: var(--gg-story-inner-y-d-b, 0);
+    padding-left: var(--gg-page-pad, 1.5rem);
+    padding-right: var(--gg-page-pad, 1.5rem);
+  }
+}
+
+.gg-story__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.gg-story__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--gg-story-img-pos, center);
+}
+
+.gg-story__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgb(var(--gg-story-overlay-rgb, 0, 0, 0));
+  opacity: var(--gg-story-overlay-opacity, 0.3);
+  pointer-events: none;
+}
+
+.gg-story__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--gg-story-inner-max, none);
+  text-align: var(--gg-story-text-m, center);
+}
+
+@media screen and (min-width: 990px) {
+  .gg-story__inner {
+    text-align: var(--gg-story-text-d, center);
+  }
+}
+
+.gg-story__heading {
+  margin: 0;
+  font-size: var(--gg-story-fs-m, 3.2rem);
+  line-height: var(--gg-story-lh-m, 1.13);
+  font-weight: 800;
+  letter-spacing: var(--gg-story-track-m, 0);
+  color: rgb(var(--gg-story-heading-rgb, 255, 255, 255));
+  text-wrap: balance;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-story__heading {
+    font-size: var(--gg-story-fs-d, 5.5rem);
+    line-height: var(--gg-story-lh-d, 1.13);
+    letter-spacing: var(--gg-story-track-d, 0);
+  }
+}

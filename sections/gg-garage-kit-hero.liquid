@@ -1,0 +1,488 @@
+{%- comment -%}
+  Figma node 647:629 — full-bleed hero, optional dual image + vignette, left content, headline, subcopy, accent CTA.
+{%- endcomment -%}
+{{ 'gg-garage-kit-hero.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  case section.settings.align_h_mobile
+    when 'center'
+      assign halign_m = 'center'
+      assign text_m = 'center'
+    when 'right'
+      assign halign_m = 'flex-end'
+      assign text_m = 'right'
+    else
+      assign halign_m = 'flex-start'
+      assign text_m = 'left'
+  endcase
+
+  case section.settings.align_v_mobile
+    when 'top'
+      assign valign_m = 'flex-start'
+    when 'bottom'
+      assign valign_m = 'flex-end'
+    else
+      assign valign_m = 'center'
+  endcase
+
+  case section.settings.align_h_desktop
+    when 'center'
+      assign halign_d = 'center'
+      assign text_d = 'center'
+    when 'right'
+      assign halign_d = 'flex-end'
+      assign text_d = 'right'
+    else
+      assign halign_d = 'flex-start'
+      assign text_d = 'left'
+  endcase
+
+  case section.settings.align_v_desktop
+    when 'top'
+      assign valign_d = 'flex-start'
+    when 'bottom'
+      assign valign_d = 'flex-end'
+    else
+      assign valign_d = 'center'
+  endcase
+
+  assign overlay_op = section.settings.overlay_opacity | times: 0.01
+  assign layer_op = section.settings.layer_image_opacity | times: 0.01
+  assign vignette_op = section.settings.vignette_opacity | times: 0.01
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-gkh {
+    --gg-gkh-text: {{ section.settings.text_color.red }},{{ section.settings.text_color.green }},{{ section.settings.text_color.blue }};
+    --gg-gkh-overlay-rgb: {{ section.settings.overlay_color.red }},{{ section.settings.overlay_color.green }},{{ section.settings.overlay_color.blue }};
+    --gg-gkh-overlay-op: {{ overlay_op }};
+    --gg-gkh-btn-bg: {{ section.settings.button_background.red }},{{ section.settings.button_background.green }},{{ section.settings.button_background.blue }};
+    --gg-gkh-btn-text: {{ section.settings.button_text_color.red }},{{ section.settings.button_text_color.green }},{{ section.settings.button_text_color.blue }};
+    --gg-gkh-img-pos: {{ section.settings.image_position }};
+    --gg-gkh-min: {{ section.settings.min_height_mobile }}rem;
+    --gg-gkh-min-d: {{ section.settings.min_height_desktop }}rem;
+    --gg-gkh-halign-m: {{ halign_m }};
+    --gg-gkh-halign-d: {{ halign_d }};
+    --gg-gkh-valign-m: {{ valign_m }};
+    --gg-gkh-valign-d: {{ valign_d }};
+    --gg-gkh-text-m: {{ text_m }};
+    --gg-gkh-text-d: {{ text_d }};
+    --gg-gkh-content-max: {% if section.settings.content_max_width == 0 %}none{% else %}{{ section.settings.content_max_width }}rem{% endif %};
+    --gg-gkh-head-m: {{ section.settings.heading_size_mobile }}rem;
+    --gg-gkh-head-d: {{ section.settings.heading_size_desktop }}rem;
+    --gg-gkh-head-lh-m: {{ section.settings.heading_line_height_mobile }};
+    --gg-gkh-head-lh-d: {{ section.settings.heading_line_height_desktop }};
+    --gg-gkh-head-track: {{ section.settings.heading_letter_spacing }}em;
+    --gg-gkh-sub-m: {{ section.settings.subheading_size_mobile }}rem;
+    --gg-gkh-sub-d: {{ section.settings.subheading_size_desktop }}rem;
+    --gg-gkh-layer-op: {{ layer_op }};
+    --gg-gkh-blend: {{ section.settings.layer_blend_mode }};
+    --gg-gkh-vignette-op: {% if section.settings.show_vignette %}{{ vignette_op }}{% else %}0{% endif %};
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-gkh section-{{ section.id }}-padding{% if section.settings.button_full_width_mobile %} gg-gkh--btn-full-mobile{% endif %} des_{{ halign_d }}"
+  {% if section.settings.heading != blank %}
+    aria-labelledby="gg-gkh-title-{{ section.id }}"
+  {% endif %}
+>
+  <div class="gg-gkh__media" aria-hidden="true">
+    {%- if section.settings.image != blank -%}
+      {%- liquid
+        assign gkh_alt = section.settings.image.alt | default: section.settings.image_alt
+      -%}
+      {{
+        section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'lazy',
+          sizes: '100vw',
+          widths: '750,1100,1500,1780,2000,3000,3840',
+          alt: gkh_alt | escape
+      }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.layer_image != blank -%}
+    <div class="gg-gkh__media gg-gkh__media--layer" aria-hidden="true">
+      {%- liquid
+        assign gkh_layer_alt = section.settings.layer_image.alt | default: section.settings.layer_image_alt
+      -%}
+      {{
+        section.settings.layer_image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'lazy',
+          sizes: '100vw',
+          widths: '750,1100,1500,2000,3000,3840',
+          alt: gkh_layer_alt | escape
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="gg-gkh__overlay"></div>
+
+  {%- if section.settings.show_vignette -%}
+    <div class="gg-gkh__vignette" aria-hidden="true"></div>
+  {%- endif -%}
+
+  <div class="gg-gkh__content">
+    <div class="gg-gkh__inner">
+      {%- if section.settings.heading != blank -%}
+        <h1 class="gg-gkh__heading gg-font-heading" id="gg-gkh-title-{{ section.id }}">
+          {{- section.settings.heading | escape | newline_to_br -}}
+        </h1>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="gg-gkh__sub gg-font-body">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="gg-gkh__btn gg-font-body">
+          {{- section.settings.button_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Garage kit hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Primary image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Primary image alt text",
+      "default": "Garage flooring installation"
+    },
+    {
+      "type": "image_picker",
+      "id": "layer_image",
+      "label": "Overlay image (optional)",
+      "info": "Second layer for a blended look; leave empty for a single photo."
+    },
+    {
+      "type": "range",
+      "id": "layer_image_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay image opacity",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "layer_blend_mode",
+      "label": "Overlay blend mode",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "multiply", "label": "Multiply" },
+        { "value": "overlay", "label": "Overlay" },
+        { "value": "soft-light", "label": "Soft light" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image focal point",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Tint overlay color",
+      "default": "#2C291D"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Tint overlay opacity",
+      "default": 10,
+      "info": "Figma uses a light brown tint at ~10%."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vignette",
+      "label": "Show soft vignette highlight",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "vignette_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Vignette strength",
+      "default": 35
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Upgrade your garage in a weekend — no measuring required"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 3.6,
+      "max": 9,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading size — large",
+      "default": 7.2,
+      "info": "Figma ~72px ≈ 7.2rem."
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height_desktop",
+      "min": 1,
+      "max": 1.3,
+      "step": 0.1,
+      "label": "Heading line height — large",
+      "default": 1.1
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 2.8,
+      "max": 6,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading size — mobile",
+      "default": 4.2
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height_mobile",
+      "min": 1,
+      "max": 1.3,
+      "step": 0.1,
+      "label": "Heading line height — mobile",
+      "default": 1.1
+    },
+    {
+      "type": "range",
+      "id": "heading_letter_spacing",
+      "min": -0.1,
+      "max": 0.2,
+      "step": 0.1,
+      "unit": "em",
+      "label": "Heading letter spacing",
+      "default": 0
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Pre-sized garage flooring kits designed to fit most garages. Choose your size and get started."
+    },
+    {
+      "type": "range",
+      "id": "subheading_size_desktop",
+      "min": 1.4,
+      "max": 2.8,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Subheading size — large",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "subheading_size_mobile",
+      "min": 1.4,
+      "max": 2.2,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Subheading size — mobile",
+      "default": 1.8
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "rem",
+      "label": "Content max width",
+      "default": 83,
+      "info": "0 = no max. Figma ~825px ≈ 82.5rem."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop your garage kit"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#E11D48"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_full_width_mobile",
+      "label": "Full width button on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout — large screens"
+    },
+    {
+      "type": "select",
+      "id": "align_h_desktop",
+      "label": "Horizontal alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "align_v_desktop",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "min": 40,
+      "max": 120,
+      "step": 1,
+      "unit": "rem",
+      "label": "Minimum height",
+      "default": 85,
+      "info": "Figma ~851px ≈ 85rem."
+    },
+    {
+      "type": "header",
+      "content": "Layout — mobile"
+    },
+    {
+      "type": "select",
+      "id": "align_h_mobile",
+      "label": "Horizontal alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "align_v_mobile",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "min": 36,
+      "max": 100,
+      "step": 1,
+      "unit": "rem",
+      "label": "Minimum height",
+      "default": 52
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Garage kit hero"
+    }
+  ]
+}
+{% endschema %}

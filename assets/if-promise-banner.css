@@ -1,0 +1,197 @@
+/* IF Promise Banner — One Click / One Price / No Surprises
+───────────────────────────────────────── */
+
+.if-prm {
+  --if-prm-bg: #dc1c1b;
+  --if-prm-text: #ffffff;
+  --if-prm-icon-bg: #ffffff;
+  --if-prm-icon: #dc1c1b;
+  position: relative;
+  overflow: hidden;
+  background: var(--if-prm-bg);
+  color: var(--if-prm-text);
+  font-family: "Be Vietnam Pro", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.if-prm *,
+.if-prm *::before,
+.if-prm *::after {
+  box-sizing: border-box;
+}
+
+.if-prm__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.if-prm__bg-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.if-prm__bg-img--desk {
+  display: none;
+}
+
+.if-prm__bg-img--mob {
+  display: block;
+}
+
+@media screen and (min-width: 768px) {
+  .if-prm__bg-img--desk {
+    display: block;
+  }
+
+  .if-prm__bg-img--mob {
+    display: none;
+  }
+}
+
+.if-prm__pattern {
+  position: absolute;
+  inset: -20% -10% -40% auto;
+  width: min(72vw, 760px);
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 70% 45%, transparent 18%, rgba(255, 255, 255, 0.07) 18.5%, transparent 19%),
+    radial-gradient(circle at 70% 45%, transparent 28%, rgba(255, 255, 255, 0.07) 28.5%, transparent 29%),
+    radial-gradient(circle at 70% 45%, transparent 38%, rgba(255, 255, 255, 0.07) 38.5%, transparent 39%),
+    radial-gradient(circle at 70% 45%, transparent 48%, rgba(255, 255, 255, 0.06) 48.5%, transparent 49%),
+    radial-gradient(circle at 70% 45%, transparent 58%, rgba(255, 255, 255, 0.05) 58.5%, transparent 59%),
+    radial-gradient(circle at 70% 45%, transparent 68%, rgba(255, 255, 255, 0.045) 68.5%, transparent 69%);
+  opacity: 0.9;
+}
+
+.if-prm__pattern[hidden] {
+  display: none !important;
+}
+
+.if-prm__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-inline: var(--gg-page-pad);
+}
+
+.if-prm__inner--fluid {
+  max-width: none;
+}
+
+.if-prm__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 0;
+}
+
+.if-prm__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 28px;
+  min-width: 0;
+}
+
+.if-prm__item + .if-prm__item {
+  border-left: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.if-prm__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: var(--if-prm-icon-bg);
+  color: var(--if-prm-icon);
+  flex: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.if-prm__icon img,
+.if-prm__icon svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.if-prm__title {
+  margin: 0 0 8px;
+  font-size: clamp(16px, 1.2vw + 16px, 22px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--if-prm-text);
+}
+
+.if-prm__text {
+  margin: 0;
+  max-width: 260px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--if-prm-text);
+  color: #FFFFFF99;
+  opacity: 0.95;
+}
+
+@media screen and (max-width: 989px) {
+  .if-prm__item {
+    padding: 8px 16px;
+  }
+
+  .if-prm__title {
+    font-size: 16px;
+  }
+  
+  .if-prm__text {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .if-prm__pattern {
+    inset: auto -30% -30% -30%;
+    width: 140%;
+    height: 70%;
+    background:
+      radial-gradient(circle at 50% 120%, transparent 22%, rgba(255, 255, 255, 0.07) 22.5%, transparent 23%),
+      radial-gradient(circle at 50% 120%, transparent 34%, rgba(255, 255, 255, 0.07) 34.5%, transparent 35%),
+      radial-gradient(circle at 50% 120%, transparent 46%, rgba(255, 255, 255, 0.06) 46.5%, transparent 47%),
+      radial-gradient(circle at 50% 120%, transparent 58%, rgba(255, 255, 255, 0.05) 58.5%, transparent 59%);
+  }
+
+  .if-prm__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .if-prm__item {
+    padding: 0;
+  }
+
+  .if-prm__item + .if-prm__item {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.28);
+    padding-top: 28px;
+  }
+
+  .if-prm__icon {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 14px;
+  }
+}

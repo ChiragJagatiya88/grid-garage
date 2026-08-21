@@ -1,0 +1,274 @@
+{%- comment -%}
+  Gallery Grid — Clean image gallery with 3x2 grid layout.
+  Light grey background, hover zoom effect, responsive layout.
+{%- endcomment -%}
+{{ 'gg-gallery-grid.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign head_align = 'center'
+  if section.settings.heading_alignment == 'left'
+    assign head_align = 'left'
+  endif
+
+  assign aspect_ratio = section.settings.image_aspect_ratio
+  assign padding_bottom = '100%'  
+  if aspect_ratio == '4:3'
+    assign padding_bottom = '75%'
+  elsif aspect_ratio == '3:4'
+    assign padding_bottom = '133.33%'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-gg {
+    --gg-gg-bg: {{ section.settings.background_color.red }},{{ section.settings.background_color.green }},{{ section.settings.background_color.blue }};
+    --gg-gg-head-align: {{ head_align }};
+    --gg-gg-grid-gap: {{ section.settings.grid_gap }}px;
+    --gg-gg-aspect: {{ padding_bottom }};
+    --gg-gg-img-h-m: {{ section.settings.image_height_mobile }}px;
+    --gg-gg-img-h-t: {{ section.settings.image_height_tablet }}px;
+    --gg-gg-img-h-d: {{ section.settings.image_height_desktop }}px;
+  }
+{%- endstyle -%}
+
+<section id="{{ section.settings.heading | downcase | remove: " " }}"
+  class="gg-gg section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="gg-gg__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="gg-gg__heading gg-font-heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="gg-gg__grid">
+      {%- for block in section.blocks -%}
+        <div
+          class="gg-gg__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {{ block.shopify_attributes }}
+          style="{% if settings.animations_reveal_on_scroll %}--animation-order: {{ forloop.index }}{% endif %}"
+        >
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="gg-gg__link">
+          {%- else -%}
+            <div class="gg-gg__inner">
+          {%- endif -%}
+
+              <div class="gg-gg__image-wrapper">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1000
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'gg-gg__image',
+                      sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw',
+                      widths: '375,550,750,900,1000',
+                      alt: block.settings.alt | default: block.settings.image.alt | escape
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg gg-gg__image' }}
+                {%- endif -%}
+              </div>
+
+              <div class="gg-gg__overlay"></div>
+
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Gallery grid",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Built For Real Garages"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Image size"
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Aspect ratio (mobile uses fixed height)",
+      "options": [
+        {
+          "value": "1:1",
+          "label": "Square 1:1"
+        },
+        {
+          "value": "4:3",
+          "label": "Landscape 4:3"
+        },
+        {
+          "value": "3:4",
+          "label": "Portrait 3:4"
+        }
+      ],
+      "default": "1:1"
+    },
+    {
+      "type": "range",
+      "id": "image_height_desktop",
+      "min": 200,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "label": "Image height (desktop)",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "image_height_tablet",
+      "min": 160,
+      "max": 320,
+      "step": 20,
+      "unit": "px",
+      "label": "Image height (tablet)",
+      "default": 220
+    },
+    {
+      "type": "range",
+      "id": "image_height_mobile",
+      "min": 200,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "label": "Image height (mobile)",
+      "default": 280
+    },
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 32,
+      "step": 4,
+      "unit": "px",
+      "label": "Grid gap",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gallery_image",
+      "name": "Gallery image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text",
+          "info": "Overrides the image's default alt text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional URL when image is clicked"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Gallery grid",
+      "blocks": [
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

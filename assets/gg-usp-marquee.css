@@ -1,0 +1,44 @@
+/* Grid Garage — USP marquee (Figma top red bar) */
+
+.gg-usp-marquee {
+  background-color: rgb(var(--gg-accent));
+  color: rgb(var(--gg-white));
+  padding: 1rem 0;
+  overflow: hidden;
+}
+
+.gg-usp-marquee__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem 2.4rem;
+  font-size: var(--gg-text-sm);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-usp-marquee__inner {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 2.8rem;
+  }
+}
+
+.gg-usp-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+}
+
+.gg-usp-marquee__item::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3E%3Cpath d='M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 11.94l6.72-6.72a.75.75 0 011.06 0z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}

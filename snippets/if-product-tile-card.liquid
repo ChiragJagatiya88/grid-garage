@@ -1,0 +1,115 @@
+{%- if tile_product != blank -%}
+{%- liquid
+  assign tile_title = custom_title | default: tile_product.title
+  assign tile_size_raw = tile_product.metafields.custom.tile_size
+  if tile_size_raw == blank
+    assign tile_size = '12" x 12" inch'
+  else
+    assign tile_size = tile_size_raw | strip
+    unless tile_size contains 'inch'
+      assign tile_size = tile_size | append: ' inch'
+    endunless
+  endif
+
+  assign tile_url = custom_url | default: tile_product.url
+  assign if_badge_mode = badge_mode | default: 'auto'
+  assign if_badge_label = ''
+  assign if_badge_mod = ''
+
+  if if_badge_mode == 'none'
+    assign if_badge_label = ''
+  elsif if_badge_mode == 'custom'
+    if badge_text != blank
+      assign if_badge_label = badge_text
+      assign if_badge_mod = 'gg-bb-custom'
+    endif
+  elsif if_badge_mode == 'best_value'
+    assign if_badge_label = 'Best Value'
+    assign if_badge_mod = 'gg-bb-value'
+  elsif if_badge_mode == 'most_popular'
+    assign if_badge_label = 'Most Popular'
+    assign if_badge_mod = 'gg-bb-pop'
+  elsif if_badge_mode == 'premium'
+    assign if_badge_label = 'Premium'
+    assign if_badge_mod = 'gg-bb-prem'
+  elsif if_badge_mode == 'bold_unique'
+    assign if_badge_label = 'Bold Unique Design'
+    assign if_badge_mod = 'gg-bb-bold'
+  else
+    if tile_product.tags contains 'Best Value'
+      assign if_badge_label = 'Best Value'
+      assign if_badge_mod = 'gg-bb-value'
+    elsif tile_product.tags contains 'Classic Diamond'
+      assign if_badge_label = 'Classic Diamond Plate'
+      assign if_badge_mod = 'gg-bb-classic-diamond'
+    elsif tile_product.tags contains 'Most Popular'
+      assign if_badge_label = 'Most Popular'
+      assign if_badge_mod = 'gg-bb-pop'
+    elsif tile_product.tags contains 'Premium'
+      assign if_badge_label = 'Premium'
+      assign if_badge_mod = 'gg-bb-prem'
+    elsif tile_product.tags contains 'Bold Unique'
+      assign if_badge_label = 'Bold Unique Design'
+      assign if_badge_mod = 'gg-bb-bold'
+    endif
+  endif
+
+  assign show_sw = show_swatches
+  if show_sw == nil
+    assign show_sw = true
+  endif
+-%}
+<a
+  class="if-fc__tile{% if is_selected %} is-selected{% endif %}"
+  href="{{ tile_url }}"
+  {% if is_selected %}aria-current="page"{% endif %}
+  data-product-id="{{ tile_product.id }}"
+  data-product-handle="{{ tile_product.handle }}"
+>
+  <div class="if-fc__tile-img">
+    {%- if if_badge_label != blank -%}
+      <div class="if-fc__tile-badge-container">
+        <span
+          class="if-fc__tile-badge {{ if_badge_mod }}"
+          {% if if_badge_mode == 'custom' %}
+            style="{% if badge_bg != blank %}background: {{ badge_bg }};{% endif %}{% if badge_color != blank %}color: {{ badge_color }};{% endif %}"
+          {% endif %}
+        >{{ if_badge_label | escape }}</span>
+      </div>
+    {%- endif -%}
+
+    {%- if custom_image != blank -%}
+      {{
+        custom_image
+        | image_url: width: 600
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 990px) 18vw, 45vw',
+          widths: '200,300,400,600',
+          alt: tile_title
+      }}
+    {%- elsif tile_product.featured_image != blank -%}
+      {{
+        tile_product.featured_image
+        | image_url: width: 600
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 990px) 18vw, 45vw',
+          widths: '200,300,400,600',
+          alt: tile_title
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+
+  <p class="if-fc__tile-name">{{ tile_title | escape }}</p>
+  <p class="if-fc__tile-size">{{ tile_size | escape }}</p>
+
+  {%- if show_sw -%}
+    <div class="if-fc__tile-swatches swiper-no-swiping">
+      {%- render 'if-pdp-tile-swatches', tile_product: tile_product -%}
+    </div>
+  {%- endif -%}
+</a>
+{%- endif -%}

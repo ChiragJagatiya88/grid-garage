@@ -1,0 +1,223 @@
+{% render 'if-swiper' %}
+{{ 'if-featured-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'if-featured-collection.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign if_accent = section.settings.accent_color | default: '#DC1C1B'
+  assign if_bg = section.settings.section_bg | default: '#F7F7F7'
+  assign if_collection = section.settings.collection
+  assign if_limit = section.settings.products_to_show | default: 8
+  assign if_show_swatches = section.settings.show_swatches
+-%}
+
+<div
+  id="if-fc-{{ section.id }}"
+  class="section_{{ section.id }} if-fc{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  data-if-fc
+  style="--if-fc-accent: {{ if_accent }}; --if-fc-bg: {{ if_bg }};"
+>
+  <div class="{% if section.settings.enable_container %}if-fc__inner{% else %}if-fc__inner if-fc__inner--fluid{% endif %}">
+    <div class="if-fc__head">
+      <div class="if-fc__titles">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="if-fc__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <div class="if-fc__subtitle">{{ section.settings.subtitle }}</div>
+        {%- endif -%}
+      </div>
+
+      <div class="if-fc__nav" data-if-fc-nav aria-label="Product carousel controls" hidden>
+        <button type="button" class="if-fc__nav-btn" data-if-fc-prev aria-label="Previous products">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <button type="button" class="if-fc__nav-btn" data-if-fc-next aria-label="Next products">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="if-fc__rail swiper" data-if-fc-rail>
+      {%- if if_collection != blank and if_collection.products.size > 0 -%}
+        <div class="swiper-wrapper" role="list">
+          {%- for coll_product in if_collection.products limit: if_limit -%}
+            <div class="swiper-slide" role="listitem">
+              {%- render 'if-product-tile-card',
+                tile_product: coll_product,
+                show_swatches: if_show_swatches,
+                is_selected: false,
+                badge_mode: 'auto'
+              -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="swiper-wrapper" role="list">
+          {%- for i in (1..4) -%}
+            <div class="swiper-slide" role="listitem">
+              <div class="if-fc__tile if-fc__tile--placeholder">
+                <div class="if-fc__tile-img">
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+                <p class="if-fc__tile-name">Select a collection</p>
+                <p class="if-fc__tile-size">12" x 12" inch</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all and if_collection != blank -%}
+      <div class="if-fc__footer">
+        <a class="if-fc__view-all" href="{{ if_collection.url }}">
+          {{ section.settings.view_all_label | default: 'View all' | escape }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "IF Featured Collection",
+  "tag": "section",
+  "class": "section-if-featured-collection",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable custom class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom class",
+      "visible_if": "{{ section.settings.enable_custom_class == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_container",
+      "label": "Enable container",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Choose Your Garage Tile System"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>All kits include tiles, edges, and free shipping.</p>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Uses the same product tile card as the PDP configurator"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "label": "Show color swatches",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "View all",
+      "visible_if": "{{ section.settings.show_view_all == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section background",
+      "default": "#F7F7F7"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#DC1C1B"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding",
+      "label": "Enable custom padding",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Padding desktop",
+      "default": "40px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Padding mobile",
+      "default": "28px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "IF Featured Collection",
+      "category": "IF Section"
+    }
+  ]
+}
+{% endschema %}
+
+{%- if section.settings.enable_custom_padding -%}
+  <style>
+    .section_{{ section.id }}.if-fc {
+      padding-block: {{ section.settings.padding_desk }};
+      background: {{ if_bg }};
+    }
+    @media screen and (max-width: 749px) {
+      .section_{{ section.id }}.if-fc {
+        padding-block: {{ section.settings.padding_mob }};
+      }
+    }
+  </style>
+{%- else -%}
+  <style>
+    .section_{{ section.id }}.if-fc {
+      background: {{ if_bg }};
+    }
+  </style>
+{%- endif -%}

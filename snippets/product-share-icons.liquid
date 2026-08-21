@@ -1,0 +1,105 @@
+{% doc %}
+  Renders a horizontal product share row (Facebook, X/Twitter, Pinterest).
+
+  @param {object} block - Section block (for Theme Editor attributes).
+  @param {object} product - Product object.
+  @param {string} share_url - Absolute URL to share (variant-aware when updated via JS).
+
+  @example
+  {% render 'product-share-icons',
+    block: block,
+    product: product,
+    share_url: share_url
+  %}
+{% enddoc %}
+<script src="{{ 'product-share-icons.js' | asset_url }}" defer="defer"></script>
+{%- liquid
+  assign share_title = product.title | escape
+  assign encoded_url = share_url | url_encode
+  assign encoded_title = product.title | url_encode
+  assign pin_media = product.featured_image | image_url: width: 1200
+  if pin_media != blank
+    unless pin_media contains 'http'
+      assign pin_media = pin_media | prepend: 'https:'
+    endunless
+  endif
+  assign encoded_media = pin_media | url_encode
+  assign facebook_href = 'https://www.facebook.com/sharer.php?u=' | append: encoded_url
+  assign twitter_href = 'https://twitter.com/intent/tweet?url=' | append: encoded_url | append: '&text=' | append: encoded_title
+  assign pinterest_href = 'https://www.pinterest.com/pin/create/button/?url=' | append: encoded_url | append: '&description=' | append: encoded_title
+  if pin_media != blank
+    assign pinterest_href = pinterest_href | append: '&media=' | append: encoded_media
+  endif
+-%}
+<product-share-icons
+  class="product-share-icons"
+  data-share-title="{{ share_title }}"
+  {% if pin_media != blank %}
+    data-share-media="{{ pin_media | escape }}"
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  <span class="product-share-icons__label">{{ block.settings.share_label | escape }}</span>
+  <ul class="product-share-icons__list list-unstyled" role="list">
+    <li class="product-share-icons__item">
+      <a
+        href="{{ facebook_href }}"
+        class="product-share-icons__link link"
+        data-share-network="facebook"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="{{ 'general.social.alt_text.share_on_facebook' | t }}"
+      >
+        <span class="svg-wrapper" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
+  <g clip-path="url(#clip0_288_1839)">
+    <path d="M9.89 0.00854492H7.19273C4.67527 0.00854492 2.69727 1.98654 2.69727 4.504V7.20127H0V10.7976H2.69727V17.9904H6.29364V10.7976H8.99091L9.89 7.20127H6.29364V4.504C6.29364 3.96454 6.65327 3.60491 7.19273 3.60491H9.89V0.00854492Z" fill="#222222"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_288_1839">
+      <rect width="9.89" height="17.9989" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
+        </span>
+      </a>
+    </li>
+    <li class="product-share-icons__item">
+      <a
+        href="{{ twitter_href }}"
+        class="product-share-icons__link link"
+        data-share-network="twitter"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="{{ 'general.social.alt_text.share_on_twitter' | t }}"
+      >
+        <span class="svg-wrapper" aria-hidden="true">
+          {{- 'icon-twitter.svg' | inline_asset_content -}}
+        </span>
+      </a>
+    </li>
+    <li class="product-share-icons__item">
+      <a
+        href="{{ pinterest_href }}"
+        class="product-share-icons__link link"
+        data-share-network="pinterest"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="{{ 'general.social.alt_text.share_on_pinterest' | t }}"
+      >
+        <span class="svg-wrapper" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18" fill="none">
+  <g clip-path="url(#clip0_288_1845)">
+    <path d="M0 6.48341C0 5.76393 0.0899355 4.95451 0.359742 4.32496C0.719484 3.60548 1.07923 2.97593 1.5289 2.52625C1.97858 2.07657 2.60813 1.53696 3.23768 1.17722C3.86723 0.817476 4.58671 0.457734 5.30619 0.367799C5.84581 0.0979921 6.56529 0.00805664 7.28477 0.00805664C8.45394 0.00805664 9.53316 0.277863 10.5225 0.72754C11.5117 1.17722 12.3212 1.8967 12.9507 2.79606C13.5803 3.78535 13.94 4.86457 13.94 6.03373C13.94 6.75322 13.8501 7.38277 13.6702 8.10225C13.5803 8.82173 13.3105 9.45128 13.0406 9.9909C12.7708 10.6204 12.4111 11.0701 11.9614 11.5198C11.5117 11.9695 10.9721 12.3292 10.4325 12.599C9.8929 12.8688 9.08348 13.0487 8.364 12.9588C7.91432 12.9588 7.37471 12.8688 6.92503 12.599C6.29548 12.5091 5.93574 12.1493 5.84581 11.7896C5.75587 12.0594 5.75587 12.5091 5.48606 12.9588C5.39613 13.4084 5.21626 13.7682 5.21626 14.038C5.21626 14.1279 5.12632 14.3977 4.94645 14.7575C4.85652 15.0273 4.85652 15.2072 4.67664 15.477L4.40684 16.1964C4.3169 16.4662 4.0471 16.826 3.95716 17.0059C3.68735 17.2757 3.59742 17.6354 3.23768 17.9952H3.14774L3.05781 17.9052C2.96787 16.826 2.96787 16.1065 2.96787 15.8367C2.96787 15.1172 3.05781 14.3977 3.23768 13.5883C3.32761 12.7789 3.59742 11.6997 3.95716 10.4406C4.3169 9.18148 4.40684 8.55193 4.58671 8.28212C4.22697 7.92238 4.13703 7.29283 4.13703 6.48341C4.13703 5.85386 4.40684 5.31425 4.76658 4.77464C4.94645 4.32496 5.39613 4.05515 6.02568 4.05515C6.47535 4.05515 6.8351 4.14509 7.1049 4.50483C7.37471 4.77464 7.46464 5.13438 7.46464 5.58406C7.46464 6.03373 7.28477 6.84315 6.92503 7.65257C6.56529 8.46199 6.47535 9.18148 6.47535 9.72109C6.47535 10.1708 6.56529 10.5305 6.92503 10.8003C7.28477 11.0701 7.64452 11.25 8.09419 11.25C8.45394 11.25 8.81368 11.1601 9.17342 10.9802C9.53316 10.7104 9.80297 10.5305 9.98284 10.2607C10.4325 9.54122 10.7923 8.82173 10.9721 8.01231C11.0621 7.56264 11.0621 7.2029 11.2419 6.84315C11.2419 6.48341 11.3319 6.12367 11.3319 5.76393C11.3319 4.59477 10.9721 3.60548 10.1627 2.88599C9.35329 2.16651 8.364 1.80677 7.1049 1.80677C5.66594 1.80677 4.49677 2.25644 3.50748 3.24573C2.51819 4.23502 2.06852 5.40419 2.06852 6.84315C2.06852 7.2029 2.06852 7.4727 2.15845 7.83244C2.24839 7.92238 2.42826 8.19219 2.51819 8.46199C2.60813 8.55193 2.788 8.82173 2.788 8.91167C2.87794 9.0016 2.87794 9.18148 2.87794 9.27141C2.87794 9.54122 2.87794 9.72109 2.788 10.0808C2.69806 10.3506 2.51819 10.4406 2.33832 10.4406C2.33832 10.4406 2.24839 10.4406 2.06852 10.4406C1.79871 10.3506 1.43897 10.0808 1.2591 9.81102C0.899355 9.54122 0.629548 9.18148 0.539613 8.82173C0.359742 8.37206 0.269806 8.01231 0.0899355 7.65257C0.0899355 7.29283 0 6.84315 0 6.48341Z" fill="#222222"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_288_1845">
+      <rect width="13.94" height="18.0032" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
+        </span>
+      </a>
+    </li>
+  </ul>
+</product-share-icons>

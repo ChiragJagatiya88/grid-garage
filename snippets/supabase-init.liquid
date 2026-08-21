@@ -1,0 +1,29 @@
+{%- comment -%}
+  Global Supabase SDK & Client Initialization for Liquid Theme.
+  Include this snippet in layout/theme.liquid or individual snippets requiring Supabase.
+{%- endcomment -%}
+
+<script>
+  window.SUPABASE_URL = "https://sgbaztpxrjdfhceooiii.supabase.co";
+  window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnYmF6dHB4cmpkZmhjZW9vaWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MDU4NjAsImV4cCI6MjEwMDI4MTg2MH0.xxbmb_qGjv5sDmHDihNl55xEpp7c0T1APqKwvOvDg7Y";
+  window.supabaseClient = null;
+  window._supabaseReady = false;
+
+  function _initSupabaseClient() {
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      try {
+        window.supabaseClient = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+        window._supabaseReady = true;
+        console.log("[Supabase] Client initialized successfully.");
+        // Dispatch event so other scripts can react
+        document.dispatchEvent(new Event('supabase:ready'));
+      } catch(e) {
+        console.warn("[Supabase] Client initialization error:", e);
+      }
+    } else {
+      console.warn("[Supabase] SDK not loaded yet.");
+    }
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onload="_initSupabaseClient()"></script>

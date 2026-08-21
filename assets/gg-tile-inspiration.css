@@ -1,0 +1,84 @@
+/* Grid Garage — modular tile inspiration grid (Figma node 279:3960) */
+
+.gg-ti {
+  background-color: rgb(var(--gg-white));
+  color: rgb(var(--gg-black));
+  padding-top: var(--gg-section-y);
+  padding-bottom: var(--gg-section-y);
+}
+
+.gg-ti__intro {
+  text-align: center;
+  max-width: 90rem;
+  margin: 0 auto 4rem;
+  padding: 0 var(--gg-page-pad);
+}
+
+.gg-ti__title {
+  font-size: var(--gg-bfl-title-size);
+  font-weight: 700;
+  margin: 0 0 1.2rem;
+  line-height: var(--gg-line-tight);
+}
+
+.gg-ti__sub {
+  font-size: var(--gg-text-md);
+  line-height: var(--gg-line-body);
+  margin: 0;
+  color: rgb(var(--gg-charcoal));
+}
+
+.gg-ti__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.4rem;
+  padding: 0 var(--gg-page-pad);
+}
+
+@media screen and (min-width: 750px) {
+  .gg-ti__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .gg-ti__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+}
+
+.gg-ti__card {
+  text-align: center;
+}
+
+.gg-ti__media {
+  position: relative;
+  border-radius: var(--gg-radius-card);
+  overflow: hidden;
+  aspect-ratio: 1;
+  background-color: #e6e6e6;
+  margin-bottom: 1.6rem;
+}
+
+.gg-ti__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gg-ti__card-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: var(--gg-line-tight);
+  margin: 0;
+}
+
+.gg-ti__card-title p {
+  margin: 0 0 0.2rem;
+}
+
+.gg-ti__card-title p:last-child {
+  margin-bottom: 0;
+}

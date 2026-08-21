@@ -1,0 +1,361 @@
+{%- comment -%}
+  Figma: Footer with marquee, link columns, newsletter (node 279:3844). Add to footer group instead of default footer if you use this layout.
+{%- endcomment -%}
+{{ 'gg-footer-grid-garage.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  /* Padding below the marquee (above link columns) */
+  .section-{{ section.id }}-padding .gg-footer__inner {
+    padding-top: {{ section.settings.padding_top }}px;
+  }
+{%- endstyle -%}
+
+<footer
+  class="gg-footer section-{{ section.id }}-padding"
+  style="--gg-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};"
+>
+  <div class="gg-footer__marquee-wrap" aria-hidden="true">
+    <div class="gg-footer__marquee">
+      <div class="gg-footer__marquee-group gg-font-body">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'marquee' and block.settings.text != blank -%}
+            <span>{{ block.settings.text | escape }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="gg-footer__marquee-group gg-font-body" aria-hidden="true">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'marquee' and block.settings.text != blank -%}
+            <span>{{ block.settings.text | escape }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="gg-footer__inner">
+    <div class="gg-footer__grid">
+      <details class="gg-footer__disclosure" id="FooterCol1-{{ section.id }}">
+        <summary class="gg-footer__disclosure-summary">
+          <span class="gg-footer__col-title gg-font-heading">
+            {{- section.settings.menu_1_title | escape -}}
+          </span>
+          <span class="gg-footer__disclosure-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="gg-footer__disclosure-panel">
+          {%- if section.settings.menu_1 != blank -%}
+            <ul class="gg-footer__links" role="list">
+              {%- for link in section.settings.menu_1.links -%}
+                <li>
+                  <a href="{{ link.url }}" class="gg-font-body">{{ link.title | escape }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </details>
+
+      <details class="gg-footer__disclosure" id="FooterCol2-{{ section.id }}">
+        <summary class="gg-footer__disclosure-summary">
+          <span class="gg-footer__col-title gg-font-heading">
+            {{- section.settings.menu_2_title | escape -}}
+          </span>
+          <span class="gg-footer__disclosure-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="gg-footer__disclosure-panel">
+          {%- if section.settings.menu_2 != blank -%}
+            <ul class="gg-footer__links" role="list">
+              {%- for link in section.settings.menu_2.links -%}
+                <li>
+                  <a href="{{ link.url }}" class="gg-font-body">{{ link.title | escape }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </details>
+
+      <details class="gg-footer__disclosure" id="FooterCol3-{{ section.id }}">
+        <summary class="gg-footer__disclosure-summary">
+          <span class="gg-footer__col-title gg-font-heading">
+            {{- section.settings.menu_3_title | escape -}}
+          </span>
+          <span class="gg-footer__disclosure-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="gg-footer__disclosure-panel">
+          {%- if section.settings.menu_3 != blank -%}
+            <ul class="gg-footer__links" role="list">
+              {%- for link in section.settings.menu_3.links -%}
+                <li>
+                  <a href="{{ link.url }}" class="gg-font-body">{{ link.title | escape }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </details>
+
+      <details open class="gg-footer__disclosure gg-footer__disclosure--newsletter" id="FooterCol4-{{ section.id }}">
+        <summary class="gg-footer__disclosure-summary gg-footer__disclosure-summary--newsletter">
+          <span class="gg-footer__newsletter-title gg-font-heading">
+            {{- section.settings.newsletter_heading | escape -}}
+          </span>
+          <span class="gg-footer__disclosure-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="gg-footer__disclosure-panel">
+          <div class="gg-footer__newsletter-col">
+            {%- if section.settings.newsletter_text != blank -%}
+              <p class="gg-footer__newsletter-text gg-font-body">{{ section.settings.newsletter_text | escape }}</p>
+            {%- endif -%}
+
+            {% form 'customer', class: 'gg-footer__newsletter-form' %}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <label class="visually-hidden" for="FooterEmail-{{ section.id }}">
+                {{- 'newsletter.label' | t -}}
+              </label>
+              <input
+                type="email"
+                name="contact[email]"
+                id="FooterEmail-{{ section.id }}"
+                class="gg-footer__field"
+                value="{{ form.email }}"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                placeholder="{{ 'grid_garage.footer.email_placeholder' | t }}"
+                required
+              >
+              <button type="submit" class="gg-footer__submit gg-font-body" name="commit">
+                {{ section.settings.newsletter_button_label | default: 'Get on the List' | escape }}
+              </button>
+              {%- if form.posted_successfully? -%}
+                <p class="gg-font-body" style="margin-top: 1rem;">
+                  {{- 'newsletter.success' | t -}}
+                </p>
+              {%- endif -%}
+              {%- if form.errors -%}
+                <p class="gg-font-body" style="margin-top: 1rem; color: rgb(var(--gg-badge));">
+                  {{ form.errors.translated_fields.email | capitalize }}
+                  {{ form.errors.messages.email }}
+                </p>
+              {%- endif -%}
+            {% endform %}
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="gg-footer__bottom">
+      
+      <div class="gg-footer__meta gg-font-body">
+        <div class="gg-footer__social">
+          {% render 'social-icons', class: 'gg-footer-social' %}
+        </div>
+        {%- if section.settings.footer_text != blank -%}
+          <div class="footer_text">
+            {{ section.settings.footer_text }}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.policy_menu != blank -%}
+          {%- assign gg_policy_links = section.settings.policy_menu.links -%}
+          {%- if gg_policy_links.size > 0 -%}
+            <nav class="gg-footer__policies" aria-label="{{ 'grid_garage.footer.policies_nav_label' | t }}">
+              <ul class="gg-footer__policies-list" role="list">
+                {%- for link in gg_policy_links -%}
+                  <li class="gg-footer__policies-item">
+                    <a href="{{ link.url }}">{{ link.title | escape }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- elsif section.settings.policies_text != blank -%}
+            <div class="gg-footer__policies gg-footer__policies--rte rte">{{ section.settings.policies_text }}</div>
+          {%- endif -%}
+        {%- elsif section.settings.policies_text != blank -%}
+          <div class="gg-footer__policies gg-footer__policies--rte rte">{{ section.settings.policies_text }}</div>
+        {%- endif -%}
+        {%- if section.settings.copyright != blank -%}
+          <span class="gg-footer__copyright">{{ section.settings.copyright | escape }}</span>
+        {%- endif -%}
+        
+      </div>
+      <div class="footer__payment">
+        <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+        <ul class="list list-payment" role="list">
+          {%- for type in shop.enabled_payment_types -%}
+            <li class="list-payment__item">
+              {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% javascript %}
+  (function () {
+    var disclosures = function () {
+      return document.querySelectorAll('.gg-footer .gg-footer__disclosure');
+    };
+    var mq = window.matchMedia('(min-width: 990px)');
+
+    function syncFooterDisclosures() {
+      var open = mq.matches;
+      disclosures().forEach(function (el) {
+        el.open = open;
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncFooterDisclosures);
+    } else {
+      syncFooterDisclosures();
+    }
+
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', syncFooterDisclosures);
+    } else if (typeof mq.addListener === 'function') {
+      mq.addListener(syncFooterDisclosures);
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "GG: Figma footer",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (marquee + button)",
+      "default": "#E61E43"
+    },
+    {
+      "type": "text",
+      "id": "menu_1_title",
+      "label": "First column heading",
+      "default": "Shop"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "First column menu"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_title",
+      "label": "Second column heading",
+      "default": "Garage inspiration"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Second column menu"
+    },
+    {
+      "type": "text",
+      "id": "menu_3_title",
+      "label": "Third column heading",
+      "default": "Help & support"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_3",
+      "label": "Third column menu"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Upgrade your garage"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter text",
+      "default": "Get garage design inspiration, flooring tips, and exclusive offers."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_label",
+      "label": "Newsletter button label",
+      "default": "Get 10% off on your first order"
+    },
+    {
+      "type": "richtext",
+      "id": "footer_text",
+      "label": "Text"
+    },
+    {
+      "type": "link_list",
+      "id": "policy_menu",
+      "label": "Policy links menu",
+      "info": "Shown as a horizontal row when set. Creates a menu in Online Store > Navigation."
+    },
+    {
+      "type": "richtext",
+      "id": "policies_text",
+      "label": "Policy links (rich text)",
+      "info": "Used only if the policy menu is empty."
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright line",
+      "default": "© 2026 Grid Garage"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding below marquee",
+      "info": "Space between the red bar and the footer columns.",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "marquee",
+      "name": "Marquee item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "✓ Lifetime tile warranty"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Figma footer",
+      "blocks": [
+        { "type": "marquee", "settings": { "text": "✓ Lifetime tile warranty" } },
+        { "type": "marquee", "settings": { "text": "✓ DIY installation" } },
+        { "type": "marquee", "settings": { "text": "✓ Built for heavy vehicles" } },
+        { "type": "marquee", "settings": { "text": "✓ Premium garage designs" } },
+        { "type": "marquee", "settings": { "text": "✓ Free shipping on garage tiles" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

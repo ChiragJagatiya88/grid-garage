@@ -1,0 +1,139 @@
+{% doc %}
+  Add-on row for complementary products: image, checkbox add-to-cart, variant select, quantity, price.
+
+  @param {object} addon_product - Product object from recommendations
+  @param {string} section_id - Parent section id
+  @param {string} block_id - Complementary block id
+  @param {number} [index] - Loop index for unique ids
+{% enddoc %}
+{%- liquid
+  assign addon_index = index | default: 0
+  assign item_id = 'ComplementaryAddon-' | append: block_id | append: '-' | append: addon_product.id | append: '-' | append: addon_index
+  assign first_variant = addon_product.selected_or_first_available_variant
+  assign any_available = false
+  for v in addon_product.variants
+    if v.available
+      assign any_available = true
+      break
+    endif
+  endfor
+-%}
+<complementary-addon-item
+  class="complementary-addon-item"
+  data-section-id="{{ section_id }}"
+  data-default-variant-id="{{ first_variant.id }}"
+  data-item-id="{{ item_id }}"
+>
+  <div class="complementary-addon-item__media">
+    {%- if addon_product.featured_media -%}
+      <div class="complementary-addon-item__image-wrap media media--transparent">
+        <img
+          src="{{ addon_product.featured_media | image_url: width: 180 }}"
+          alt="{{ addon_product.featured_media.alt | default: addon_product.title | escape }}"
+          width="90"
+          height="90"
+          loading="lazy"
+          class="motion-reduce"
+        >
+      </div>
+    {%- else -%}
+      <div class="complementary-addon-item__image-wrap complementary-addon-item__image-wrap--placeholder media media--transparent">
+        {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="complementary-addon-item__checkbox-wrap">
+    <input
+      type="checkbox"
+      id="{{ item_id }}-checkbox"
+      class="complementary-addon-item__checkbox visually-hidden"
+      data-addon-checkbox
+      {% unless any_available %}
+        disabled
+      {% endunless %}
+      aria-describedby="{{ item_id }}-title"
+      aria-label="{{ 'products.complementary.include_with_main_cart' | t: product_title: addon_product.title | escape }}"
+    >
+    <label for="{{ item_id }}-checkbox" class="complementary-addon-item__checkbox-ui" aria-hidden="true"> </label>
+  </div>
+
+  <h3 class="complementary-addon-item__title h6" id="{{ item_id }}-title">
+    <a href="{{ addon_product.url }}" class="link">{{ addon_product.title | escape }}</a>
+  </h3>
+
+  {%- if addon_product.variants.size > 1 -%}
+    <div class="complementary-addon-item__field">
+      <label class="visually-hidden" for="{{ item_id }}-variant">
+        {{- 'products.complementary.choose_variant' | t -}}
+      </label>
+      <select
+        id="{{ item_id }}-variant"
+        class="complementary-addon-item__select field__input"
+        data-addon-variant-select
+        {% unless any_available %}
+          disabled
+        {% endunless %}
+      >
+        {%- for variant in addon_product.variants -%}
+          <option
+            value="{{ variant.id }}"
+            {% if variant.id == first_variant.id %}
+              selected
+            {% endif %}
+            {% unless variant.available %}
+              disabled
+            {% endunless %}
+            data-price-formatted="{% if settings.show_currency_codes %}{{ variant.price | money_with_currency | escape }}{% else %}{{ variant.price | money | escape }}{% endif %}"
+          >
+            {{ variant.title | escape -}}
+            {%- unless variant.available %} — {{ 'products.product.sold_out' | t }}{% endunless %}
+          </option>
+        {%- endfor -%}
+      </select>
+    </div>
+  {%- endif -%}
+
+  <div class="complementary-addon-item__field">
+    <label class="visually-hidden" for="{{ item_id }}-qty">
+      {{- 'products.complementary.quantity' | t -}}
+    </label>
+    <input
+      type="number"
+      id="{{ item_id }}-qty"
+      class="complementary-addon-item__qty field__input"
+      name="quantity"
+      min="1"
+      value="1"
+      inputmode="numeric"
+      data-addon-quantity
+      {% unless any_available %}
+        disabled
+      {% endunless %}
+    >
+  </div>
+
+  <div class="complementary-addon-item__price" data-addon-price>
+    {%- if settings.show_currency_codes -%}
+      {{ first_variant.price | money_with_currency }}
+    {%- else -%}
+      {{ first_variant.price | money }}
+    {%- endif -%}
+  </div>
+
+  <p class="complementary-addon-item__error caption" data-addon-error hidden role="status"></p>
+
+  <script type="application/json" data-addon-variants>
+    {
+      "variants": [
+        {%- for variant in addon_product.variants -%}
+          {
+            "id": {{ variant.id | json }},
+            "available": {{ variant.available | json }},
+            "price_formatted": {% if settings.show_currency_codes %}{{ variant.price | money_with_currency | json }}{% else %}{{ variant.price | money | json }}{% endif %}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+</complementary-addon-item>

@@ -1,0 +1,271 @@
+{%- comment -%}
+  Hero CTA Banner — Full-width background image with overlay, centered text, and CTA button.
+{%- endcomment -%}
+{{ 'gg-hero-cta.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-hc {
+    --gg-hc-overlay: {{ section.settings.overlay_color.red }},{{ section.settings.overlay_color.green }},{{ section.settings.overlay_color.blue }};
+    --gg-hc-overlay-opacity: {{ overlay_opacity }};
+    --gg-hc-head-m: {{ section.settings.heading_size_mobile }}px;
+    --gg-hc-head-d: {{ section.settings.heading_size_desktop }}px;
+    --gg-hc-max-width: {{ section.settings.content_max_width }}px;
+    --gg-hc-height-m: {{ section.settings.section_height_mobile }}px;
+    --gg-hc-height-d: {{ section.settings.section_height_desktop }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-hc section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="gg-hc__background">
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 2000
+        | image_tag:
+          loading: 'lazy',
+          class: 'gg-hc__image',
+          sizes: '100vw',
+          widths: '750,1100,1500,2000',
+          alt: section.settings.image_alt | default: section.settings.heading | escape
+      }}
+    {%- else -%}
+      <div class="gg-hc__image gg-hc__image--placeholder">
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {%- endif -%}
+
+    <div class="gg-hc__overlay"></div>
+  </div>
+
+  <div class="gg-hc__content">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="gg-hc__heading gg-font-heading">{{ section.settings.heading | escape | newline_to_br }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      {%- if section.settings.button_product != blank -%}
+        {%- comment -%}Product form for direct add to cart{%- endcomment -%}
+        {%- form 'product', section.settings.button_product, class: 'gg-hc__form', id: 'HeroCtaForm-'  -%}
+        
+          <input type="hidden" name="id" value="{{ section.settings.button_product.selected_or_first_available_variant.id }}">
+          <button
+            type="submit"
+            class="gg-hc__button gg-btn{% if section.settings.button_style == 'secondary' %} gg-btn--secondary{% elsif section.settings.button_style == 'outline' %} gg-btn--outline{% endif %}"
+            {% unless section.settings.button_product.selected_or_first_available_variant.available %}
+              disabled
+            {% endunless %}
+          >
+            {%- if section.settings.button_product.selected_or_first_available_variant.available -%}
+              {{ section.settings.button_label | escape }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- endif -%}
+          </button>
+        {%- endform -%}
+      {%- elsif section.settings.button_link != blank -%}
+        <a
+          href="{{ section.settings.button_link }}"
+          class="gg-hc__button gg-btn{% if section.settings.button_style == 'secondary' %} gg-btn--secondary{% elsif section.settings.button_style == 'outline' %} gg-btn--outline{% endif %}"
+        >
+          {{ section.settings.button_label | escape }}
+        </a>
+      {%- else -%}
+        <button class="gg-hc__button gg-btn" disabled>
+          {{ section.settings.button_label | escape }}
+        </button>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Hero CTA",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "One click, one price, no surprises.\nShipping is included.",
+      "info": "Use line breaks for multiple lines"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 20,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (mobile)",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 28,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "min": 500,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "label": "Content max width",
+      "default": 700
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "info": "Optional — links to a page or URL"
+    },
+    {
+      "type": "product",
+      "id": "button_product",
+      "label": "Product (for add to cart)",
+      "info": "If selected, clicking the button adds this product to cart"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary (Red)"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height_mobile",
+      "min": 250,
+      "max": 500,
+      "step": 25,
+      "unit": "px",
+      "label": "Section height (mobile)",
+      "default": 350
+    },
+    {
+      "type": "range",
+      "id": "section_height_desktop",
+      "min": 300,
+      "max": 600,
+      "step": 25,
+      "unit": "px",
+      "label": "Section height (desktop)",
+      "default": 450
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Hero CTA"
+    }
+  ]
+}
+{% endschema %}

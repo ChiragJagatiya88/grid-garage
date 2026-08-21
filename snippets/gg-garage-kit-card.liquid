@@ -1,0 +1,261 @@
+{% doc %}
+  Grid Garage — kit comparison card (Figma 647:815): media link, badge, title, body (product description or subtitle + features), price row, CTA.
+
+  @param block {Object} Section block (shopify_attributes, settings)
+  @param section {Object} Parent section
+  @param card_product {Object} Product or nil for placeholder
+  @param price_label {String} Small uppercase label above price (translated)
+  @param lazy_image {Boolean} Lazy-load featured image
+{% enddoc %}
+
+{%- liquid
+  assign bp = block.settings
+  assign has_product = false
+  if card_product != blank
+    assign has_product = true
+  endif
+
+  assign has_placeholder_link = false
+  if bp.placeholder_link != blank
+    assign has_placeholder_link = true
+  endif
+
+  assign product_body_mode = bp.product_body_mode | default: 'full_description'
+
+  assign show_full_description = false
+  if has_product and product_body_mode == 'full_description' and card_product.description != blank
+    assign show_full_description = true
+  endif
+
+  assign title_out = ''
+  if bp.title_source == 'custom'
+    if bp.title_custom != blank
+      assign title_out = bp.title_custom
+    elsif has_product
+      assign title_out = card_product.title
+    else
+      assign title_out = 'onboarding.product_title' | t
+    endif
+  elsif has_product
+    assign title_out = card_product.title
+  else
+    assign title_out = 'onboarding.product_title' | t
+  endif
+
+  assign subtitle_out = ''
+  if bp.subtitle_source == 'custom' and bp.subtitle_custom != blank
+    assign subtitle_out = bp.subtitle_custom
+  elsif bp.subtitle_source == 'from_description' and has_product
+    assign subtitle_out = card_product.description | strip_html | strip | truncatewords: 16, ''
+  endif
+
+  assign button_label = ''
+  if bp.button_label_source == 'custom'
+    if bp.button_label_custom != blank
+      assign button_label = bp.button_label_custom
+    elsif has_product
+      assign button_label = 'sections.gg_garage_kit_compare.shop_product' | t: product_title: card_product.title
+    else
+      assign button_label = 'sections.gg_garage_kit_compare.shop_placeholder' | t
+    endif
+  elsif has_product
+    assign button_label = 'sections.gg_garage_kit_compare.shop_product' | t: product_title: card_product.title
+  else
+    assign button_label = 'sections.gg_garage_kit_compare.shop_placeholder' | t
+  endif
+
+  assign product_url = '#'
+  if has_product
+    assign product_url = card_product.url
+  endif
+
+  assign variant = nil
+  if has_product
+    assign variant = card_product.selected_or_first_available_variant
+  endif
+
+  assign money_from_plain = ''
+  if variant != nil and card_product.price_varies
+    if settings.currency_code_enabled
+      assign money_from_plain = card_product.price_min | money_with_currency
+    else
+      assign money_from_plain = card_product.price_min | money
+    endif
+  endif
+
+  assign img_loading = 'eager'
+  if lazy_image
+    assign img_loading = 'lazy'
+  endif
+
+  assign img_alt = title_out | escape
+  if bp.image_alt_override != blank
+    assign img_alt = bp.image_alt_override | escape
+  elsif has_product and card_product.featured_media != blank
+    assign img_alt = card_product.featured_media.alt | default: title_out | escape
+  endif
+-%}
+
+<article class="gg-gkc-card" id="gg-gkc-{{ section.id }}-{{ block.id }}" {{ block.shopify_attributes }}>
+  <div class="gg-gkc-card__media">
+    {%- if has_product -%}
+      <a href="{{ product_url }}" class="gg-gkc-card__media-link">
+        <span class="visually-hidden">{{ 'sections.gg_garage_kit_compare.view_product' | t: product_title: card_product.title }}</span>
+        {%- if card_product.featured_media != blank -%}
+          {%- liquid
+            assign grid_space = settings.spacing_grid_horizontal | divided_by: 2 | append: 'px'
+            capture sizes
+              echo '(min-width: 990px) calc((min(100vw, '
+              echo settings.page_width
+              echo 'px) - 100px) / 2 - '
+              echo grid_space
+              echo '), (min-width: 750px) calc(100vw - 100px), calc(100vw - 30px)'
+            endcapture
+          -%}
+          {{
+            card_product.featured_media
+            | image_url: width: 1600
+            | image_tag:
+              loading: img_loading,
+              sizes: sizes,
+              widths: '165, 360, 535, 750, 940, 1100, 1340, 1600',
+              alt: img_alt,
+              class: 'gg-gkc-card__img'
+          }}
+        {%- else -%}
+          <div class="gg-gkc-card__img gg-gkc-card__img--placeholder">
+            {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </a>
+    {%- else -%}
+      {%- if has_placeholder_link -%}
+        <a href="{{ bp.placeholder_link }}" class="gg-gkc-card__media-link">
+          <span class="visually-hidden">
+            {{- 'sections.gg_garage_kit_compare.view_custom_link' | t: title: title_out -}}
+          </span>
+      {%- else -%}
+        <div class="gg-gkc-card__media-link gg-gkc-card__media-link--disabled" aria-disabled="true">
+      {%- endif -%}
+      {%- if bp.placeholder_image != blank -%}
+        {%- liquid
+          assign grid_space_ph = settings.spacing_grid_horizontal | divided_by: 2 | append: 'px'
+          capture sizes_ph
+            echo '(min-width: 990px) calc((min(100vw, '
+            echo settings.page_width
+            echo 'px) - 100px) / 2 - '
+            echo grid_space_ph
+            echo '), (min-width: 750px) calc(100vw - 100px), calc(100vw - 30px)'
+          endcapture
+        -%}
+        {{
+          bp.placeholder_image
+          | image_url: width: 1600
+          | image_tag:
+            loading: img_loading,
+            sizes: sizes_ph,
+            widths: '165, 360, 535, 750, 940, 1100, 1340, 1600',
+            alt: img_alt,
+            class: 'gg-gkc-card__img'
+        }}
+      {%- else -%}
+        <div class="gg-gkc-card__img gg-gkc-card__img--placeholder">
+          {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {%- endif -%}
+      {%- if has_placeholder_link -%}
+        </a>
+      {%- else -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if bp.show_badge -%}
+      <span class="gg-gkc-card__badge">
+        {%- if bp.badge_text != blank -%}
+          {{- bp.badge_text | escape -}}
+        {%- else -%}
+          {{- 'sections.gg_garage_kit_compare.most_popular' | t -}}
+        {%- endif -%}
+      </span>
+    {%- endif -%}
+  </div>
+
+  <div class="gg-gkc-card__body">
+    <h3 class="gg-gkc-card__title">{{ title_out | escape }}</h3>
+    {%- if subtitle_out != blank -%}
+      <div class="gg-gkc-card__subtitle rte">{{ subtitle_out }}</div>
+    {%- endif -%}
+    {%- if show_full_description -%}
+      <div class="gg-gkc-card__description rte">{{ card_product.description }}</div>
+    {%- else -%}
+      {%- if bp.features_source == 'custom' and bp.features_custom != blank -%}
+        <div class="gg-gkc-card__features gg-gkc-card__features--rte rte">
+          {{ bp.features_custom }}
+        </div>
+      {%- else -%}
+        <ul class="gg-gkc-card__features" role="list">
+          {%- if bp.features_source == 'product' and has_product -%}
+            {%- liquid
+              assign norm = card_product.description
+              assign norm = norm | replace: '<br />', '||n||'
+              assign norm = norm | replace: '<br/>', '||n||'
+              assign norm = norm | replace: '<br>', '||n||'
+              assign norm = norm | replace: '</p>', '||n||'
+              assign norm = norm | replace: '</li>', '||n||'
+              assign norm = norm | strip_html
+              assign feat_lines = norm | split: '||n||'
+            -%}
+            {%- assign feat_count = 0 -%}
+            {%- for line in feat_lines -%}
+              {%- assign line_stripped = line | strip -%}
+              {%- if line_stripped != blank and feat_count < 10 -%}
+                <li class="gg-gkc-card__feature">
+                  <span class="gg-gkc-card__check" aria-hidden="true"></span>
+                  <span>{{ line_stripped | escape }}</span>
+                </li>
+                {%- assign feat_count = feat_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+
+    <div class="gg-gkc-card__footer">
+      <div class="gg-gkc-card__price-col">
+        <p class="gg-gkc-card__price-label">{{ price_label | escape }}</p>
+        {%- if variant != nil -%}
+          {%- if card_product.price_varies -%}
+            <p class="gg-gkc-card__price-value">
+              {{ 'products.product.price.from_price_html' | t: price: money_from_plain }}
+            </p>
+          {%- else -%}
+            <p class="gg-gkc-card__price-value">
+              {%- if settings.currency_code_enabled -%}
+                {{- variant.price | money_with_currency -}}
+              {%- else -%}
+                {{- variant.price | money -}}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        {%- else -%}
+          <p class="gg-gkc-card__price-value">{{ 199900 | money }}</p>
+        {%- endif -%}
+      </div>
+      {%- if has_product -%}
+        <a href="{{ product_url }}" class="gg-gkc-card__btn">
+          {{ button_label | escape }}
+        </a>
+      {%- elsif has_placeholder_link -%}
+        <a href="{{ bp.placeholder_link }}" class="gg-gkc-card__btn">
+          {{ button_label | escape }}
+        </a>
+      {%- else -%}
+        <span class="gg-gkc-card__btn gg-gkc-card__btn--disabled" aria-disabled="true">
+          {{ button_label | escape }}
+        </span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

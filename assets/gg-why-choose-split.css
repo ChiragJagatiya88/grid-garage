@@ -1,0 +1,149 @@
+/* Grid Garage — why choose (image + features) */
+
+.gg-why {
+  background-color: rgb(var(--gg-black));
+  color: rgb(var(--gg-white));
+  padding-top: var(--gg-section-y);
+  padding-bottom: var(--gg-section-y);
+}
+
+.gg-why__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-why__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+  }
+}
+
+.gg-why__visual {
+  position: relative;
+}
+
+.gg-why__img {
+  width: 100%;
+}
+.gg-why__img img{
+  height:auto;
+}
+.gg-why__heading {
+    font-size: var(--gg-why-heading-size);
+    font-weight: 700;
+    margin: 0 0 0.9rem;
+    line-height: 4.8rem;
+    color: #fff;
+}
+
+.gg-why__intro {
+    font-size: 1.8rem;
+    line-height: 2.8rem;
+    color: rgba(var(--gg-white),);
+    margin: 0 0 2.6rem;
+}
+
+.gg-why__features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4rem;
+}
+
+.gg-why__feature {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.gg-why__icon-wrap {
+    width: 8rem;
+    height: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: #111;
+}
+
+.gg-why__icon-wrap img {
+  width: 2.4rem;
+  height: 2.4rem;
+  object-fit: contain;
+}
+
+.gg-why__feature-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 .4rem;
+    color: #F1F5F9;
+    line-height: 2.8rem;
+}
+
+.gg-why__feature-text {
+  font-size: var(--gg-text-base);
+  line-height: 2.4rem;
+  color: rgba(var(--gg-white));
+  margin: 0;
+}
+
+.gg-why__btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.gg-why__btn-outline {
+  background-color: transparent;
+  color: rgb(var(--gg-white));
+  border: 0.2rem solid rgb(var(--gg-accent));
+}
+
+.gg-why__btn-outline:hover {
+  background-color: rgba(var(--gg-accent), 0.15);
+}
+.gg-why__btns .gg-btn {
+    letter-spacing: 0;
+    padding: 1.4rem 2rem;
+}
+@media screen and (max-width:1199px) {
+.gg-why__grid {
+        gap: 2rem;
+    }
+    .gg-why__feature {
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+}
+@media screen and (max-width:749px) {
+.gg-why__intro {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    margin: 0 0 1.6rem;
+}
+.gg-why__icon-wrap {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 8px;
+}
+.gg-why__feature {
+    grid-template-columns: 5rem 1fr;
+}
+.gg-why__feature-title {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+}
+.gg-why__feature-text {
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+}
+.gg-why {
+    padding: 30px 0 !important;
+}
+.gg-why__btns .gg-btn {
+    width: 100%;    padding: 1rem;
+}
+}

@@ -1,0 +1,169 @@
+{{ 'if-ticker-bar.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign if_bg = section.settings.bar_bg | default: '#DC1C1B'
+  assign if_text = section.settings.text_color | default: '#FFFFFF'
+  assign if_speed = section.settings.speed | default: 30
+-%}
+
+<div
+  id="if-ticker-{{ section.id }}"
+  class="section_{{ section.id }} if-tkr{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  style="--if-tkr-bg: {{ if_bg }}; --if-tkr-text: {{ if_text }}; --if-tkr-speed: {{ if_speed }}s;"
+>
+  <div class="if-tkr__track" aria-hidden="true">
+    {%- for i in (1..2) -%}
+      <div class="if-tkr__group">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'item' -%}
+            <span class="if-tkr__item" {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}>
+              {%- if block.settings.show_check -%}
+                <span class="if-tkr__check" aria-hidden="true">✓</span>
+              {%- endif -%}
+              {{ block.settings.text | escape }}
+            </span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Accessible static list for screen readers {%- endcomment -%}
+  <div class="if-tkr__sr-only">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'item' and block.settings.text != blank -%}
+        <p>{{ block.settings.text | escape }}</p>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% style %}
+  .section_{{ section.id }} {
+    {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_desk }};{% endif %}
+  }
+  @media screen and (max-width: 767px) {
+    .section_{{ section.id }} {
+      {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_mob }};{% endif %}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "IF Ticker Bar",
+  "tag": "section",
+  "class": "if_ticker_bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable custom class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom class",
+      "visible_if": "{{ section.settings.enable_custom_class == true }}"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll speed (seconds)",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "s",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bar_bg",
+      "label": "Bar background",
+      "default": "#DC1C1B"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding",
+      "label": "Enable custom padding",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Padding desktop",
+      "default": "0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Padding mobile",
+      "default": "0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Ticker item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Lifetime Tile Warranty"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_check",
+          "label": "Show checkmark",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "IF Ticker Bar",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": { "text": "Lifetime Tile Warranty", "show_check": true }
+        },
+        {
+          "type": "item",
+          "settings": { "text": "Free Shipping on Garage Kits", "show_check": true }
+        },
+        {
+          "type": "item",
+          "settings": { "text": "DIY Installation", "show_check": true }
+        },
+        {
+          "type": "item",
+          "settings": { "text": "Lifetime Tile Warranty", "show_check": true }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

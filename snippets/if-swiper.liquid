@@ -1,0 +1,8 @@
+{%- comment -%}
+  Shared Swiper v11 bundle — include once per page render.
+{%- endcomment -%}
+{%- unless if_swiper_assets_loaded -%}
+  {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+  {%- assign if_swiper_assets_loaded = true -%}
+{%- endunless -%}

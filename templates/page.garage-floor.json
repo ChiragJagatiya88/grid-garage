@@ -1,0 +1,691 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "gg_hero_grid_garage_WHdWrX": {
+      "type": "gg-hero-grid-garage",
+      "blocks": {
+        "slide_xxybzE": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "image": "shopify://shop_images/garage-floor-banner.png",
+            "gg_text_align": "left",
+            "eyebrow": "",
+            "heading": "",
+            "accent_word": "",
+            "accent_color": "#e61e43",
+            "heading_accent_color": "#e61e43",
+            "subtext": "",
+            "primary_label": "",
+            "primary_link": "",
+            "secondary_label": "",
+            "secondary_link": "",
+            "samples_label": "",
+            "samples_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_xxybzE"
+      ],
+      "name": "Grid Garage: Hero banner",
+      "settings": {
+        "show_arrows": false,
+        "show_dots": false,
+        "arrow_position": "sides",
+        "min_height_mobile": 26,
+        "min_height_desktop": 58,
+        "show_overlay": true,
+        "overlay_color": "#000000",
+        "overlay_opacity": 50,
+        "heading_size_min": 32,
+        "heading_size_max": 72,
+        "eyebrow": "",
+        "heading": "",
+        "accent_word": "",
+        "accent_color": "#e61e43",
+        "heading_accent_color": "#e61e43",
+        "subtext": "",
+        "primary_label": "",
+        "primary_link": "",
+        "secondary_label": "",
+        "secondary_link": "",
+        "samples_label": "",
+        "samples_link": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gg_breadcrumbs_EqhzT8": {
+      "type": "gg-breadcrumbs",
+      "blocks": {
+        "crumb_FfxeCh": {
+          "type": "crumb",
+          "settings": {
+            "label": "Home",
+            "link": "/",
+            "is_current": false
+          }
+        },
+        "crumb_yixezr": {
+          "type": "crumb",
+          "settings": {
+            "label": "Solid",
+            "link": "/collections/solid",
+            "is_current": false
+          }
+        },
+        "crumb_LRrPUd": {
+          "type": "crumb",
+          "settings": {
+            "label": "Swisstrax Ribtrax Smooth 12-SERIES",
+            "link": "/collections/all",
+            "is_current": false
+          }
+        },
+        "crumb_WpCpYR": {
+          "type": "crumb",
+          "settings": {
+            "label": "Durable smooth garage floor tiles",
+            "link": "",
+            "is_current": true
+          }
+        }
+      },
+      "block_order": [
+        "crumb_FfxeCh",
+        "crumb_yixezr",
+        "crumb_LRrPUd",
+        "crumb_WpCpYR"
+      ],
+      "name": "GG: Breadcrumbs",
+      "settings": {
+        "breadcrumb_mode": "auto",
+        "hide_on_home": true,
+        "home_label": "Home",
+        "separator": "|",
+        "aria_label": "Breadcrumb",
+        "label_cart": "Shopping cart",
+        "label_search": "Search",
+        "label_collections": "Collections",
+        "label_404": "Page not found",
+        "background_color": "#ffffff",
+        "text_color": "#222222",
+        "separator_color": "#222222",
+        "font_size_desktop": 1.2,
+        "font_size_mobile": 1.1,
+        "line_height": 1.5,
+        "font_weight": 700,
+        "letter_spacing": 0,
+        "align_desktop": "left",
+        "align_mobile": "left",
+        "padding_top": 16,
+        "padding_bottom": 12
+      }
+    },
+    "floor_hero_intro_fxKUVQ": {
+      "type": "floor-hero-intro",
+      "name": "Floor: Hero intro",
+      "settings": {
+        "eyebrow": "Grid Garage",
+        "heading": "Garage Floor Tiles",
+        "text": "<p>Grid Garage floor tiles transform your garage in more ways than one. You won't only get a clean and professional looking garage with Grid Garage, but you'll also have a functional and durable flooring system that can withstand the harsh environment of a well-used garage.</p>",
+        "primary_label": "",
+        "primary_link": "shopify://collections/garage-flooring-options",
+        "secondary_label": "Shop Kits",
+        "secondary_link": "shopify://collections/complete-garage-floor-kits",
+        "tertiary_label": "Installation",
+        "tertiary_link": "shopify://pages/installation-guide",
+        "accent_color": "#e11d48",
+        "background_color": "#ffffff",
+        "heading_color": "#0a0a0a",
+        "text_color": "#0a0a0a",
+        "button_gap_mobile": 12,
+        "button_gap_desktop": 16,
+        "padding_top": 48,
+        "padding_bottom": 72
+      }
+    },
+    "floor_features_epoxy_4JTPtD": {
+      "type": "floor-features-epoxy",
+      "blocks": {
+        "feature_BbrUkG": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/icon-tire-orange_svg.svg",
+            "title": "Eliminate hot tire pickup",
+            "text": "<p>Most epoxy coatings don't stand up against scuffing issues caused by tires from a vehicle.</p>"
+          }
+        },
+        "feature_jDLRVF": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/icon-shield-sun-orange_svg.svg",
+            "title": "Avoid epoxy yellowing from UV exposure",
+            "text": "<p>If areas of your garage are exposed to sunlight, over time an epoxy coating will yellow from UV exposure.</p>"
+          }
+        },
+        "feature_7YTDGq": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/icon-design-orange_svg.svg",
+            "title": "Don't worry about fixing peeling epoxy",
+            "text": "<p>The biggest issue with epoxy garage floor coatings is that they eventually start to chip and peel.</p>"
+          }
+        },
+        "feature_WLFG6N": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/icon-beaker-orange_svg.svg",
+            "title": "Skip use of dangerous chemicals",
+            "text": "<p>Epoxy garage floor coatings require prep, often with hazardous chemicals. Choose the <strong>quick and easy garage floor installation</strong> option instead.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_BbrUkG",
+        "feature_jDLRVF",
+        "feature_7YTDGq",
+        "feature_WLFG6N"
+      ],
+      "name": "Floor: Epoxy comparison",
+      "settings": {
+        "background_image": "shopify://shop_images/Garage_Floor_Tiles_image.png",
+        "heading_image": "shopify://shop_images/leave-epoxy-title-svg.svg",
+        "heading": "Leave epoxy in the dust",
+        "panel_color": "#000000",
+        "panel_opacity": 90,
+        "panel_width": 38,
+        "min_height": 720,
+        "accent_color": "#e11d48",
+        "padding_top": 44,
+        "padding_bottom": 44
+      }
+    },
+    "floor_unrivaled_performance_NVgHgM": {
+      "type": "floor-unrivaled-performance",
+      "blocks": {
+        "card_B3LB4c": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Highly_Durable.png",
+            "title": "Highly durable",
+            "text": "Unlike epoxy, Grid Garage tile do not fade and are resistant to heat, weather and chemicals."
+          }
+        },
+        "card_iRTTei": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Incredibly_Strong.png",
+            "title": "Incredibly strong",
+            "text": "Tiles are manufactured to withstand 60,000 lbs of rollover weight."
+          }
+        },
+        "card_X3tynM": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Lasts_a_Lifetime.png",
+            "title": "Lasts a lifetime",
+            "text": "No need to worry about replacing or resealing garage coatings."
+          }
+        }
+      },
+      "block_order": [
+        "card_B3LB4c",
+        "card_iRTTei",
+        "card_X3tynM"
+      ],
+      "name": "Floor: Performance",
+      "settings": {
+        "heading": "Unrivaled Performance",
+        "subheading": "<p>Grid Garage tiles were designed and tested for harsh garage environments. Whether you're looking for a garage floor solution that is strong or long-lasting, Grid Garage tiles have got you covered.</p>",
+        "button_label": "Shop Kits",
+        "button_link": "shopify://collections/complete-garage-floor-kits",
+        "accent_color": "#e11d48",
+        "background_color": "#ffffff",
+        "grid_gap": 24,
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "floor_unmatched_value_FEiyXD": {
+      "type": "floor-unmatched-value",
+      "blocks": {
+        "point_i7C67t": {
+          "type": "point",
+          "settings": {
+            "icon": "shopify://shop_images/icon-cleaning-orange_svg.svg",
+            "title": "Easy to clean",
+            "text": "<p>Grid Garage tiles have a ¾\" understructure that has a built-in advanced channeling system to allow liquids and debris to easily be washed out from under the flooring system. The innovative tile connection system allows for you to easily pop-out a tile if you need to clean under one specific area.</p>"
+          }
+        },
+        "point_XmRTKD": {
+          "type": "point",
+          "settings": {
+            "icon": "shopify://shop_images/icon-maintenance-orange_svg.svg",
+            "title": "Easy to maintain",
+            "text": "<p>As an open-profile tile system. the perforations allow for dirt and liquids to flow through to the bottom to keep the surface of your garage clean and dry. Give your neighbors something to talk about, without all the labor.</p>"
+          }
+        },
+        "point_3wn83Q": {
+          "type": "point",
+          "settings": {
+            "icon": "shopify://shop_images/icon-lock-orange_svg.svg",
+            "title": "Easy to replace",
+            "text": "<p>Easily remove a single tile if you need to access the subsurface. Grid Garage tiles 6-point interlocking design ensures a secure and comfortable connection throughout your entire garage floor.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "point_i7C67t",
+        "point_XmRTKD",
+        "point_3wn83Q"
+      ],
+      "name": "Floor: Unmatched value",
+      "settings": {
+        "background_image": "shopify://shop_images/Unmatched_Value.png",
+        "circle_image": "shopify://shop_images/image00044_2.png",
+        "heading": "Unmatched value",
+        "panel_position": "right",
+        "panel_color": "#000000",
+        "panel_opacity": 90,
+        "min_height": 600,
+        "accent_color": "#e11d48",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "featured_collection_tpF7qG": {
+      "type": "featured-collection",
+      "disabled": true,
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "complete-garage-floor-kits",
+        "products_to_show": 5,
+        "title": "Shop Complete Garage Kits",
+        "heading_size": "h1",
+        "description": "<p>Choose your tile style. Every kit includes tiles, edges, and shipping — no calculations required.</p>",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 5,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "product_card_style": "grid_garage",
+        "gg_title_position": "below_image",
+        "gg_title_size": "medium",
+        "gg_show_title": true,
+        "gg_show_swatches": true,
+        "gg_swatch_shape": "square",
+        "gg_show_unit_price": false,
+        "gg_unit_label_suffix": "sq ft",
+        "gg_image_padding_mobile": 0,
+        "gg_image_padding_desktop": 0,
+        "gg_text_align": "center",
+        "gg_slider_accent": "#e61e43",
+        "gg_slider_pagination_label": "Product slides",
+        "gg_slider_go_to_slide_prefix": "Go to slide",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "show_footer_cta": true,
+        "show_footer_border": true,
+        "footer_border_width": 2,
+        "footer_border_color": "#d4d4d4",
+        "footer_space_above_border": 24,
+        "footer_space_below_border": 46,
+        "footer_button_1_label": "Shop garage kits",
+        "footer_button_1_link": "shopify://collections/complete-garage-floor-kits",
+        "footer_button_1_bg": "#e11d48",
+        "footer_button_1_text": "#ffffff",
+        "footer_button_2_label": "Build your garage",
+        "footer_button_2_link": "shopify://collections/accessories",
+        "footer_button_2_bg": "#e5e5e5",
+        "footer_button_2_text": "#121212",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "if_featured_collection_8JXnzr": {
+      "type": "if-featured-collection",
+      "name": "IF Featured Collection",
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "heading": "Shop Complete Garage Kits",
+        "subtitle": "<p>Choose your tile style. Every kit includes tiles, edges, and shipping — no calculations required.</p>",
+        "collection": "complete-garage-floor-kits",
+        "products_to_show": 8,
+        "show_swatches": true,
+        "show_view_all": false,
+        "view_all_label": "View all",
+        "section_bg": "#FFFFFF",
+        "accent_color": "#DC1C1B",
+        "enable_custom_padding": true,
+        "padding_desk": "60px",
+        "padding_mob": "30px"
+      }
+    },
+    "floor_before_after_slider_EQeX4X": {
+      "type": "floor-before-after-slider",
+      "name": "Floor: Before after slider",
+      "settings": {
+        "before_image": "shopify://shop_images/Before-Large-image.png",
+        "after_image": "shopify://shop_images/After-large-image.png",
+        "before_label": "Before",
+        "after_label": "After",
+        "initial_position": 50,
+        "accent_color": "#e11d48",
+        "aspect_ratio_w": 16,
+        "aspect_ratio_h": 9,
+        "max_height": 760,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "floor_striking_designs_NRKdY9": {
+      "type": "floor-striking-designs",
+      "blocks": {
+        "image_BRFF9c": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2018-10-SEMA-189_1.png",
+            "badge": "01",
+            "link": ""
+          }
+        },
+        "image_aYYfRg": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2018-03_BNP-The_Sports_Bar-Pearl_Grey-RT-2.png",
+            "badge": "02",
+            "link": ""
+          }
+        },
+        "image_qcYimz": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2021-01_Barrett-Jackson_RT_Pearl_Grey_Jet_Black_Ford-3.png",
+            "badge": "03",
+            "link": ""
+          }
+        },
+        "image_93CcyN": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2018-01_CES_Show_Event_Booth-Ash_Pine-VT_2_1-4.png",
+            "badge": "04",
+            "link": ""
+          }
+        },
+        "image_cyKdqD": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2021-01_Barrett-Jackson_RT_Slate_Grey_3-5.png",
+            "badge": "05",
+            "link": ""
+          }
+        },
+        "image_rKN3nM": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2003-05_Nopi.com_Booth-RT_2_1-6.png",
+            "badge": "06",
+            "link": ""
+          }
+        },
+        "image_9hfETz": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2018-10-SEMA-108_1-7.png",
+            "badge": "07",
+            "link": ""
+          }
+        },
+        "image_HThawH": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/2018-03_BNP-Retail-FILA_Tennis-Reclaimed_Pine-VT_13_1-8.png",
+            "badge": "08",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_BRFF9c",
+        "image_aYYfRg",
+        "image_qcYimz",
+        "image_93CcyN",
+        "image_cyKdqD",
+        "image_rKN3nM",
+        "image_9hfETz",
+        "image_HThawH"
+      ],
+      "name": "Floor: Striking designs",
+      "settings": {
+        "heading": "Striking designs",
+        "subheading": "<p>Need more inspiration? Browse our <strong>Garage Flooring Ideas</strong> pages to see how Swisstrax customers use our garage floor tile to customize their garages. Whether you have a one car garage, two car garage, three car garage, you'll find inspiration from these <strong>unique garage floor ideas</strong> from our creative customers.</p>",
+        "button_label": "View more",
+        "button_link": "shopify://pages/gallery",
+        "accent_color": "#e11d48",
+        "background_color": "#000000",
+        "grid_gap": 20,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "floor_grid_garage_reviews_HhKXUY": {
+      "type": "floor-grid-garage-reviews",
+      "blocks": {
+        "review_BP8fW9": {
+          "type": "review",
+          "settings": {
+            "star_count": 5,
+            "quote": "\"Their product is absolutely outstanding! I was considering an epoxy floor but the Grid Garage product has so many benefits over epoxy that I know I made the right decision. Very easy to install! Less than an hour and my 2 car garage was done! I'm also considering doing my basement with Grid Garage Don't waste your time on anything else - get Grid Garage!\"",
+            "author": "Jim K."
+          }
+        },
+        "review_C9hXUr": {
+          "type": "review",
+          "settings": {
+            "star_count": 5,
+            "quote": "\"Incredible quality and customer service. Kyle from Grid Garage was amazing! Helped me through the entire process of picking the design, ordering and even during the process of installation. The quality of the tiles are second to none and the customer service was just as incredible. I'm a customer for life!\"",
+            "author": "Danny M."
+          }
+        },
+        "review_AGUVbq": {
+          "type": "review",
+          "settings": {
+            "star_count": 5,
+            "quote": "Incredible quality and customer service. Helped me through the entire process of picking the design, ordering and installation.",
+            "author": "Mohammad S."
+          }
+        }
+      },
+      "block_order": [
+        "review_BP8fW9",
+        "review_C9hXUr",
+        "review_AGUVbq"
+      ],
+      "disabled": true,
+      "name": "Floor: Testimonials",
+      "settings": {
+        "heading": "Grid Garage reviews",
+        "subheading": "<p>We take immense pride in showcasing the unfiltered voices of those who have chosen to be a part of the Grid Garage family. Explore the customer reviews below that speak to the quality, durability and trustworthiness that defines the Grid Garage brand.</p>",
+        "button_label": "Submit a Testimonial",
+        "button_link": "",
+        "reviews_slider_when_more_than_two": true,
+        "reviews_slider_show_arrows": false,
+        "reviews_slider_arrows_mobile": false,
+        "reviews_slider_arrow_transparent": true,
+        "reviews_slider_show_dots": true,
+        "reviews_slider_autoplay": false,
+        "reviews_slider_speed": 5,
+        "accent_color": "#e11d48",
+        "background_color": "#ffffff",
+        "grid_gap": 16,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "floor_helpful_information_UKb6tr": {
+      "type": "floor-helpful-information",
+      "blocks": {
+        "link_pWMLnR": {
+          "type": "link",
+          "settings": {
+            "icon": "shopify://shop_images/icon-speech-bubble-question_svg.svg",
+            "label": "Garage floor tile FAQs",
+            "link": "shopify://pages/faqs"
+          }
+        },
+        "link_BqpNyi": {
+          "type": "link",
+          "settings": {
+            "icon": "shopify://shop_images/icon-design-white_svg.svg",
+            "label": "Order sample tile packs",
+            "link": "shopify://collections/sample-packs"
+          }
+        },
+        "link_tyHTjp": {
+          "type": "link",
+          "settings": {
+            "icon": "shopify://shop_images/icon-design-white_svg.svg",
+            "label": "Installing Grid Garage garage floor tiles",
+            "link": "shopify://pages/installation-guide"
+          }
+        },
+        "link_6hCycx": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "icon": "shopify://shop_images/icon-cleaning-white_svg.svg",
+            "label": "Cleaning",
+            "link": ""
+          }
+        },
+        "link_kyKCiq": {
+          "type": "link",
+          "disabled": true,
+          "settings": {
+            "icon": "shopify://shop_images/icon-blog-white_svg.svg",
+            "label": "Garage flooring knowledge center",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "link_pWMLnR",
+        "link_BqpNyi",
+        "link_tyHTjp",
+        "link_6hCycx",
+        "link_kyKCiq"
+      ],
+      "name": "Floor: Help + image",
+      "settings": {
+        "eyebrow": "Garage floor tiles /",
+        "heading": "Helpful information",
+        "intro": "<p>From start to finish, we strive to support Grid Garage customers from theinitial interest phase, through installation and maintenance. Click belowfor additional information including:</p>",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/Helpful_Information_image.png",
+        "video": "shopify://files/videos/Swisstrax Installation 101.mp4",
+        "video_autoplay": true,
+        "image_position": "right",
+        "accent_color": "#e11d48",
+        "min_height": 680,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "floor_how_to_get_started_8gcVbK": {
+      "type": "floor-how-to-get-started",
+      "blocks": {
+        "card_3AXzFp": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/2021-01_Barrett-Jackson_RT_Slate_Grey_2.png",
+            "title": "Get free design assistance",
+            "text": "<p>Speak to a knowledgeable flooring specialist who will assist with your design and help determine the perfect tile style for your new floor.</p>",
+            "button_label": "Get design assistance",
+            "button_link": ""
+          }
+        },
+        "card_7BHk6T": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/2017-03_Construction_Expo-RT_VT_17_1.png",
+            "title": "Design your new floor",
+            "text": "<p>Whether you utilize one of the existing preset designs or customize your own flooring, this program has all the tools to help you imagine your new floor.</p>",
+            "button_label": "Start designing",
+            "button_link": ""
+          }
+        },
+        "card_PzhV7G": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/2009-06_NL_Race_Event-RT_2_1.png",
+            "title": "Shop Grid Garage online store",
+            "text": "<p>Ready to buy? Go straight to our online store to shop our inventory of pre-designed garage kits, pads, accessories, and much more.</p>",
+            "button_label": "Start designing",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_3AXzFp",
+        "card_7BHk6T",
+        "card_PzhV7G"
+      ],
+      "disabled": true,
+      "name": "Floor: Get started",
+      "settings": {
+        "heading": "How to get started",
+        "accent_color": "#e11d48",
+        "grid_gap": 24,
+        "padding_top": 60,
+        "padding_bottom": 72
+      }
+    }
+  },
+  "order": [
+    "main",
+    "gg_hero_grid_garage_WHdWrX",
+    "gg_breadcrumbs_EqhzT8",
+    "floor_hero_intro_fxKUVQ",
+    "floor_features_epoxy_4JTPtD",
+    "floor_unrivaled_performance_NVgHgM",
+    "floor_unmatched_value_FEiyXD",
+    "featured_collection_tpF7qG",
+    "if_featured_collection_8JXnzr",
+    "floor_before_after_slider_EQeX4X",
+    "floor_striking_designs_NRKdY9",
+    "floor_grid_garage_reviews_HhKXUY",
+    "floor_helpful_information_UKb6tr",
+    "floor_how_to_get_started_8gcVbK"
+  ]
+}

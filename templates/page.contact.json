@@ -1,0 +1,120 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "gg_story_banner_gFQFwy": {
+      "type": "gg-story-banner",
+      "name": "GG: Story banner",
+      "settings": {
+        "image": "shopify://shop_images/contact-banner.png",
+        "image_alt": "Grid Garage team and flooring",
+        "image_position": "center center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30,
+        "heading": "Contact us",
+        "heading_color": "#ffffff",
+        "heading_size_desktop": 5.5,
+        "heading_lh_desktop": 6.2,
+        "heading_tracking_desktop": 0,
+        "heading_size_mobile": 3.2,
+        "heading_lh_mobile": 0,
+        "heading_tracking_mobile": 0,
+        "align_h_desktop": "center",
+        "align_v_desktop": "center",
+        "min_height_desktop": 44,
+        "inner_pad_y_desktop_top": 0,
+        "inner_pad_y_desktop_bottom": 0,
+        "align_h_mobile": "center",
+        "align_v_mobile": "center",
+        "min_height_mobile": 28,
+        "inner_pad_y_mobile": 0,
+        "content_max_width": 0,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gg_breadcrumbs_mdkUdN": {
+      "type": "gg-breadcrumbs",
+      "blocks": {
+        "crumb_UQMPMQ": {
+          "type": "crumb",
+          "settings": {
+            "label": "Home",
+            "link": "/",
+            "is_current": false
+          }
+        }
+      },
+      "block_order": [
+        "crumb_UQMPMQ"
+      ],
+      "name": "GG: Breadcrumbs",
+      "settings": {
+        "breadcrumb_mode": "auto",
+        "hide_on_home": true,
+        "home_label": "Home",
+        "separator": "|",
+        "aria_label": "Breadcrumb",
+        "label_cart": "",
+        "label_search": "",
+        "label_collections": "",
+        "label_404": "",
+        "background_color": "#ffffff",
+        "text_color": "#222222",
+        "separator_color": "#222222",
+        "font_size_desktop": 1.2,
+        "font_size_mobile": 1.1,
+        "line_height": 1.5,
+        "font_weight": 700,
+        "letter_spacing": 0,
+        "align_desktop": "left",
+        "align_mobile": "left",
+        "padding_top": 20,
+        "padding_bottom": 12
+      }
+    },
+    "form": {
+      "type": "gg-contact-form",
+      "settings": {
+        "heading": "Get In Touch With Us",
+        "heading_size": "h1",
+        "subtext": "Questions about Grid Garage? Please fill out the form to contact us and we will get back to you right away.",
+        "subtext_size": "subtext-medium",
+        "button_label": "Submit",
+        "button_size": "medium",
+        "site_text": "Grid Garage",
+        "address": "22647 Ventura Blvd\nWoodland Hills, CA 91364",
+        "phone": "+1 (888) 898-8022",
+        "email": "info@gridgarageinc.com",
+        "icon_address": "shopify://shop_images/contact-icon1.svg",
+        "icon_phone": "shopify://shop_images/contact-icon2.svg",
+        "icon_email": "shopify://shop_images/contact-icon3.svg",
+        "custom_css_class": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "gg_story_banner_gFQFwy",
+    "gg_breadcrumbs_mdkUdN",
+    "form"
+  ]
+}

@@ -1,0 +1,143 @@
+{%- comment -%}
+  Figma: Build your perfect garage floor — split media + copy (node 279:3828).
+{%- endcomment -%}
+{{ 'gg-perfect-garage-floor.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-pgf section-{{ section.id }}-padding{% if section.settings.media_position == 'right' %} gg-pgf--media-right{% endif %}"
+  style="--gg-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};"
+>
+  <div class="gg-pgf__grid">
+    <div class="gg-pgf__media">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            widths: '750,1100,1500,2000',
+            alt: section.settings.image.alt | escape
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+    <div class="gg-pgf__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="gg-pgf__heading gg-font-heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="gg-pgf__text rte gg-font-body">{{ section.settings.text }}</div>
+      {%- endif -%}
+      <div class="gg-pgf__btns">
+        {%- if section.settings.primary_label != blank -%}
+          <a href="{{ section.settings.primary_link }}" class="gg-btn gg-btn--primary gg-font-body">
+            {{- section.settings.primary_label | escape -}}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.secondary_label != blank -%}
+          <a
+            href="{{ section.settings.secondary_link }}"
+            class="gg-btn gg-pgf__btn-secondary-light gg-font-body"
+          >
+            {{- section.settings.secondary_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Floor + text",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Image position on large screens",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build your perfect garage floor"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Grid Garage tiles are engineered for strength, style, and easy installation. Whether you're upgrading your garage, gym, or workspace, our modular flooring delivers showroom-quality performance.</p>"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop flooring"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Build your garage"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Primary button color",
+      "default": "#E61E43"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [{ "name": "GG: Floor + text" }]
+}
+{% endschema %}

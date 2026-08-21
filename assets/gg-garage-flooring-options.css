@@ -1,0 +1,176 @@
+/* Grid Garage — Garage flooring options (heading + product grid + CTAs) */
+
+.gg-gfo {
+  background-color: rgb(var(--gg-gfo-bg, 255, 255, 255));
+  color: rgb(var(--gg-gfo-text, 10, 10, 10));
+}
+
+.gg-gfo__inner {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-left: var(--gg-page-pad, 1.5rem);
+  padding-right: var(--gg-page-pad, 1.5rem);
+}
+
+.gg-gfo__header {
+  text-align: var(--gg-gfo-head-align, center);
+  max-width: 90rem;
+  margin: 0 auto 4.8rem;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gfo__header {
+    margin-bottom: 6.4rem;
+  }
+}
+
+.gg-gfo__title {
+  margin: 0 0 1.2rem;
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  line-height: var(--gg-gfo-title-lh, 1.15);
+  letter-spacing: var(--gg-gfo-title-track, 0);
+  font-size: var(--gg-gfo-title-m, 2.8rem);
+  color: rgb(var(--gg-gfo-text, 10, 10, 10));
+}
+
+@media screen and (min-width: 990px) {
+  .gg-gfo__title {
+    font-size: var(--gg-gfo-title-d, 4rem);
+  }
+}
+
+.gg-gfo__sub {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: var(--gg-gfo-sub-m, 1.6rem);
+  line-height: 1.55;
+  font-weight: 400;
+  color: rgb(var(--gg-gfo-subtext, 10, 10, 10));
+  opacity: var(--gg-gfo-sub-opacity, 0.95);
+}
+
+@media screen and (min-width: 990px) {
+  .gg-gfo__sub {
+    font-size: var(--gg-gfo-sub-d, 1.8rem);
+  }
+}
+
+.gg-gfo__sub p {
+  margin: 0 0 0.8rem;
+}
+
+.gg-gfo__sub p:last-child {
+  margin-bottom: 0;
+}
+
+.gg-gfo__grid {
+  list-style: none;
+  margin: 0 0 4.8rem;
+  padding: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gfo__grid {
+    margin-bottom: 5.6rem;
+  }
+}
+
+.gg-gfo__item {
+  height: 100%;
+}
+
+.gg-gfo__rule {
+  border: none;
+  height: 0.1rem;
+  background-color: rgb(var(--gg-gfo-rule, 229, 231, 235));
+  margin: 0 0 3.2rem;
+  border-radius: 0.2rem;
+}
+
+.gg-gfo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem 1.6rem;
+}
+
+.gg-gfo__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.8rem;
+  padding: 1.7rem 3.2rem;
+  font-family: var(--font-body-family);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--gg-radius-btn, 0.2rem);
+  border: 0.1rem solid transparent;
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  max-width: 100%;
+}
+
+.gg-gfo__btn--primary {
+  background-color: rgb(var(--gg-gfo-btn-primary-bg, 230, 30, 67));
+  color: rgb(var(--gg-gfo-btn-primary-text, 255, 255, 255));
+}
+
+.gg-gfo__btn--primary:hover {
+  opacity: 0.92;
+}
+
+.gg-gfo__btn--secondary {
+  background-color: rgb(var(--gg-gfo-btn-secondary-bg, 229, 231, 235));
+  color: rgb(var(--gg-gfo-btn-secondary-text, 10, 10, 10));
+  border-color: rgb(var(--gg-gfo-btn-secondary-border, 212, 212, 212));
+}
+
+.gg-gfo__btn--secondary:hover {
+  opacity: 0.92;
+}
+
+.gg-gfo__btn:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-gfo-text, 10, 10, 10));
+  outline-offset: 0.2rem;
+}
+
+/* Swatch tooltip (Figma: black pill, white uppercase label) */
+.gg-gfo .gg-pc__swatches li {
+  position: relative;
+}
+
+.gg-gfo .gg-pc__swatch {
+  position: relative;
+}
+
+.gg-gfo .gg-pc__swatch[title]:not([title='']):hover::after,
+.gg-gfo .gg-pc__swatch[title]:not([title='']):focus-visible::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 0.6rem;
+  padding: 0.5rem 0.8rem;
+  background-color: rgb(10, 10, 10);
+  color: rgb(255, 255, 255);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 3;
+  border-radius: 0.2rem;
+}
+
+@media screen and (max-width: 749px) {
+  .gg-gfo .gg-pc__swatch[title]:not([title='']):hover::after,
+  .gg-gfo .gg-pc__swatch[title]:not([title='']):focus-visible::after {
+    font-size: 1rem;
+  }
+}

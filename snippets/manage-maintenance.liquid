@@ -1,0 +1,518 @@
+{%- comment -%}
+  Manage Maintenance Page with Supabase Authentication
+  Rendered on /manage-maintainance or /pages/manage-maintainance
+{%- endcomment -%}
+
+{% render 'supabase-init' %}
+
+
+<style>
+  .mm-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+
+  .mm-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+    width: 100%;
+    max-width: 480px;
+    padding: 2.5rem;
+    box-sizing: border-box;
+  }
+
+  .mm-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .mm-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: #eff6ff;
+    color: #2563eb;
+    margin-bottom: 0.75rem;
+  }
+
+  .mm-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+  }
+
+  .mm-subtitle {
+    margin-top: 0.5rem;
+    font-size: 0.925rem;
+    color: #64748b;
+  }
+
+  .mm-form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .mm-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.5rem;
+  }
+
+  .mm-input, .mm-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+    color: #0f172a;
+  }
+
+  .mm-input:focus, .mm-textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  }
+
+  .mm-textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  .mm-btn {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .mm-btn-primary {
+    background: #0f172a;
+    color: #ffffff;
+  }
+
+  .mm-btn-primary:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+  }
+
+  .mm-btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    margin-top: 1rem;
+  }
+
+  .mm-btn-secondary:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+
+  /* Toggle Switch */
+  .mm-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+  }
+
+  .mm-toggle-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mm-toggle-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+
+  .mm-toggle-desc {
+    font-size: 0.825rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+  }
+
+  .mm-switch {
+    position: relative;
+    display: inline-block;
+    width: 56px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  .mm-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .mm-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #cbd5e1;
+    transition: .3s;
+    border-radius: 34px;
+  }
+
+  .mm-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  input:checked + .mm-slider {
+    background-color: #dc2626;
+  }
+
+  input:checked + .mm-slider:before {
+    transform: translateX(26px);
+  }
+
+  .mm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+
+  .mm-status-pill.active {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+  }
+
+  .mm-status-pill.inactive {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+
+  .mm-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .mm-status-pill.active .mm-status-dot {
+    background-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  }
+
+  .mm-status-pill.inactive .mm-status-dot {
+    background-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+  }
+
+  .mm-alert {
+    padding: 0.875rem 1rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+    display: none;
+  }
+
+  .mm-alert-error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+  }
+
+  .mm-alert-success {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+</style>
+
+<div class="mm-wrapper">
+  <div class="mm-card">
+    
+    <!-- LOGIN VIEW -->
+    <div id="mm-login-view">
+      <div class="mm-header">
+        <span class="mm-badge">Supabase Auth</span>
+        <h1 class="mm-title">Maintenance Admin</h1>
+        <p class="mm-subtitle">Sign in to manage store availability and maintenance state</p>
+      </div>
+
+      <div id="mm-login-alert" class="mm-alert mm-alert-error"></div>
+
+      <form id="mm-login-form">
+        <div class="mm-form-group">
+          <label class="mm-label" for="mm-email">Admin Email</label>
+          <input type="email" id="mm-email" class="mm-input" placeholder="admin@gridgarageinc.com" required>
+        </div>
+
+        <div class="mm-form-group">
+          <label class="mm-label" for="mm-password">Password</label>
+          <input type="password" id="mm-password" class="mm-input" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" id="mm-login-btn" class="mm-btn mm-btn-primary">
+          Sign In to Manage
+        </button>
+      </form>
+    </div>
+
+    <!-- CONTROL DASHBOARD VIEW -->
+    <div id="mm-dashboard-view" style="display: none;">
+      <div class="mm-header">
+        <div class="mm-status-pill inactive" id="mm-status-pill">
+          <span class="mm-status-dot"></span>
+          <span id="mm-status-text">Storefront is Live</span>
+        </div>
+        <h1 class="mm-title">Maintenance Control</h1>
+        <p class="mm-subtitle">Manage store blanking and custom maintenance notice</p>
+      </div>
+
+      <div id="mm-dash-alert" class="mm-alert"></div>
+
+      <form id="mm-dash-form">
+        <!-- TOGGLE -->
+        <div class="mm-toggle-row">
+          <div class="mm-toggle-info">
+            <span class="mm-toggle-title">Maintenance Mode</span>
+            <span class="mm-toggle-desc">Turn ON to make website blank and display maintenance notice</span>
+          </div>
+          <label class="mm-switch">
+            <input type="checkbox" id="mm-toggle">
+            <span class="mm-slider"></span>
+          </label>
+        </div>
+
+        <!-- MESSAGE FIELD -->
+        <div class="mm-form-group">
+          <label class="mm-label" for="mm-message">Custom Maintenance Message</label>
+          <textarea id="mm-message" class="mm-textarea" placeholder="We are currently conducting scheduled system updates. We will be back online shortly."></textarea>
+        </div>
+
+        <!-- ESTIMATED RETURN TIME -->
+        <div class="mm-form-group">
+          <label class="mm-label" for="mm-return-time">Estimated Return Time (Optional)</label>
+          <input type="text" id="mm-return-time" class="mm-input" placeholder="e.g. Expected back today at 4:00 PM EST">
+        </div>
+
+        <button type="submit" id="mm-save-btn" class="mm-btn mm-btn-primary">
+          Save Settings
+        </button>
+      </form>
+
+      <button type="button" id="mm-logout-btn" class="mm-btn mm-btn-secondary">
+        Sign Out
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function _mmInit() {
+  var sbClient = window.supabaseClient;
+  console.log('[MM] _mmInit called. sbClient:', sbClient ? 'YES' : 'NO');
+
+  var loginView    = document.getElementById('mm-login-view');
+  var dashView     = document.getElementById('mm-dashboard-view');
+  var loginForm    = document.getElementById('mm-login-form');
+  var loginAlert   = document.getElementById('mm-login-alert');
+  var dashAlert    = document.getElementById('mm-dash-alert');
+  var toggleInput  = document.getElementById('mm-toggle');
+  var messageInput = document.getElementById('mm-message');
+  var returnInput  = document.getElementById('mm-return-time');
+  var statusPill   = document.getElementById('mm-status-pill');
+  var statusText   = document.getElementById('mm-status-text');
+
+  async function loadState() {
+    var enabled     = localStorage.getItem('mm_maintenance_enabled') === 'true';
+    var message     = localStorage.getItem('mm_maintenance_message') || '';
+    var returnTime  = localStorage.getItem('mm_maintenance_return_time') || '';
+
+    if (sbClient) {
+      try {
+        var res = await sbClient
+          .from('message')
+          .select('notification')
+          .order('id', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        console.log('[MM] loadState from Supabase:', res);
+        if (res && res.data && res.data.notification) {
+          message = res.data.notification;
+          localStorage.setItem('mm_maintenance_message', message);
+        }
+      } catch (e) {
+        console.warn('[MM] loadState error:', e);
+      }
+    }
+
+    toggleInput.checked  = enabled;
+    messageInput.value   = message;
+    returnInput.value    = returnTime;
+    updateStatusUI(enabled);
+  }
+
+  function updateStatusUI(enabled) {
+    if (enabled) {
+      statusPill.className  = 'mm-status-pill active';
+      statusText.textContent = 'Storefront is UNDER MAINTENANCE';
+    } else {
+      statusPill.className  = 'mm-status-pill inactive';
+      statusText.textContent = 'Storefront is Live';
+    }
+  }
+
+  function checkSession() {
+    if (localStorage.getItem('mm_auth_logged_in') === 'true') {
+      loginView.style.display = 'none';
+      dashView.style.display  = 'block';
+      loadState();
+    } else {
+      loginView.style.display = 'block';
+      dashView.style.display  = 'none';
+    }
+  }
+
+  function showLoginAlert(msg) {
+    loginAlert.textContent   = msg;
+    loginAlert.style.display = 'block';
+  }
+
+  function showDashAlert(msg, success) {
+    dashAlert.textContent   = msg;
+    dashAlert.className     = 'mm-alert ' + (success ? 'mm-alert-success' : 'mm-alert-error');
+    dashAlert.style.display = 'block';
+    setTimeout(function() { dashAlert.style.display = 'none'; }, 5000);
+  }
+
+  toggleInput.addEventListener('change', function() {
+    updateStatusUI(this.checked);
+  });
+
+  loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    loginAlert.style.display = 'none';
+    var email    = document.getElementById('mm-email').value.trim();
+    var password = document.getElementById('mm-password').value.trim();
+    if (!email || !password) { showLoginAlert('Please fill in both fields.'); return; }
+
+    if (sbClient) {
+      try {
+        var res = await sbClient.auth.signInWithPassword({ email: email, password: password });
+        if (res.error) { showLoginAlert(res.error.message); return; }
+        if (!res.data || !res.data.session) { showLoginAlert('Login failed – no session returned.'); return; }
+      } catch (err) {
+        showLoginAlert(err.message || 'Login failed.');
+        return;
+      }
+    }
+    localStorage.setItem('mm_auth_logged_in', 'true');
+    checkSession();
+  });
+
+  document.getElementById('mm-dash-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var enabled    = toggleInput.checked;
+    var message    = messageInput.value.trim();
+    var returnTime = returnInput.value.trim();
+
+    // Always save toggle + return time locally
+    localStorage.setItem('mm_maintenance_enabled', enabled ? 'true' : 'false');
+    localStorage.setItem('mm_maintenance_return_time', returnTime);
+
+    if (!sbClient) {
+      localStorage.setItem('mm_maintenance_message', message);
+      showDashAlert('Saved locally (Supabase not connected).', true);
+      return;
+    }
+
+    try {
+      document.getElementById('mm-save-btn').textContent = 'Saving…';
+      console.log('[MM] Upserting into message table: notification =', message);
+
+      var result = await sbClient
+        .from('message')
+        .upsert({ id: 1, notification: message }, { onConflict: 'id' });
+
+      console.log('[MM] Upsert result:', result);
+
+      if (result.error) {
+        showDashAlert('Save failed: ' + result.error.message, false);
+      } else {
+        localStorage.setItem('mm_maintenance_message', message);
+        showDashAlert('✓ Message saved to Supabase successfully!', true);
+      }
+    } catch (err) {
+      console.error('[MM] Upsert exception:', err);
+      showDashAlert('Error: ' + (err.message || 'Could not save to Supabase.'), false);
+    } finally {
+      document.getElementById('mm-save-btn').textContent = 'Save Settings';
+    }
+  });
+
+  document.getElementById('mm-logout-btn').addEventListener('click', function() {
+    localStorage.removeItem('mm_auth_logged_in');
+    if (sbClient) { try { sbClient.auth.signOut(); } catch(e) {} }
+    checkSession();
+  });
+
+  checkSession();
+}
+
+// Run only after Supabase SDK has loaded
+if (window._supabaseReady) {
+  _mmInit();
+} else {
+  document.addEventListener('supabase:ready', _mmInit);
+  // Safety net: if CDN loaded but event was missed
+  setTimeout(function() {
+    if (!window._supabaseReady && window.supabase && typeof window.supabase.createClient === 'function') {
+      window.supabaseClient = window.supabase.createClient(
+        "https://sgbaztpxrjdfhceooiii.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnYmF6dHB4cmpkZmhjZW9vaWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MDU4NjAsImV4cCI6MjEwMDI4MTg2MH0.xxbmb_qGjv5sDmHDihNl55xEpp7c0T1APqKwvOvDg7Y"
+      );
+      window._supabaseReady = true;
+      _mmInit();
+    }
+  }, 800);
+}
+</script>

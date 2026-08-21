@@ -1,0 +1,204 @@
+{%- comment -%}
+  Benefits bar — 3 feature items on black background with subtle borders.
+  Minimal, premium design with accent red icons.
+{%- endcomment -%}
+{{ 'gg-benefits-bar.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign border_color = section.settings.border_color
+  assign show_top = section.settings.show_top_border
+  assign show_bottom = section.settings.show_bottom_border
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-bb {
+    --gg-bb-border: {{ border_color.red }},{{ border_color.green }},{{ border_color.blue }};
+    --gg-bb-max-width: {{ section.settings.max_width }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-bb section-{{ section.id }}-padding{% if show_top %} gg-bb--border-top{% endif %}{% if show_bottom %} gg-bb--border-bottom{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="gg-bb__container">
+    <div class="gg-bb__grid">
+      {%- for block in section.blocks -%}
+        <div
+          class="gg-bb__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {{ block.shopify_attributes }}
+          style="{% if settings.animations_reveal_on_scroll %}--animation-order: {{ forloop.index }}{% endif %}"
+        >
+          <div class="gg-bb__icon">
+            {%- if block.settings.icon != blank -%}
+              {{
+                block.settings.icon
+                | image_url: width: 96
+                | image_tag:
+                  loading: 'lazy',
+                  width: 24,
+                  height: 24,
+                  alt: block.settings.icon.alt | default: block.settings.title | escape
+              }}
+            {%- else -%}
+              {%- case forloop.index -%}
+                {%- when 1 -%}
+                  {%- comment -%}One Click - cursor/click icon{%- endcomment -%}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 11V17C9 18.1046 9.89543 19 11 19H13C14.1046 19 15 18.1046 15 17V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M12 11V5M12 5L9 8M12 5L15 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {%- when 2 -%}
+                  {%- comment -%}One Price - tag/dollar icon{%- endcomment -%}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 6V18M12 6C9.79086 6 8 7.79086 8 10M12 6C14.2091 6 16 7.79086 16 10M12 18C9.79086 18 8 16.2091 8 14M12 18C14.2091 18 16 16.2091 16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M3 8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16V8Z" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                {%- when 3 -%}
+                  {%- comment -%}No Surprises - package/box icon{%- endcomment -%}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M12 12L20 7.5M12 12V21M12 12L4 7.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  </svg>
+              {%- endcase -%}
+            {%- endif -%}
+          </div>
+
+          {%- if block.settings.title != blank -%}
+            <h3 class="gg-bb__title gg-font-heading">{{ block.settings.title | escape }}</h3>
+          {%- endif -%}
+
+          {%- if block.settings.description != blank -%}
+            <p class="gg-bb__desc gg-font-body">{{ block.settings.description | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Benefits bar",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Borders"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show top border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_border",
+      "label": "Show bottom border",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#222222"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Max container width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+          "info": "SVG or PNG, 48x48px recommended. Falls back to default icon if empty."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Short description text goes here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Benefits bar",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "One Click",
+            "description": "No measuring or calculators needed"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "One Price",
+            "description": "Shipping and essentials included"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "No Surprises",
+            "description": "Everything arrives ready to install"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

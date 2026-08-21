@@ -1,0 +1,168 @@
+{% comment %}
+  Renders a list of product's price (regular, sale)
+
+  Accepts:
+  - product: {Object} Product Liquid object (optional)
+  - placeholder: {Boolean} Renders a placeholder price (optional)
+  - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+  - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+  - price_class: {String} Adds a price class to the price element (optional)
+  - show_compare_at_price: {Boolean} Renders the compare at price if the product matches the condition (optional)
+
+  Usage:
+  {% render 'price', product: product %}
+{% endcomment %}
+{%- if use_variant -%}
+  {%- assign target = product.selected_or_first_available_variant -%}
+  {%- comment -%} Kit PDPs: prefer 2-Car total kit price over Custom (Per Sq Ft) unit variant {%- endcomment -%}
+  {%- if template.name == 'product' -%}
+    {%- capture gg_offer_vid_raw -%}{% render 'gg-kit-variant-id', product: product %}{%- endcapture -%}
+    {%- assign gg_offer_vid_num = gg_offer_vid_raw | strip | plus: 0 -%}
+    {%- for v in product.variants -%}
+      {%- if v.id == gg_offer_vid_num -%}
+        {%- assign target = v -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- elsif placeholder -%}
+  {%- assign target = null -%}
+{%- else -%}
+  {%- assign target = product -%}
+{%- endif -%}
+
+{%- liquid
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign price_min = product.price_min
+  assign price_max = product.price_max
+  assign available = target.available | default: false
+  assign money_price = price | money
+  assign money_price_min = price_min | money
+  assign money_price_max = price_max | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign money_price_min = price_min | money_with_currency
+    assign money_price_max = price_max | money_with_currency
+  endif
+
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+
+  assign unit_variant = product.selected_or_first_available_variant
+  assign show_unit_as_secondary = false
+  if template.name == 'product' and use_variant
+    assign uv_title = unit_variant.title | downcase
+    if uv_title contains 'per sq' or uv_title contains 'per-sq' or uv_title contains 'sqft' or uv_title contains 'sq ft'
+      if unit_variant.id != target.id
+        assign show_unit_as_secondary = true
+      endif
+    endif
+  endif
+-%}
+
+{%- unless target == null and placeholder == null -%}
+  <div
+    class="
+      price
+      {%- if price_class %} {{ price_class }}{% endif -%}
+      {%- if available == false %} price--sold-out{% endif -%}
+      {%- if compare_at_price > price and product.quantity_price_breaks_configured? != true %} price--on-sale{% endif -%}
+      {%- if compare_at_price > price and product.quantity_price_breaks_configured? %} volume-pricing--sale-badge{% endif -%}
+      {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
+      {%- if show_badges %} price--show-badge{% endif -%}
+    "
+    data-gg-offer-price="{{ price | divided_by: 100.0 }}"
+    data-gg-offer-variant="{{ target.id }}"
+  >
+    {%- if product.tags contains 'price by consultation' -%}
+      <div class="price__consultation">
+        <a href="https://www.gridgarageinc.com/pages/contact" class="price-by-consultation-link" style="text-decoration: underline;">Please Call or Email for Pricing</a>
+      </div>
+    {%- else -%}
+      <div class="price__container">
+        {%- comment -%}
+          Explanation of description list:
+            - div.price__regular: Displayed when there are no variants on sale
+            - div.price__sale: Displayed when a variant is a sale
+        {%- endcomment -%}
+        <div class="price__regular">
+          {%- if product.quantity_price_breaks_configured? -%}
+            {%- if show_compare_at_price and compare_at_price -%}
+              {%- unless product.price_varies == false and product.compare_at_price_varies %}
+                <span class="visually-hidden visually-hidden--inline">
+                  {{- 'products.product.price.regular_price' | t -}}
+                </span>
+                <span>
+                  <s class="price-item price-item--regular variant-item__old-price">
+                    {% if settings.currency_code_enabled %}
+                      {{ compare_at_price | money_with_currency }}
+                    {% else %}
+                      {{ compare_at_price | money }}
+                    {% endif %}
+                  </s>
+                </span>
+              {%- endunless -%}
+            {%- endif -%}
+            <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+            <span class="price-item price-item--regular">
+              {{-
+                'products.product.volume_pricing.price_range'
+                | t: minimum: money_price_min, maximum: money_price_max
+              -}}
+            </span>
+          {%- else -%}
+            <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+            <span class="price-item price-item--regular">
+              {{ money_price }}
+            </span>
+          {%- endif -%}
+        </div>
+        <div class="price__sale">
+          {%- unless product.price_varies == false and product.compare_at_price_varies %}
+            <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
+            <span>
+              <s class="price-item price-item--regular">
+                {% if settings.currency_code_enabled %}
+                  {{ compare_at_price | money_with_currency }}
+                {% else %}
+                  {{ compare_at_price | money }}
+                {% endif %}
+              </s>
+            </span>
+          {%- endunless -%}
+          <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+          <span class="price-item price-item--sale price-item--last">
+            {{ money_price }}
+          </span>
+        </div>
+        {%- if show_unit_as_secondary -%}
+          <small class="price__unit-secondary">
+            {%- if settings.currency_code_enabled -%}
+              {{ unit_variant.price | money_with_currency }}/sq ft
+            {%- else -%}
+              {{ unit_variant.price | money }}/sq ft
+            {%- endif -%}
+          </small>
+        {%- elsif product.selected_or_first_available_variant.unit_price_measurement and target.id == product.selected_or_first_available_variant.id -%}
+          {% render 'unit-price', price: product.selected_or_first_available_variant.unit_price, measurement: product.selected_or_first_available_variant.unit_price_measurement %}
+        {%- endif -%}
+      </div>
+      {%- if show_badges -%}
+        <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
+          {{ 'products.product.on_sale' | t }}
+        </span>
+
+        <span class="badge price__badge-sold-out color-{{ settings.sold_out_badge_color_scheme }}">
+          {{ 'products.product.sold_out' | t }}
+        </span>
+      {%- endif -%}
+      {% if product.tags contains 'Garage Flooring Kits' %}
+        {% if template.name == 'product' %}
+          <p class="no_hidden">All-in price. No additional shipping or hidden fee</p>
+        {% endif %}
+      {% endif %}
+    {%- endif -%}
+  </div>
+{% endunless %}

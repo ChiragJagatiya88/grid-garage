@@ -1,0 +1,240 @@
+{{ 'if-upgrade-garage.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign if_accent = section.settings.accent_color | default: '#DC1C1B'
+  assign if_bg = section.settings.section_bg | default: '#F7F7F7'
+-%}
+
+<div
+  id="if-upgrade-{{ section.id }}"
+  class="section_{{ section.id }} if-upg{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  style="--if-upg-accent: {{ if_accent }}; --if-upg-bg: {{ if_bg }};"
+>
+  <div class="{% if section.settings.enable_container %}if-upg__inner{% else %}if-upg__inner if-upg__inner--fluid{% endif %}">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="if-upg__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="if-upg__sub">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+
+    <div class="if-upg__grid" style="--if-upg-cols: {{ section.settings.columns | default: 4 }};">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'feature' -%}
+          <article class="if-upg__card" {{ block.shopify_attributes }}>
+            <div class="if-upg__media">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 900
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 990px) 22vw, (min-width: 750px) 45vw, 90vw',
+                    widths: '300,450,600,900',
+                    alt: block.settings.title | default: block.settings.image.alt | escape
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg if-upg__placeholder' }}
+              {%- endif -%}
+            </div>
+            {%- if block.settings.title != blank -%}
+              <h3 class="if-upg__card-title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="if-upg__card-text">{{ block.settings.text | escape | newline_to_br }}</p>
+            {%- endif -%}
+            {%- if block.settings.link_label != blank and block.settings.link != blank -%}
+              <a class="if-upg__card-link" href="{{ block.settings.link }}">
+                {{ block.settings.link_label | escape }}
+              </a>
+            {%- endif -%}
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% style %}
+  .section_{{ section.id }} {
+    {% if section.settings.section_bg != blank %}background: {{ section.settings.section_bg }};{% endif %}
+    {% if section.settings.section_gradient_bg != blank %}background: {{ section.settings.section_gradient_bg }};{% endif %}
+    {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_desk }};{% endif %}
+  }
+  @media screen and (max-width: 767px) {
+    .section_{{ section.id }} {
+      {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_mob }};{% endif %}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "IF Upgrade Garage Floor",
+  "tag": "section",
+  "class": "if_upgrade_garage",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable custom class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom class",
+      "visible_if": "{{ section.settings.enable_custom_class == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_container",
+      "label": "Enable container",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Upgrade Your Garage Floor"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section background",
+      "default": "#F7F7F7"
+    },
+    {
+      "type": "color_background",
+      "id": "section_gradient_bg",
+      "label": "Section gradient background"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#DC1C1B"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding",
+      "label": "Enable custom padding",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Padding desktop",
+      "default": "48px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Padding mobile",
+      "default": "32px 0",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "No More Cracked Concrete"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Cover damaged slabs with a finished interlocking surface that looks clean and professional."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label (optional)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "IF Upgrade Garage Floor",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "No More Cracked Concrete",
+            "text": "Cover damaged slabs with a finished interlocking surface that looks clean and professional."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Skip the Epoxy Mess",
+            "text": "No grinding, fumes, or cure times — modular tiles install dry and are ready for use the same day."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Built for Spills & Traffic",
+            "text": "Resist oil, dirt, and daily wear while staying easy to wipe down and keep looking sharp."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "A Garage You're Proud Of",
+            "text": "Turn storage space into a show-ready floor that elevates every vehicle and tool in the room."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,674 @@
+{%- comment -%}
+  Figma: Banner / Hero — full-bleed slides (image or muted autoplay video), eyebrow, two-tone heading, CTAs.
+{%- endcomment -%}
+{{ 'gg-hero-grid-garage.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gg-hero-grid-garage.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign slide_total_blocks = 0
+  for block in section.blocks
+    if block.type == 'slide'
+      assign slide_total_blocks = slide_total_blocks | plus: 1
+    endif
+  endfor
+
+  assign slide_count = slide_total_blocks
+  if slide_count == 0
+    assign slide_count = 1
+  endif
+
+  assign show_arrows_ui = false
+  if slide_count > 1 and section.settings.show_arrows
+    assign show_arrows_ui = true
+  endif
+
+  assign show_dots_ui = false
+  if slide_count > 1 and section.settings.show_dots
+    assign show_dots_ui = true
+  endif
+
+  assign arrow_bottom = false
+  if section.settings.arrow_position == 'bottom_center'
+    assign arrow_bottom = true
+  endif
+
+  assign announce_pattern = 'sections.gg_hero_grid_garage.slide_status' | t
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  .gg-hero-gg__content.center .gg-hero-gg__heading {
+    margin: 0 auto 1.6rem;
+    text-align: center;
+}
+.gg-hero-gg__content.center .gg-hero-gg__buttons {
+    justify-content: center;
+}
+
+
+{%- endstyle -%}
+
+<section
+  class="gg-hero-gg section-{{ section.id }}-padding{% if arrow_bottom %} gg-hero-gg--arrows-bottom{% endif %}{% if show_arrows_ui == false and show_dots_ui %} gg-hero-gg--dots-only{% endif %}"
+  style="--gg-hero-min-mobile: {{ section.settings.min_height_mobile }}rem; --gg-hero-min-desktop: {{ section.settings.min_height_desktop }}rem; --gg-hero-heading-min: {{ section.settings.heading_size_min | divided_by: 10.0 }}rem; --gg-hero-heading-max: {{ section.settings.heading_size_max | divided_by: 10.0 }}rem; --gg-overlay-rgb: {{ section.settings.overlay_color.red }},{{ section.settings.overlay_color.green }},{{ section.settings.overlay_color.blue }};"
+  data-gg-hero="{{ section.id }}"
+  aria-roledescription="carousel"
+  aria-label="{{ 'sections.gg_hero_grid_garage.carousel_label' | t | escape }}"
+>
+  <div class="gg-hero-gg__slides">
+    {%- if slide_total_blocks > 0 -%}
+      {%- assign slide_index = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type != 'slide' -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- assign slide_index = slide_index | plus: 1 -%}
+        {%- capture slide_aria -%}
+          {{- 'sections.gg_hero_grid_garage.slide_status' | t | replace: '__CURRENT__', slide_index | replace: '__TOTAL__', slide_total_blocks -}}
+        {%- endcapture -%}
+          <div
+            class="gg-hero-gg__slide{% if slide_index == 1 %} is-active{% endif %}"
+            role="group"
+            aria-roledescription="slide"
+            aria-label="{{ slide_aria | strip | escape }}"
+            aria-hidden="{% if slide_index == 1 %}false{% else %}true{% endif %}"
+            data-gg-hero-slide
+            {{ block.shopify_attributes }}
+          >
+            <div class="gg-hero-gg__media" aria-hidden="true">
+              {%- if block.settings.media_type == 'video' and block.settings.video != blank -%}
+                {%- assign hero_poster = block.settings.video_poster | image_url: width: 2000 -%}
+                  <!-- LCP Poster Image -->
+                  {%- if slide_index == 1 and block.settings.video_poster != blank -%}
+                    {{
+                      block.settings.video_poster
+                      | image_url: width: 1920
+                      | image_tag:
+                        loading: 'eager',
+                        fetchpriority: 'high',
+                        sizes: '(min-width: 990px) 50vw, 100vw',
+                        widths: '375,550,750,1100,1500,1920',
+                        alt: block.settings.heading,
+                        class: 'gg-hero-gg__poster'
+                    }}
+                  {%- endif -%}
+
+                  <!-- Hero Video -->
+                  <video
+                    playsinline
+                    autoplay
+                    muted
+                    loop
+                    preload="none"
+                    class="gg-hero-gg__video"
+                    poster="{{ hero_poster }}"
+                  >
+                    {%- for source in block.settings.video.sources -%}
+                      <source
+                        src="{{ source.url }}"
+                        type="{{ source.mime_type }}"
+                      >
+                    {%- endfor -%}
+                  </video>
+              {%- elsif block.settings.media_type == 'video' and block.settings.image != blank -%}
+                {%- assign gg_hero_img_alt = block.settings.image.alt | default: shop.name | escape -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 1920
+                  | image_tag:
+                    loading: 'lazy',
+                    fetchpriority: 'low',
+                    sizes: '(min-width: 990px) 50vw, 100vw',
+                    widths: '375,550,750,1100,1500,1920',
+                    alt: gg_hero_img_alt,
+                    class: 'gg-hero-gg__img'
+                }}
+              {%- elsif block.settings.image != blank -%}
+                {%- assign gg_hero_img_alt = block.settings.image.alt | default: shop.name | escape -%}
+                {%- if slide_index == 1 -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1920
+                    | image_tag:
+                      loading: 'eager',
+                      fetchpriority: 'high',
+                      sizes: '(min-width: 990px) 50vw, 100vw',
+                      widths: '375,550,750,1100,1500,1920',
+                      alt: gg_hero_img_alt,
+                      class: 'gg-hero-gg__img'
+                  }}
+                {%- else -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1920
+                    | image_tag:
+                      loading: 'lazy',
+                      fetchpriority: 'low',
+                      sizes: '(min-width: 990px) 50vw, 100vw',
+                      widths: '375,550,750,1100,1500,1920',
+                      alt: gg_hero_img_alt,
+                      class: 'gg-hero-gg__img'
+                  }}
+                {%- endif -%}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            {%- if section.settings.show_overlay -%}
+              <div
+                class="gg-hero-gg__overlay"
+                style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+              ></div>
+            {%- endif -%}
+            <div
+              class="gg-hero-gg__content gg-page-width {{ block.settings.gg_text_align }}"
+              style="--gg-accent: {{ block.settings.accent_color.red }},{{ block.settings.accent_color.green }},{{ block.settings.accent_color.blue }}; --gg-hero-heading-accent: {{ block.settings.heading_accent_color.red }},{{ block.settings.heading_accent_color.green }},{{ block.settings.heading_accent_color.blue }};"
+            >
+              {% render 'gg-hero-slide-content', section: section, block: block %}
+            </div>
+          </div>
+      {%- endfor -%}
+    {%- else -%}
+      <div
+        class="gg-hero-gg__slide is-active"
+        role="group"
+        aria-roledescription="slide"
+        aria-label="{{ 'sections.gg_hero_grid_garage.slide_status' | t | replace: '__CURRENT__', '1' | replace: '__TOTAL__', '1' | escape }}"
+        aria-hidden="false"
+        data-gg-hero-slide
+      >
+        <div class="gg-hero-gg__media" aria-hidden="true">
+          {%- if section.settings.image != blank -%}
+            {%- assign gg_hero_fallback_alt = section.settings.image.alt | default: shop.name | escape -%}
+            {{
+              section.settings.image
+              | image_url: width: 1920
+              | image_tag:
+                loading: 'eager',
+                fetchpriority: 'high',
+                sizes: '(min-width: 990px) 50vw, 100vw',
+                widths: '375,550,750,1100,1500,1920',
+                alt: gg_hero_fallback_alt,
+                class: 'gg-hero-gg__img'
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+        {%- if section.settings.show_overlay -%}
+          <div
+            class="gg-hero-gg__overlay"
+            style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+          ></div>
+        {%- endif -%}
+        <div
+          class="gg-hero-gg__content gg-page-width"
+          style="--gg-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }}; --gg-hero-heading-accent: {{ section.settings.heading_accent_color.red }},{{ section.settings.heading_accent_color.green }},{{ section.settings.heading_accent_color.blue }};"
+        >
+          {% render 'gg-hero-slide-content', section: section %}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <span
+    class="visually-hidden"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    data-gg-hero-live="{{ section.id }}"
+    data-announce-pattern="{{ announce_pattern | escape }}"
+  ></span>
+
+  {%- if show_arrows_ui or show_dots_ui -%}
+    <div class="gg-hero-gg__nav" data-gg-hero-nav>
+      {%- if show_arrows_ui -%}
+        <div class="gg-hero-gg__arrows">
+          <button
+            type="button"
+            class="gg-hero-gg__arrow gg-hero-gg__arrow--prev"
+            data-gg-hero-prev="{{ section.id }}"
+            aria-label="{{ 'sections.gg_hero_grid_garage.previous_slide' | t | escape }}"
+          >
+            <span class="svg-wrapper" style="transform: rotate(90deg); display: inline-flex;">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+          <button
+            type="button"
+            class="gg-hero-gg__arrow gg-hero-gg__arrow--next"
+            data-gg-hero-next="{{ section.id }}"
+            aria-label="{{ 'sections.gg_hero_grid_garage.next_slide' | t | escape }}"
+          >
+            <span class="svg-wrapper" style="transform: rotate(-90deg); display: inline-flex;">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
+      {%- endif -%}
+      {%- if show_dots_ui and slide_total_blocks > 1 -%}
+        <div class="gg-hero-gg__dots" role="navigation" aria-label="{{ 'sections.gg_hero_grid_garage.carousel_label' | t | escape }}">
+          {%- assign dot_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type != 'slide' -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- assign dot_index = dot_index | plus: 1 -%}
+            {%- capture dot_aria -%}
+              {{- 'sections.gg_hero_grid_garage.go_to_slide' | t: slide_number: dot_index, slide_total: slide_total_blocks -}}
+            {%- endcapture -%}
+            <button
+              type="button"
+              class="gg-hero-gg__dot{% if dot_index == 1 %} is-active{% endif %}"
+              data-gg-hero-dot="{{ section.id }}"
+              aria-label="{{ dot_aria | strip | escape }}"
+              aria-current="{% if dot_index == 1 %}true{% else %}false{% endif %}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "GG: Hero banner",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slides"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add slide blocks for a slider. Each slide has its own text, buttons, and links. With one slide (or no blocks and a fallback image), arrows and dots stay hidden."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback background image",
+      "info": "Used when there are no slide blocks."
+    },
+    {
+      "type": "header",
+      "content": "Slider navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": true,
+      "info": "Visible only when there is more than one slide."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots",
+      "default": true,
+      "info": "Visible only when there is more than one slide."
+    },
+    {
+      "type": "select",
+      "id": "arrow_position",
+      "label": "Arrow position",
+      "options": [
+        {
+          "value": "sides",
+          "label": "Left and right (centered vertically)"
+        },
+        {
+          "value": "bottom_center",
+          "label": "Bottom center"
+        }
+      ],
+      "default": "sides"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "min": 22,
+      "max": 70,
+      "step": 2,
+      "unit": "rem",
+      "label": "Minimum height (mobile)",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "min": 28,
+      "max": 90,
+      "step": 2,
+      "unit": "rem",
+      "label": "Minimum height (desktop)",
+      "default": 52
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": true,
+      "info": "Gradient scrim over the image or video for text contrast."
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 50,
+      "info": "How strong the overlay appears (0% = invisible when shown)."
+    },
+    {
+      "type": "header",
+      "content": "Fallback slide content"
+    },
+    {
+      "type": "paragraph",
+      "content": "Used only when there are no slide blocks (fallback image mode)."
+    },
+    {
+      "type": "header",
+      "content": "Typography (section)"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_min",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "label": "Heading size (minimum)",
+      "default": 32,
+      "info": "Displayed size uses this value ÷ 10 in rem (e.g. 32 → 3.2rem) inside responsive clamp."
+    },
+    {
+      "type": "range",
+      "id": "heading_size_max",
+      "min": 50,
+      "max": 100,
+      "step": 2,
+      "label": "Heading size (maximum)",
+      "default": 72,
+      "info": "Displayed size uses this value ÷ 10 in rem (e.g. 72 → 7.2rem) inside responsive clamp."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Premium engineered surfaces"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Transform your garage into a masterpiece."
+    },
+    {
+      "type": "text",
+      "id": "accent_word",
+      "label": "Accent word (must match text inside heading)",
+      "default": "Masterpiece.",
+      "info": "Matching is case-insensitive (heading can say masterpiece. and accent Masterpiece.)."
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Primary button color",
+      "default": "#E61E43",
+      "info": "Fill color for the primary CTA button."
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Accent word color",
+      "default": "#E61E43",
+      "info": "Color for the highlighted word in the heading (for example Masterpiece.)."
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Description",
+      "default": "<p>Premium interlocking flooring designed for the ultimate man cave, home gym, and professional workshop. Built to endure, styled to impress.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Buttons (fallback)"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop flooring"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Build your garage"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "samples_label",
+      "label": "Samples link label",
+      "default": "Order samples"
+    },
+    {
+      "type": "url",
+      "id": "samples_link",
+      "label": "Samples link"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Background image. Also used as fallback if video is missing."
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Hosted video: autoplays muted. Optional poster below; if empty, the first frame shows when loaded."
+        },
+        {
+          "type": "image_picker",
+          "id": "video_poster",
+          "label": "Video poster",
+          "info": "Optional. Shown before playback. Leave empty to use the video’s default frame."
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "select",
+          "id": "gg_text_align",
+          "label": "Card text alignment",
+          "options": [
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Premium engineered surfaces"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Transform your garage into a masterpiece."
+        },
+        {
+          "type": "text",
+          "id": "accent_word",
+          "label": "Accent word (must match text inside heading)",
+          "default": "Masterpiece.",
+          "info": "Matching is case-insensitive (heading can say masterpiece. and accent Masterpiece.)."
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Primary button color",
+          "default": "#E61E43",
+          "info": "Fill color for the primary CTA button."
+        },
+        {
+          "type": "color",
+          "id": "heading_accent_color",
+          "label": "Accent word color",
+          "default": "#E61E43",
+          "info": "Color for the highlighted word in the heading (for example Masterpiece.)."
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "label": "Description",
+          "default": "<p>Premium interlocking flooring designed for the ultimate man cave, home gym, and professional workshop. Built to endure, styled to impress.</p>"
+        },
+        {
+          "type": "text",
+          "id": "primary_label",
+          "label": "Primary button label",
+          "default": "Shop flooring"
+        },
+        {
+          "type": "url",
+          "id": "primary_link",
+          "label": "Primary button link"
+        },
+        {
+          "type": "text",
+          "id": "secondary_label",
+          "label": "Secondary button label",
+          "default": "Build your garage"
+        },
+        {
+          "type": "url",
+          "id": "secondary_link",
+          "label": "Secondary button link"
+        },
+        {
+          "type": "text",
+          "id": "samples_label",
+          "label": "Samples link label",
+          "default": "Order samples"
+        },
+        {
+          "type": "url",
+          "id": "samples_link",
+          "label": "Samples link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid Garage: Hero banner",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "eyebrow": "Premium engineered surfaces",
+            "heading": "Transform your garage into a masterpiece.",
+            "accent_word": "Masterpiece.",
+            "accent_color": "#E61E43",
+            "heading_accent_color": "#E61E43",
+            "subtext": "<p>Premium interlocking flooring designed for the ultimate man cave, home gym, and professional workshop. Built to endure, styled to impress.</p>",
+            "primary_label": "Shop flooring",
+            "secondary_label": "Build your garage",
+            "samples_label": "Order samples"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

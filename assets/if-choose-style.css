@@ -1,0 +1,223 @@
+/* IF Choose Your Style
+───────────────────────────────────────── */
+
+.if-sty {
+  --if-sty-accent: #dc1c1b;
+  --if-sty-bg: #ffffff;
+  --if-sty-panel: #f3f3f3;
+  --if-sty-ink: #111111;
+  font-family: "Be Vietnam Pro", sans-serif;
+  background: var(--if-sty-bg);
+  color: var(--if-sty-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.if-sty *,
+.if-sty *::before,
+.if-sty *::after {
+  box-sizing: border-box;
+}
+
+.if-sty__inner {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-inline: var(--gg-page-pad);
+}
+
+.if-sty__inner--fluid {
+  max-width: none;
+}
+
+.if-sty__heading {
+  margin: 0 0 28px;
+  text-align: center;
+  font-size: clamp(24px, 2vw + 16px, 34px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.if-sty__panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  background: var(--if-sty-panel);
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.if-sty__preview {
+  display: none;
+}
+
+.if-sty__list {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.if-sty__item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.if-sty__item:last-child {
+  border-bottom: 0;
+}
+
+.if-sty__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--if-sty-ink);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  min-height: 45px;
+}
+
+.if-sty__btn-icon {
+  display: none;
+  flex: none;
+  color: var(--if-sty-accent);
+  height: 30px;
+  width: 30px;
+}
+
+.if-sty__btn-icon svg {
+  height: inherit;
+  width: inherit;
+}
+
+.if-sty__item.is-active .if-sty__btn {
+  color: var(--if-sty-accent);
+  font-weight: 700;
+}
+
+.if-sty__item.is-active .if-sty__btn-icon {
+  display: inline-flex;
+}
+
+.if-sty__mobile-media {
+  display: block;
+  margin: 0 0 16px;
+  padding: 14px;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.if-sty__mobile-media[hidden] {
+  display: none !important;
+}
+
+.if-sty__mobile-media img,
+.if-sty__mobile-media .placeholder-svg,
+.if-sty__preview-item img,
+.if-sty__preview-item .placeholder-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media screen and (min-width: 750px) {
+
+  .if-sty__item {
+    min-height: 80px;
+    display: flex;
+  }
+
+  .if-sty__btn-icon {
+    height: 45px;
+    width: 45px;
+  }
+
+  .if-sty__heading {
+    margin-bottom: 32px;
+  }
+
+  .if-sty__panel {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 20px;
+    padding: 20px;
+    align-items: stretch;
+  }
+
+  .if-sty__preview {
+    display: block;
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 360px;
+    max-height: 450px;
+  }
+
+  .if-sty__preview-item {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    height: 100%;
+    width: 100%;
+  }
+
+  .if-sty__preview-item.is-active,
+  .if-sty__preview-item:not([hidden]) {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .if-sty__preview-item[hidden] {
+    display: none !important;
+  }
+
+  .if-sty__preview-item.is-active {
+    display: flex !important;
+  }
+
+  .if-sty__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-inline: 8px 12px;
+  }
+
+  .if-sty__btn {
+    padding: 10px 8px;
+    font-size: 22px;
+  }
+
+  /* Mobile accordion media hidden on desktop */
+  .if-sty__mobile-media {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .if-sty__heading {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .if-sty__btn {
+    font-size: 16px;
+    padding: 10px 2px;
+  }
+}

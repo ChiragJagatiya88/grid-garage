@@ -1,0 +1,145 @@
+/* Grid Garage — Product Details Bar
+   Black background, dark card, 5 columns of product specs from metafields. */
+
+.gg-pdb {
+  background-color: rgb(var(--gg-pdb-bg, var(--gg-black)));
+}
+
+/* Container */
+.gg-pdb__container {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--gg-page-pad);
+}
+
+/* Heading */
+.gg-pdb__heading {
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-align: center;
+    color: rgb(var(--gg-white));
+    margin: 0 0 2.4rem;
+    line-height: 3.8rem;
+    letter-spacing: -0.8px;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-pdb__heading {
+    margin-bottom: 4.8rem;
+  }
+}
+
+/* Card Container */
+.gg-pdb__card {
+  background-color: rgb(var(--gg-pdb-card-bg, 26, 26, 26));
+  border: 1px solid rgb(var(--gg-pdb-border, 34, 34, 34));
+  border-radius: 8px;
+  padding: 2.4rem;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-pdb__card {
+    padding: 6rem 3rem;
+  }
+}
+
+/* Grid Layout */
+.gg-pdb__grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+@media screen and (min-width: 550px) {
+  .gg-pdb__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .gg-pdb__grid {
+    gap: 1.6rem;
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .gg-pdb__grid {
+    gap: 2.4rem;
+  }
+}
+
+/* Item */
+.gg-pdb__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-pdb__item {
+    gap: 0.8rem;
+  }
+}
+
+/* Label */
+.gg-pdb__label {
+  font-size: 1.3rem;
+  color: rgb(var(--gg-pdb-label, 170, 170, 170));
+      font-weight: 400;
+    line-height: 24px;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-pdb__label {
+    font-size: 1.6rem;
+  }
+}
+
+/* Value */
+.gg-pdb__value {
+  font-size: 1.5rem;
+  color: rgb(var(--gg-pdb-value, var(--gg-white)));
+  font-weight: 700;
+line-height: 28px;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-pdb__value {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .gg-pdb__value {
+    font-size: 2.2rem;
+  }
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 549px) {
+  .gg-pdb__card {
+    padding: 2rem;
+  }
+
+  .gg-pdb__value {
+    font-size: 1.4rem;
+  }
+}
+
+/* Tablet: 5 items handling */
+@media screen and (min-width: 550px) and (max-width: 749px) {
+  /* 2 columns, center the 5th item if it exists */
+  .gg-pdb__grid .gg-pdb__item:nth-child(5):last-child {
+    grid-column: span 2;
+  }
+}
+
+/* Animation stagger delay */
+.gg-pdb__item.scroll-trigger {
+  animation-delay: calc(var(--animation-order, 1) * 80ms);
+}

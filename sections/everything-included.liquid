@@ -1,0 +1,554 @@
+{%- comment -%}
+  Everything Included — two-column split: features + image (full-width black band).
+{%- endcomment -%}
+
+{%- liquid
+  assign heading_id = 'EverythingIncluded-heading-' | append: section.id
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .everything-included__grid {
+    gap: {{ section.settings.column_gap }}px;
+  }
+
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .everything-included__grid {
+      gap: {{ section.settings.column_gap_mobile }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="everything-included">
+  <div class="everything-included__band section-{{ section.id }}-padding isolate">
+    <div class="everything-included__inner page-width">
+      <div class="everything-included__grid">
+        <div class="everything-included__content">
+          {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
+            <h2 class="everything-included__heading" id="{{ heading_id }}">
+              {%- if section.settings.heading_line_1 != blank -%}
+                <span class="everything-included__heading-line">{{ section.settings.heading_line_1 | escape }}</span>
+              {%- endif -%}
+              {%- if section.settings.heading_line_2 != blank -%}
+                <span class="everything-included__heading-line">{{ section.settings.heading_line_2 | escape }}</span>
+              {%- endif -%}
+            </h2>
+          {%- endif -%}
+
+          {%- if section.blocks.size > 0 -%}
+            <ul
+              class="everything-included__features list-unstyled"
+              role="list"
+              aria-label="{{ 'sections.everything_included.features_label' | t }}"
+            >
+              {%- for block in section.blocks -%}
+                <li class="everything-included__feature" {{ block.shopify_attributes }}>
+                  {%- liquid
+                    assign feature_icon_image = block.settings.icon_image
+                    assign feature_icon_alt = feature_icon_image.alt | default: ''
+                  -%}
+                  <span
+                    class="everything-included__feature-icon"
+                    {% if feature_icon_image == blank or feature_icon_alt == blank %}
+                      aria-hidden="true"
+                    {% endif %}
+                  >
+                    {%- if feature_icon_image != blank -%}
+                      {{
+                        feature_icon_image
+                        | image_url: width: 96
+                        | image_tag:
+                          widths: '48, 72, 96',
+                          sizes: '24px',
+                          class: 'everything-included__feature-icon-img',
+                          alt: feature_icon_alt,
+                          loading: 'lazy',
+                          decoding: 'async'
+                      }}
+                    {%- else -%}
+                      {%- case block.settings.icon -%}
+                        {%- when 'compass' -%}
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M14.5 9.5 10 14l-2.5 1.5L9 13l4.5-4.5z"/>
+                          </svg>
+                        {%- when 'ruler' -%}
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" focusable="false">
+                            <path d="M4 20 20 4"/>
+                            <path d="m7 17 2-2m3-3 2-2m3-3 2-2"/>
+                            <path d="M5 19 3 21"/>
+                          </svg>
+                        {%- when 'truck' -%}
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" focusable="false">
+                            <path d="M1 7h12v10H1z"/>
+                            <path d="M13 12h4l3 3v2h-3"/>
+                            <circle cx="7" cy="19" r="2"/>
+                            <circle cx="17" cy="19" r="2"/>
+                          </svg>
+                        {%- else -%}
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                            <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z" opacity=".9"/>
+                          </svg>
+                      {%- endcase -%}
+                    {%- endif -%}
+                  </span>
+                  <span class="everything-included__feature-text">
+                    {%- if block.settings.title != blank -%}
+                      <span class="everything-included__feature-title">{{ block.settings.title | escape }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.subtitle != blank -%}
+                      <span class="everything-included__feature-subtitle">{{ block.settings.subtitle | escape }}</span>
+                    {%- endif -%}
+                  </span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        <div class="everything-included__media">
+          {%- liquid
+            assign everything_included_alt = section.settings.image.alt | default: section.settings.image_alt
+            if everything_included_alt == blank
+              assign everything_included_alt = 'sections.everything_included.image_placeholder' | t
+            endif
+          -%}
+          {%- if section.settings.image != blank -%}
+            <figure class="everything-included__figure">
+              {{
+                section.settings.image
+                | image_url: width: 2400
+                | image_tag:
+                  widths: '375, 550, 750, 1100, 1500, 1780, 2000, 2400',
+                  sizes: '(min-width: 750px) 50vw, 100vw',
+                  class: 'everything-included__image',
+                  loading: 'lazy',
+                  decoding: 'async',
+                  alt: everything_included_alt
+              }}
+            </figure>
+          {%- else -%}
+            <div class="everything-included__figure everything-included__figure--placeholder" role="img" aria-label="{{ 'sections.everything_included.image_placeholder' | t }}">
+              {{ 'detailed-apparel-1' | placeholder_svg_tag: 'everything-included__placeholder-svg' }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .everything-included {
+    --ei-bg: 0, 0, 0;
+    --ei-text: 255, 255, 255;
+    --ei-subtext: 169, 169, 169;
+    --ei-accent: 255, 0, 0;
+    --ei-radius: 1.4rem;
+  }
+
+  .everything-included__band {
+    width: 100%;
+    background-color: rgb(var(--ei-bg));
+    color: rgb(var(--ei-text));
+  }
+
+  .everything-included__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .everything-included__inner {
+      padding-inline: 2rem;
+    }
+  }
+
+  .everything-included__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .everything-included__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .everything-included__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 3vw, 3.4rem);
+    text-align: center;
+  }
+
+ .everything-included__heading {
+    margin: 0;
+    font-size: clamp(2.6rem, 1.5rem + 3.2vw, 4rem);
+    font-weight: 700;
+    line-height: 1.30;
+    color: rgb(var(--ei-text));
+}
+
+  .everything-included__heading-line {
+    display: block;
+  }
+
+  .everything-included__features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.2rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media screen and (min-width: 400px) {
+    .everything-included__features {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .everything-included__feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
+    border-radius: 0.8rem;
+    text-align: center;
+    transition: transform 0.25s ease, background-color 0.25s ease;
+  }
+
+  @media screen and (min-width: 750px) {
+    .everything-included__content {
+      text-align: start;
+    }
+
+    .everything-included__features {
+      text-align: start;
+    }
+
+    .everything-included__feature {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1.2rem;
+      padding: 1.2rem 1rem;
+      text-align: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .everything-included__feature:hover,
+    .everything-included__feature:focus-within {
+      transform: translateY(-0.2rem);
+      background-color: rgba(var(--ei-text), 0.06);
+    }
+  }
+
+  .everything-included__feature-icon {
+    flex-shrink: 0;
+    width: 2.4rem;
+    height: 2.4rem;
+    color: rgb(var(--ei-accent));
+  }
+
+  .everything-included__feature-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .everything-included__feature-icon-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .everything-included__feature-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .everything-included__feature-text {
+      align-items: flex-start;
+    }
+  }
+
+.everything-included__feature-title {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.40;
+    color: rgb(var(--ei-text));
+}
+
+ .everything-included__feature-subtitle {
+    font-size: 1.8rem;
+    line-height: 1.1;
+    color: #fff;
+}
+
+  .everything-included__media {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .everything-included__figure {
+    margin: 0;
+    border-radius: var(--ei-radius);
+    overflow: hidden;
+    box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(var(--ei-text), 0.08);
+  }
+
+  .everything-included__figure--placeholder {
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(var(--ei-text), 0.08);
+  }
+
+  .everything-included__placeholder-svg {
+    width: 50%;
+    height: auto;
+    opacity: 0.35;
+  }
+
+  .everything-included__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .everything-included__grid {
+      animation: everything-included-fade 0.75s ease forwards;
+    }
+  }
+
+  @keyframes everything-included-fade {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+  @media screen and (max-width:749px){
+    .everything-included__band {
+    padding: 30px 0 !important;
+}
+.everything-included__feature-subtitle {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+.everything-included__feature-title {
+    font-size: 1.5rem;
+}
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.everything-included.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.everything-included.settings.header_heading.content"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "t:sections.everything-included.settings.heading_line_1.label",
+      "default": "Everything Included —"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "t:sections.everything-included.settings.heading_line_2.label",
+      "default": "No Guesswork Required"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.everything-included.settings.header_media.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.everything-included.settings.image.label"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "t:sections.everything-included.settings.image_alt.label",
+      "info": "t:sections.everything-included.settings.image_alt.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.everything-included.settings.header_layout.content"
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.everything-included.settings.column_gap.label",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "column_gap_mobile",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.everything-included.settings.column_gap_mobile.label",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "t:sections.everything-included.blocks.feature.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "t:sections.everything-included.blocks.feature.settings.icon_image.label",
+          "info": "t:sections.everything-included.blocks.feature.settings.icon_image.info"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:sections.everything-included.blocks.feature.settings.icon.label",
+          "options": [
+            {
+              "value": "grid",
+              "label": "t:sections.everything-included.blocks.feature.settings.icon.options__1.label"
+            },
+            {
+              "value": "compass",
+              "label": "t:sections.everything-included.blocks.feature.settings.icon.options__2.label"
+            },
+            {
+              "value": "ruler",
+              "label": "t:sections.everything-included.blocks.feature.settings.icon.options__3.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.everything-included.blocks.feature.settings.icon.options__4.label"
+            }
+          ],
+          "default": "grid"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.everything-included.blocks.feature.settings.title.label",
+          "default": "Feature title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "t:sections.everything-included.blocks.feature.settings.subtitle.label",
+          "default": "Supporting text"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "t:sections.everything-included.presets.name",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "grid",
+            "title": "432 tiles",
+            "subtitle": "Includes 8% extra for cuts"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "compass",
+            "title": "14 edge pieces",
+            "subtitle": "Professional ramp finish"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "ruler",
+            "title": "Covers 400 sq ft",
+            "subtitle": "Standard 2-car footprint"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "truck",
+            "title": "Ships ready",
+            "subtitle": "Palletized for protection"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

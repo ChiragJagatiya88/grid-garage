@@ -1,0 +1,390 @@
+{%- comment -%}
+  Figma: Announcement strip + main header (node 491:3123). Replace the default header group with this section only (do not stack with Dawn header — cart bubble id must be unique).
+{%- endcomment -%}
+{{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+{%- if settings.predictive_search_enabled -%}
+<link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+{%- endif -%}
+
+{%- liquid
+  assign search_id = 'Search-GG-' | append: section.id
+  assign gg_slider_id = 'Slider-GG-' | append: section.id
+  assign gg_usp_count = 0
+  for block in section.blocks
+    if block.type == 'usp' and block.settings.text != blank
+      assign gg_usp_count = gg_usp_count | plus: 1
+    endif
+  endfor
+  assign gg_has_social = false
+  if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+    assign gg_has_social = true
+  endif
+-%}
+{%- if gg_has_social -%}
+  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{{ 'gg-figma-header.css' | asset_url | stylesheet_tag }}
+
+<div class="header-wrapper">
+  <div
+    class="gg-fh section-header shopify-section-header-sticky color-{{ section.settings.color_scheme }} gradient{% if section.settings.menu_type_desktop == 'drawer' %} gg-fh--drawer-desktop{% endif %}"
+    style="--gg-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};"
+  >
+    {%- if gg_usp_count > 0 -%}
+      <div
+        class="gg-fh__announcement{% if gg_usp_count > 1 %} gg-fh__announcement--multi{% endif %}{% if gg_usp_count > 1 and section.settings.announcement_arrows_mobile == false %} gg-fh__announcement--hide-arrows-mobile{% endif %}"
+      >
+        {%- if gg_usp_count == 1 -%}
+          {%- assign gg_single_rendered = false -%}
+          {%- for block in section.blocks -%}
+            {%- if gg_single_rendered == false and block.type == 'usp' and block.settings.text != blank -%}
+              {%- assign gg_single_rendered = true -%}
+              <div
+                class="announcement-bar gg-fh__announcement-bar announcement-bar--one-announcement"
+                role="region"
+                aria-label="{{ 'sections.header.announcement' | t }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.link != blank -%}
+                  <a
+                    href="{{ block.settings.link }}"
+                    class="announcement-bar__link link link--text focus-inset animate-arrow"
+                  >
+                {%- endif -%}
+                <p class="announcement-bar__message h5 gg-fh__announcement-message">
+                  <span>{{ block.settings.text | escape }}</span>
+                  {%- if block.settings.link != blank -%}
+                    {{- 'icon-arrow.svg' | inline_asset_content -}}
+                  {%- endif -%}
+                </p>
+                {%- if block.settings.link != blank -%}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <div
+            class="gg-fh__announcement-static"
+            role="region"
+            aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
+          >
+            <div class="gg-fh__announcement-static-inner gg-font-body">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'usp' and block.settings.text != blank -%}
+                  {%- if block.settings.link != blank -%}
+                    <a
+                      href="{{ block.settings.link }}"
+                      class="gg-fh__usp-pill link link--text focus-inset"
+                      {{ block.shopify_attributes }}
+                    >
+                      {{- block.settings.text | escape -}}
+                    </a>
+                  {%- else -%}
+                    <span class="gg-fh__usp-pill" {{ block.shopify_attributes }}>
+                      {{- block.settings.text | escape -}}
+                    </span>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+          <div class="gg-fh__announcement-slider-only">
+          <slideshow-component
+            class="announcement-bar gg-fh__announcement-bar"
+            role="region"
+            aria-roledescription="{{ 'sections.announcements.carousel' | t }}"
+            aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
+          >
+            <div class="announcement-bar-slider slider-buttons">
+              <button
+                type="button"
+                class="slider-button slider-button--prev"
+                name="previous"
+                aria-label="{{ 'sections.announcements.previous_announcement' | t }}"
+                aria-controls="{{ gg_slider_id }}"
+              >
+                <span class="svg-wrapper">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </button>
+              <div
+                class="grid grid--1-col slider slider--everywhere"
+                id="{{ gg_slider_id }}"
+                aria-live="polite"
+                aria-atomic="true"
+                data-autoplay="{% if section.settings.announcement_autoplay %}true{% else %}false{% endif %}"
+                data-speed="{{ section.settings.announcement_speed }}"
+              >
+                {%- assign gg_slide_idx = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'usp' and block.settings.text != blank -%}
+                    {%- assign gg_slide_idx = gg_slide_idx | plus: 1 -%}
+                    <div
+                      class="slideshow__slide slider__slide grid__item grid--1-col"
+                      id="Slide-GG-{{ section.id }}-{{ gg_slide_idx }}"
+                      {{ block.shopify_attributes }}
+                      role="group"
+                      aria-roledescription="{{ 'sections.announcements.announcement' | t }}"
+                      aria-label="{{ gg_slide_idx }} {{ 'general.slider.of' | t }} {{ gg_usp_count }}"
+                      tabindex="-1"
+                    >
+                      <div
+                        class="announcement-bar__announcement"
+                        role="region"
+                        aria-label="{{ 'sections.header.announcement' | t }}"
+                      >
+                        {%- if block.settings.link != blank -%}
+                          <a
+                            href="{{ block.settings.link }}"
+                            class="announcement-bar__link link link--text focus-inset animate-arrow"
+                          >
+                        {%- endif -%}
+                        <p class="announcement-bar__message h5 gg-fh__announcement-message">
+                          <span>{{ block.settings.text | escape }}</span>
+                          {%- if block.settings.link != blank -%}
+                            {{- 'icon-arrow.svg' | inline_asset_content -}}
+                          {%- endif -%}
+                        </p>
+                        {%- if block.settings.link != blank -%}
+                          </a>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <button
+                type="button"
+                class="slider-button slider-button--next"
+                name="next"
+                aria-label="{{ 'sections.announcements.next_announcement' | t }}"
+                aria-controls="{{ gg_slider_id }}"
+              >
+                <span class="svg-wrapper">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </button>
+            </div>
+          </slideshow-component>
+          </div>
+          {%- if request.design_mode -%}
+            <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+            <style>
+              .gg-fh__announcement .announcement-bar-slider .slider__slide[aria-hidden='true'] {
+                visibility: hidden;
+              }
+            </style>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="gg-fh__bar">
+      <div class="gg-fh__bar-inner">
+        <div class="gg-fh__menu-mobile">
+          {%- if section.settings.menu != blank -%}
+            {% render 'header-drawer' %}
+          {%- endif -%}
+        </div>
+
+        <a href="{{ routes.root_url }}" class="gg-fh__logo focus-inset">
+          {%- if settings.logo != blank -%}
+            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+            {{
+              settings.logo
+              | image_url: width: 600
+              | image_tag:
+                class: 'motion-reduce',
+                widths: widths,
+                height: logo_height,
+                width: settings.logo_width,
+                alt: logo_alt,
+                loading: 'eager'
+            }}
+          {%- else -%}
+            <span class="h2">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+
+        <div class="gg-fh__nav">
+          {%- if section.settings.menu != blank and section.settings.menu_type_desktop != 'drawer' -%}
+            {%- if section.settings.menu_type_desktop == 'mega' -%}
+              {% render 'header-mega-menu' %}
+            {%- else -%}
+              {% render 'header-dropdown-menu' %}
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        <div class="gg-fh__utilities">
+          {% render 'header-search', input_id: search_id %}
+
+          {%- if section.settings.help_link != blank -%}
+            <a
+              href="{{ section.settings.help_link }}"
+              class="gg-fh__util focus-inset"
+              aria-label="Help"
+            >
+              <span class="svg-wrapper">{{ 'icon-question-mark.svg' | inline_asset_content }}</span>
+            </a>
+          {%- endif -%}
+
+          <a href="{{ routes.cart_url }}" class="gg-fh__util focus-inset" id="cart-icon-bubble">
+            {% if cart == empty %}
+              <span class="svg-wrapper">{{ 'icon-cart-new.svg' | inline_asset_content }}</span>
+            {% else %}
+              <span class="svg-wrapper">{{ 'icon-cart-new.svg' | inline_asset_content }}</span>
+            {% endif %}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            <span class="gg-fh__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if settings.cart_type == 'notification' -%}
+  {%- render 'cart-notification',
+    color_scheme: section.settings.color_scheme,
+    desktop_menu_type: section.settings.menu_type_desktop
+  -%}
+{%- endif -%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == '@app' -%}
+    {% render block %}
+  {%- endif -%}
+{%- endfor -%}
+
+{% schema %}
+{
+  "name": "GG: Figma header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Announcement and cart badge color",
+      "default": "#E61E43"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_type_desktop",
+      "label": "Desktop menu",
+      "options": [
+        { "value": "dropdown", "label": "Dropdown" },
+        { "value": "mega", "label": "Mega menu" },
+        { "value": "drawer", "label": "Drawer" }
+      ],
+      "default": "dropdown",
+      "info": "Dropdown and mega menu show on large screens. Tablet and below always use the drawer, same as the default theme."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "menu_color_scheme",
+      "label": "Drawer color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "url",
+      "id": "help_link",
+      "label": "Help link",
+      "info": "Shown as the question mark icon."
+    },
+    {
+      "type": "header",
+      "content": "Announcement slider"
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_autoplay",
+      "label": "Auto-rotate announcements",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "announcement_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Change announcements every",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_arrows_mobile",
+      "label": "Show previous and next arrows on mobile",
+      "default": true,
+      "info": "When off, customers can still swipe the announcement strip on a touchscreen."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Announcement item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "✓ Lifetime tile warranty"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional. Shows an arrow next to the message like the default theme announcement bar."
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Figma header",
+      "blocks": [
+        { "type": "usp", "settings": { "text": "✓ Lifetime tile warranty" } },
+        { "type": "usp", "settings": { "text": "✓ DIY installation" } },
+        { "type": "usp", "settings": { "text": "✓ Built for heavy vehicles" } },
+        { "type": "usp", "settings": { "text": "✓ Premium garage designs" } },
+        { "type": "usp", "settings": { "text": "✓ Free shipping on garage tiles" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

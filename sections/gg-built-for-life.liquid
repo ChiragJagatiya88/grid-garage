@@ -1,0 +1,183 @@
+{%- comment -%}
+  Figma: Built for your life — category row (nodes 279:3067, 394:4298). Uses gg-built-for-life.css.
+{%- endcomment -%}
+{{ 'gg-built-for-life.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section class="gg-bfl section-{{ section.id }}-padding">
+  <div class="gg-page-width">
+    <header class="gg-bfl__header">
+      {%- if section.settings.title != blank -%}
+        <h2 class="gg-bfl__title gg-font-heading">{{ section.settings.title | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.view_all_label != blank and section.settings.view_all_link != blank -%}
+        <a href="{{ section.settings.view_all_link }}" class="gg-bfl__view gg-font-body">
+          <span>{{ section.settings.view_all_label | escape }}</span>
+          <span class="svg-wrapper" aria-hidden="true">
+            {% comment %} {{- 'icon-arrow.svg' | inline_asset_content -}} {% endcomment %}
+             {{- 'right-arrow.svg' | inline_asset_content -}}
+          </span>
+        </a>
+      {%- endif -%}
+    </header>
+
+    <div class="gg-bfl__grid">
+      {%- for block in section.blocks -%}
+        <article class="gg-bfl__card" {{ block.shopify_attributes }}>
+          <div class="gg-bfl__card-media">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  sizes: '(min-width: 1200px) 18vw, (min-width: 750px) 30vw, 100vw',
+                  widths: '375,550,750,1100',
+                  alt: block.settings.image.alt | default: block.settings.title | escape
+              }}
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+          <div class="gg-bfl__card-overlay"></div>
+          <div class="gg-bfl__card-body">
+            {%- if block.settings.title != blank -%}
+              <h3 class="gg-bfl__card-title gg-font-heading">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+              <a href="{{ block.settings.button_link }}" class="gg-bfl__card-btn gg-font-body">
+                {{- block.settings.button_label | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Built for life",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Built for your life"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "View all"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Workshop"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop by style"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Built for life",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Workshop",
+            "button_label": "Shop by style"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Garage floor kits",
+            "button_label": "Shop by style"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Man cave flooring",
+            "button_label": "Shop by style"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Home gym flooring",
+            "button_label": "Shop by style"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Storage and cabinetry",
+            "button_label": "Shop by style"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

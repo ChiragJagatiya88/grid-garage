@@ -1,0 +1,73 @@
+{%- comment -%}
+  Renders all color swatches for a tile product card.
+  Accepts: tile_product
+{%- endcomment -%}
+{%- liquid
+  assign gg_sw_opt = nil
+  for opt in tile_product.options_with_values
+    assign gg_has_sw = opt.values | map: 'swatch' | compact | size
+    if gg_has_sw > 0 and gg_sw_opt == nil
+      assign gg_sw_opt = opt
+    endif
+  endfor
+  if gg_sw_opt == nil
+    for opt in tile_product.options_with_values
+      assign gg_oname = opt.name | downcase
+      if gg_oname == 'color' or gg_oname == 'colour' or gg_oname == 'tile color' or gg_oname == 'tile colour'
+        assign gg_sw_opt = opt
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- if gg_sw_opt -%}
+  {%- assign gg_opt_pos = gg_sw_opt.position -%}
+  <div class="if-cfg__tile-swatches-track">
+    {%- for val in gg_sw_opt.values -%}
+      {%- assign gg_val_str = val.name | default: val | strip -%}
+      {%- assign gg_mv = nil -%}
+      {%- for v in tile_product.variants -%}
+        {%- if gg_mv == nil -%}
+          {%- assign gg_v_opt = '' -%}
+          {%- if gg_opt_pos == 1 -%}{%- assign gg_v_opt = v.option1 -%}
+          {%- elsif gg_opt_pos == 2 -%}{%- assign gg_v_opt = v.option2 -%}
+          {%- elsif gg_opt_pos == 3 -%}{%- assign gg_v_opt = v.option3 -%}
+          {%- endif -%}
+          {%- if gg_v_opt == gg_val_str -%}{%- assign gg_mv = v -%}{%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign gg_sw_bg = blank -%}
+      {%- assign gg_tile_img = blank -%}
+      {%- if gg_mv.featured_media -%}
+        {%- assign gg_tile_img = gg_mv.featured_media | image_url: width: 600 -%}
+      {%- elsif gg_mv.featured_image -%}
+        {%- assign gg_tile_img = gg_mv.featured_image | image_url: width: 600 -%}
+      {%- elsif val.swatch.image -%}
+        {%- assign gg_tile_img = val.swatch.image | image_url: width: 600 -%}
+      {%- endif -%}
+      {%- if val.swatch.image -%}
+        {%- assign gg_sw_url = val.swatch.image | image_url: width: 80 -%}
+        {%- assign gg_sw_bg = 'url(' | append: gg_sw_url | append: ')' -%}
+      {%- elsif val.swatch.color -%}
+        {%- assign gg_sw_bg = 'rgb(' | append: val.swatch.color.rgb | append: ')' -%}
+      {%- elsif gg_mv.featured_media -%}
+        {%- assign gg_sw_url = gg_mv.featured_media | image_url: width: 80 -%}
+        {%- assign gg_sw_bg = 'url(' | append: gg_sw_url | append: ')' -%}
+      {%- elsif gg_mv.featured_image -%}
+        {%- assign gg_sw_url = gg_mv.featured_image | image_url: width: 80 -%}
+        {%- assign gg_sw_bg = 'url(' | append: gg_sw_url | append: ')' -%}
+      {%- endif -%}
+      <span
+        class="if-cfg__swatch"
+        data-if-cfg-swatch
+        data-color-name="{{ gg_val_str | escape }}"
+        data-image="{{ gg_tile_img | escape }}"
+        role="button"
+        tabindex="0"
+        {% if gg_sw_bg != blank %}style="background: {{ gg_sw_bg }};"{% endif %}
+        title="{{ gg_val_str | escape }}"
+        aria-label="{{ gg_val_str | escape }}"
+      ></span>
+    {%- endfor -%}
+  </div>
+{%- endif -%}

@@ -1,0 +1,194 @@
+/* IF Before / After comparison slider
+───────────────────────────────────────── */
+
+.if-ba {
+  --if-ba-accent: #dc1c1b;
+  --if-ba-bg: #f7f7f7;
+  --if-ba-pos: 50%;
+  --if-ba-ratio: 16 / 9;
+  --if-ba-ink: #111111;
+  --if-ba-muted: #6b6b6b;
+  font-family: "Be Vietnam Pro", sans-serif;
+  background: var(--if-ba-bg);
+  color: var(--if-ba-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.if-ba *,
+.if-ba *::before,
+.if-ba *::after {
+  box-sizing: border-box;
+}
+
+.if-ba__inner {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-inline: var(--gg-page-pad);
+}
+
+.if-ba__inner--fluid {
+  max-width: none;
+  padding-inline: 0;
+}
+
+.if-ba__head {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.if-ba__eyebrow {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--if-ba-muted);
+}
+
+.if-ba__heading {
+  margin: 0;
+  font-size: clamp(24px, 2vw + 16px, 34px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.if-ba__viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--if-ba-ratio);
+  max-height: 760px;
+  overflow: hidden;
+  background: #e8e8e8;
+  user-select: none;
+  touch-action: none;
+  cursor: ew-resize;
+}
+
+.if-ba__layer {
+  position: absolute;
+  inset: 0;
+}
+
+.if-ba__layer img,
+.if-ba__layer .placeholder-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.if-ba__layer--after {
+  z-index: 1;
+}
+
+.if-ba__layer--before {
+  z-index: 2;
+  width: var(--if-ba-pos);
+  overflow: hidden;
+  border-right: 4px solid #ffffff;
+}
+
+/* Keep before image full-bleed of the viewport while the clip shrinks */
+.if-ba__layer--before img,
+.if-ba__layer--before .placeholder-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--if-ba-vp-w, 100%);
+  height: 100%;
+  max-width: none;
+}
+
+.if-ba__label {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  pointer-events: none;
+  width: 50%;
+  text-align: center;
+  .if-ba__label-text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 16px 30px;
+    border-radius: 0 0 10px 10px;
+    background: #fff;
+    color: #111;
+  }
+}
+
+.if-ba__label--before {
+  left: 25%;
+  transform: translateX(-50%);
+}
+
+.if-ba__label--after {
+  right: 0;
+  left: auto;
+  transform: none;
+  .if-ba__label-text {
+    background: var(--if-ba-accent);
+    color: #fff;
+  }
+}
+
+.if-ba__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--if-ba-pos);
+  z-index: 3;
+  width: 3px;
+  transform: translateX(-50%);
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+}
+
+.if-ba__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--if-ba-pos);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--if-ba-accent);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  touch-action: none;
+}
+
+.if-ba__handle:active {
+  cursor: grabbing;
+}
+
+.if-ba__handle svg {
+  display: block;
+  width: 20px;
+  height: 12px;
+}
+
+@media screen and (max-width: 749px) {
+  .if-ba__label {
+    font-size: 11px;
+  }
+
+  .if-ba__handle {
+    width: 44px;
+    height: 44px;
+  }
+}

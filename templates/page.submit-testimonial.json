@@ -1,0 +1,126 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "gg_story_banner_VzY66n": {
+      "type": "gg-story-banner",
+      "name": "GG: Story banner",
+      "settings": {
+        "image": "shopify://shop_images/about-banner.png",
+        "image_alt": "Grid Garage team and flooring",
+        "image_position": "center center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30,
+        "heading": "{{ page.title }}",
+        "heading_color": "#ffffff",
+        "heading_size_desktop": 4.5,
+        "heading_lh_desktop": 6.2,
+        "heading_tracking_desktop": 0,
+        "heading_size_mobile": 3.2,
+        "heading_lh_mobile": 0,
+        "heading_tracking_mobile": 0,
+        "align_h_desktop": "center",
+        "align_v_desktop": "center",
+        "min_height_desktop": 44,
+        "inner_pad_y_desktop_top": 0,
+        "inner_pad_y_desktop_bottom": 0,
+        "align_h_mobile": "center",
+        "align_v_mobile": "center",
+        "min_height_mobile": 20,
+        "inner_pad_y_mobile": 0,
+        "content_max_width": 0,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gg_breadcrumbs_t7HE7g": {
+      "type": "gg-breadcrumbs",
+      "blocks": {
+        "crumb_3rrB6z": {
+          "type": "crumb",
+          "settings": {
+            "label": "Home",
+            "link": "/",
+            "is_current": false
+          }
+        }
+      },
+      "block_order": [
+        "crumb_3rrB6z"
+      ],
+      "name": "GG: Breadcrumbs",
+      "settings": {
+        "breadcrumb_mode": "auto",
+        "hide_on_home": true,
+        "home_label": "Home",
+        "separator": "|",
+        "aria_label": "Breadcrumb",
+        "label_cart": "",
+        "label_search": "",
+        "label_collections": "",
+        "label_404": "",
+        "background_color": "#ffffff",
+        "text_color": "#222222",
+        "separator_color": "#222222",
+        "font_size_desktop": 1.2,
+        "font_size_mobile": 1.1,
+        "line_height": 1.5,
+        "font_weight": 700,
+        "letter_spacing": 0,
+        "align_desktop": "left",
+        "align_mobile": "left",
+        "padding_top": 20,
+        "padding_bottom": 12
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "1778164718c58c5743": {
+      "type": "apps",
+      "blocks": {
+        "forms_inline_XjkhPJ": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "981704",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_XjkhPJ"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "gg_story_banner_VzY66n",
+    "gg_breadcrumbs_t7HE7g",
+    "main",
+    "1778164718c58c5743"
+  ]
+}

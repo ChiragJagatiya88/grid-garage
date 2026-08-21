@@ -1,0 +1,109 @@
+/* Grid Garage — featured collection slider controls (matches GG verified reviews pattern) */
+
+slider-component[data-gg-fc-slider] .gg-fc-slider-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  width: 100%;
+  margin-top: 2.4rem;
+  box-sizing: border-box;
+}
+
+/* Override Dawn centering when GG controls are active */
+slider-component[data-gg-fc-slider] .gg-fc-slider-buttons .gg-fc-controls__progress {
+  margin-left: auto;
+}
+
+.gg-fc-controls__arrows {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.gg-fc-controls__arrow {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.22);
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.gg-fc-controls__arrow svg {
+  flex-shrink: 0;
+  display: block;
+}
+
+.gg-fc-controls__arrow:hover:not([disabled]) {
+  border-color: rgba(var(--color-foreground), 0.55);
+}
+
+.gg-fc-controls__arrow:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.45);
+  outline-offset: 0.2rem;
+}
+
+.gg-fc-controls__arrow[disabled],
+.gg-fc-controls__arrow.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.gg-fc-controls__progress {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.gg-fc-controls__segments {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.gg-fc-controls__segment {
+  width: 2.4rem;
+  height: 0.2rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background-color: rgba(var(--color-foreground), 0.22);
+  opacity: 0.9;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.gg-fc-controls__segment:hover {
+  opacity: 1;
+}
+
+.gg-fc-controls__segment.is-active {
+  background-color: rgb(var(--gg-fc-pagination-accent, var(--color-button)));
+  opacity: 1;
+}
+
+.gg-fc-controls__segment:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.4);
+  outline-offset: 0.2rem;
+}
+
+.gg-fc-controls__count {
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.43;
+  color: rgb(var(--color-foreground));
+  min-width: 4.6rem;
+  font-variant-numeric: tabular-nums;
+}

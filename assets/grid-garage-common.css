@@ -1,0 +1,212 @@
+/**
+ * Grid Garage — shared design tokens (Figma: Grid Garage — P)
+ * RGB triplets align with Dawn: use rgb(var(--token))
+ * https://www.figma.com/design/o9x5I4ilfMdqfoL9jQZgCm/Grid-Garage---P
+ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+:root {
+  /* Brand */
+  --gg-accent: 230, 30, 67;
+  --gg-accent-rgb: rgb(var(--gg-accent));
+  --gg-black: 0, 0, 0;
+  --gg-white: 255, 255, 255;
+  --gg-gray-50: 250, 250, 250;
+  --gg-gray-100: 245, 245, 245;
+  --gg-gray-200: 229, 229, 229;
+  --gg-gray-400: 153, 153, 153;
+  --gg-gray-500: 102, 102, 102;
+  --gg-gray-600: 82, 82, 82;
+  --gg-charcoal: 26, 26, 26;
+  --gg-table-bg: 17, 17, 17;
+  --gg-icon-box: 18, 18, 18;
+  --gg-star: 234, 179, 8;
+  --gg-badge: 244, 63, 94;
+
+  /* Typography scale (Figma ~16 body, large display headings) */
+  --gg-text-xs: 1.2rem;
+  --gg-text-sm: 1.3rem;
+  --gg-text-base: 1.6rem;
+  --gg-text-md: 1.8rem;
+  --gg-text-lg: 2.4rem;
+  --gg-text-xl: clamp(3rem, 4vw, 4.8rem);
+  --gg-text-display: clamp(3.6rem, 6vw, 6.4rem);
+  --gg-line-tight: 1.15;
+  --gg-line-body: 1.55;
+  --gg-letter-spacing-wide: 0.08em;
+
+  /* Layout */
+  --gg-radius-card: 1.2rem;
+  --gg-radius-media: 1.4rem;
+  --gg-radius-btn: 0.2rem;
+  --gg-page-pad: 1.5rem;
+  --gg-section-y: clamp(4rem, 8vw, 8rem);
+
+  /* Section heading scales (used by gg-* section CSS files) */
+  --gg-hero-heading-size: clamp(3.2rem, 5vw, 7.2rem);
+  --gg-hero-sub-size: 2rem;
+  --gg-bfl-title-size: clamp(3rem, 4vw, 4rem);
+  --gg-why-heading-size: clamp(3rem, 4vw, 4rem);
+  --gg-split-heading-size: clamp(3rem, 4vw, 4rem);
+}
+
+/* Shared section header row (title + “View all”) — use with section-specific wrappers */
+.gg-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-bottom: 3.2rem;
+}
+
+.gg-section-head__title {
+  margin: 0;
+  font-size: var(--gg-bfl-title-size);
+  font-weight: 700;
+  line-height: var(--gg-line-tight);
+  letter-spacing: -0.09rem;
+  color: rgb(var(--gg-black));
+}
+
+.gg-section-head__link {
+  font-size: var(--gg-text-base);
+  font-weight: 700;
+  color: rgb(var(--gg-black));
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.gg-section-head__link:hover {
+  text-decoration: underline;
+}
+
+.gg-section-head__link svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+}
+
+.gg-font-body {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: var(--gg-text-base);
+  line-height: var(--gg-line-body);
+}
+
+.gg-font-heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--gg-line-tight);
+}
+
+.gg-uppercase-nav {
+  text-transform: uppercase;
+  letter-spacing: var(--gg-letter-spacing-wide);
+  font-weight: 600;
+  font-size: var(--gg-text-sm);
+}
+
+/* Buttons — Figma: sharp / minimal radius */
+.gg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .8rem;
+    padding: 1.4rem 3rem;
+    font-family: var(--font-body-family);
+    font-weight: 700;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--gg-radius-btn);
+    border: .1rem solid transparent;
+    cursor: pointer;
+    transition: opacity .2s ease, background-color .2s ease, color .2s ease;
+    text-align: center;
+    letter-spacing: 0.8px;
+}
+
+.gg-btn:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-white));
+  outline-offset: 0.2rem;
+}
+
+.gg-btn--primary {
+  background-color: rgb(var(--gg-accent));
+  color: rgb(var(--gg-white));
+}
+
+.gg-btn--primary:hover {
+  opacity: 0.92;
+}
+
+.gg-btn--secondary-light {
+  background-color: rgb(var(--gg-gray-200));
+  color: rgb(var(--gg-black));
+}
+
+.gg-btn--secondary-light:hover {
+  opacity: 0.9;
+}
+
+.gg-btn--secondary-ghost-dark {
+    color: rgb(var(--gg-white));
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.30);
+    background: rgba(0, 0, 0, 0.10);
+    backdrop-filter: blur(6px);
+}
+
+.gg-btn--secondary-ghost-dark:hover {
+  background-color: rgba(var(--gg-white), 0.08);
+}
+
+.gg-btn--secondary-outline-accent {
+  background-color: transparent;
+  color: rgb(var(--gg-accent));
+  border-color: rgb(var(--gg-accent));
+}
+
+.gg-btn--secondary-outline-accent:hover {
+  background-color: rgba(var(--gg-accent), 0.08);
+}
+
+.gg-page-width {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-left: var(--gg-page-pad);
+  padding-right: var(--gg-page-pad);
+}
+
+@media screen and (min-width: 750px) {
+  :root {
+    --gg-page-pad: 2.5rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  :root {
+    --gg-page-pad: 3rem;
+  }
+}
+
+@media screen and (max-width:749px) {
+  .gg-btn{    padding: 1rem 1rem;}
+  .gg-hero-gg__buttons .gg-btn {
+    max-width: 220px;
+    width: 100%;
+}
+}
+
+/* Judge.me — preview badge / widget visibility (scoped to kits product card badge slot) */
+.gg-pc__judgeme-wrap .jdgm-prev-badge[data-average-rating='0.00'] {
+  display: block !important;
+}
+
+.gg-pc__judgeme-wrap .jdgm-widget.jdgm-widget {
+  display: block !important;
+}

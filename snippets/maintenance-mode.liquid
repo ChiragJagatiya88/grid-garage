@@ -1,0 +1,95 @@
+{%- comment -%}
+  Renders full-screen maintenance overlay when Maintenance Mode is ON.
+{%- endcomment -%}
+<script>
+(function() {
+  var isMaintenance = localStorage.getItem('mm_maintenance_enabled') === 'true';
+  var path = window.location.pathname;
+
+  if (!isMaintenance || path.includes('/manage-maintainance')) return;
+
+  // Hide page immediately - use visibility on html, NOT display:none on body *
+  // Using display:none on body * also kills our injected content
+  var styleTag = document.createElement('style');
+  styleTag.id = 'mm-hide-style';
+  styleTag.textContent = 'html { visibility: hidden !important; }';
+  document.documentElement.appendChild(styleTag);
+
+  var heading    = "Website Under Maintenance";
+  var message    = localStorage.getItem('mm_maintenance_message') || "We\u2019re performing scheduled maintenance and will be back shortly.";
+  var returnTime = localStorage.getItem('mm_maintenance_return_time') || "";
+
+  function paintScreen(msg, rt) {
+    // Remove the hide style first
+    var existing = document.getElementById('mm-hide-style');
+    if (existing) existing.remove();
+
+    document.body.innerHTML =
+      '<div id="mm-overlay" style="' +
+        'height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;' +
+        'background:#ffffff;color:#0f172a;' +
+        'font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;' +
+        'padding:2rem;box-sizing:border-box;text-align:center;' +
+        'position:fixed;top:0;left:0;z-index:99999999;">' +
+        '<div style="max-width:32rem;">' +
+          '<div style="font-size:3rem;margin-bottom:1rem">\u2699\ufe0f</div>' +
+          '<h1 style="font-size:2.25rem;font-weight:800;line-height:1.2;margin:0 0 1rem;color:#0f172a;letter-spacing:-0.02em;">' + heading + '</h1>' +
+          '<p style="font-size:1.15rem;line-height:1.6;margin:0;color:#475569;">' + (msg || '') + '</p>' +
+          (rt ? '<p style="margin:1.5rem 0 0;font-size:0.95rem;font-weight:600;color:#2563eb;background:#eff6ff;display:inline-block;padding:0.5rem 1rem;border-radius:9999px;">' + rt + '</p>' : '') +
+        '</div>' +
+      '</div>';
+
+    // Make html visible again (our overlay is now the only content)
+    document.documentElement.style.visibility = 'visible';
+    document.body.style.cssText = 'margin:0;padding:0;background:#ffffff;visibility:visible;';
+  }
+
+  function fetchFromSupabase(sbClient) {
+    sbClient.from('message')
+      .select('notification')
+      .order('id', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(function(res) {
+        var liveMsg = (res && res.data && res.data.notification) ? res.data.notification : message;
+        if (liveMsg) localStorage.setItem('mm_maintenance_message', liveMsg);
+        paintScreen(liveMsg, returnTime);
+      })
+      .catch(function() {
+        paintScreen(message, returnTime);
+      });
+  }
+
+  function init() {
+    // Paint immediately with cached message so there's no blank delay
+    paintScreen(message, returnTime);
+
+    // Then try to get live message from Supabase and repaint
+    if (window.supabaseClient) {
+      fetchFromSupabase(window.supabaseClient);
+    } else {
+      document.addEventListener('supabase:ready', function() {
+        if (window.supabaseClient) fetchFromSupabase(window.supabaseClient);
+      });
+      // Safety net fallback
+      setTimeout(function() {
+        if (window.supabaseClient) {
+          fetchFromSupabase(window.supabaseClient);
+        } else if (window.supabase && typeof window.supabase.createClient === 'function') {
+          var sb = window.supabase.createClient(
+            "https://sgbaztpxrjdfhceooiii.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnYmF6dHB4cmpkZmhjZW9vaWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MDU4NjAsImV4cCI6MjEwMDI4MTg2MH0.xxbmb_qGjv5sDmHDihNl55xEpp7c0T1APqKwvOvDg7Y"
+          );
+          fetchFromSupabase(sb);
+        }
+      }, 1500);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

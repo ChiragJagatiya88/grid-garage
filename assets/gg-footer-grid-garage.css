@@ -1,0 +1,401 @@
+/* Grid Garage — footer with marquee + columns (Figma node 279:3844) */
+
+.gg-footer {
+  /* Marquee is first in document flow; no top margin on the footer shell */
+  --gg-footer-marquee-band: clamp(5.6rem, 12vw, 8rem);
+  position: relative;
+  padding-top: 0;
+  background-color: rgb(var(--gg-black));
+  color: rgba(var(--gg-white), 0.85);
+}
+
+.gg-footer__marquee-wrap {
+  min-height: var(--gg-footer-marquee-band);
+  width: 100%;
+  overflow: hidden;
+  background-color: rgb(var(--gg-accent));
+  color: rgb(var(--gg-white));
+  display: flex;
+  align-items: center;
+}
+
+.gg-footer__marquee {
+  display: flex;
+  width: 100%;
+  animation: gg-footer-marquee 40s linear infinite;
+}
+
+.gg-footer__marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes gg-footer-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.gg-footer__marquee-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3.2rem;
+  padding-right: 3.2rem;
+  font-size: var(--gg-text-md);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gg-footer__inner {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--gg-page-pad) 0;
+}
+
+.gg-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding-bottom: 4rem;
+}
+
+/* Mobile: accordion columns */
+.gg-footer__disclosure {
+  margin: 0;
+  padding: 0;
+  border-bottom: 0.1rem solid rgba(var(--gg-white), 0.12);
+}
+
+.gg-footer__grid > .gg-footer__disclosure:last-of-type {
+  border-bottom: none;
+}
+
+.gg-footer__disclosure-summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 1.4rem 0;
+  cursor: pointer;
+  color: rgb(var(--gg-white));
+}
+
+.gg-footer__disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+.gg-footer__disclosure-icon {
+  flex-shrink: 0;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-right: 0.15rem solid currentColor;
+  border-bottom: 0.15rem solid currentColor;
+  transform: rotate(45deg) translate(-0.1rem, -0.1rem);
+  transition: transform 0.2s ease;
+  opacity: 0.9;
+}
+
+.gg-footer__disclosure[open] .gg-footer__disclosure-icon {
+  transform: rotate(225deg) translate(-0.15rem, -0.15rem);
+}
+
+.gg-footer__disclosure-panel {
+  padding: 0 0 1.6rem;
+}
+
+.gg-footer__disclosure-panel .gg-footer__links {
+  padding-top: 0.2rem;
+}
+
+/* Last column: design width 415px */
+.gg-footer__newsletter-col {
+  width: 100%;
+  max-width: 415px;
+  min-width: 0;
+}
+
+.gg-footer__newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media screen and (min-width: 990px) {
+  /* Fourth column capped at 415px; first three columns take remaining space */
+  .gg-footer__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 415px);
+    gap: 2.4rem;
+  }
+
+  .gg-footer__disclosure {
+    border-bottom: none;
+  }
+
+  .gg-footer__disclosure-summary {
+    padding: 0;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .gg-footer__disclosure-icon {
+    display: none;
+  }
+
+  .gg-footer__disclosure-panel {
+    padding: 0;
+  }
+
+  .gg-footer__newsletter-col {
+    justify-self: stretch;
+    max-width: 100%;
+  }
+}
+
+.gg-footer__col-title {
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: rgb(var(--gg-white));
+  margin: 0;
+}
+
+.gg-footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gg-footer__links a {
+  color: rgba(var(--gg-white), 1);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 34px;
+}
+
+.gg-footer__links a:hover {
+  text-decoration: underline;
+  color: rgb(var(--gg-white));
+}
+
+.gg-footer__newsletter-title {
+  font-size: 2rem;
+  line-height: 1.25;
+  font-weight: 700;
+  color: rgb(var(--gg-white));
+  margin: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-footer__disclosure--newsletter .gg-footer__disclosure-summary--newsletter {
+    display: block;
+    margin: 0 0 0.8rem;
+  }
+}
+
+.gg-footer__newsletter-text {
+  margin: 0 0 1.6rem;
+  font-size: var(--gg-text-base);
+  font-weight: 500;
+  line-height: 1.75;
+  color: rgb(var(--gg-white));
+}
+
+.gg-footer__field {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.4rem 1.6rem;
+  margin: 0;
+  background-color: rgb(var(--gg-black));
+  border: 0.1rem solid rgba(var(--gg-white), 0.35);
+  color: rgb(var(--gg-white));
+  font-size: var(--gg-text-base);
+  border-radius: var(--gg-radius-btn);
+}
+
+.gg-footer__field::placeholder {
+  color: rgba(var(--gg-white), 0.65);
+}
+
+.gg-footer__submit {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.5rem 1.2rem;
+  background-color: rgb(var(--gg-accent));
+  color: rgb(var(--gg-white));
+  border: none;
+  font-weight: 700;
+  font-size: var(--gg-text-sm);
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--gg-radius-btn);
+  text-align: center;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-footer__submit {
+    font-size: var(--gg-text-base);
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+    white-space: nowrap;
+  }
+
+  /* 415px-wide column: smaller caps + tight padding so CTA stays one line */
+  .gg-footer__newsletter-col .gg-footer__submit {
+    font-size: 1.35rem;
+    padding: 1.45rem 0.8rem;
+    letter-spacing: normal;
+    white-space: nowrap;
+  }
+}
+
+.gg-footer__submit:hover {
+  opacity: 0.92;
+}
+
+.gg-footer__bottom {
+  border-top: 0.1rem solid rgba(var(--gg-white), 0.1);
+  padding-top: 2.4rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  text-align: left;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-footer__bottom {
+    align-items: flex-end;
+  }
+}
+
+/* Override component-list-social.css (flex-end desktop / center mobile) */
+.gg-footer__social {
+  width: 100%;
+}
+
+.gg-footer__social .list-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: flex-start;
+}
+
+.gg-footer__social .list-social__link {
+  width: 3.8rem;
+  height: 3.8rem;
+  border: 0.1rem solid rgba(var(--gg-white), 0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--gg-white));
+}
+
+.gg-footer__meta {
+  width: 100%;
+  font-size: var(--gg-text-base);
+  line-height: 1.75;
+  text-align: left;
+}
+
+.gg-footer__meta a {
+  color: rgba(var(--gg-white), 0.8);
+  text-decoration: none;
+}
+
+.gg-footer__copyright {
+  margin-top: 1.2rem;
+  display: inline-block;
+  color: rgba(var(--gg-white), 0.75);
+}
+
+.gg-footer__policies {
+  margin-top: 1.2rem;
+}
+
+.gg-footer__policies-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.4rem 0;
+}
+
+.gg-footer__policies-item {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--gg-text-base);
+}
+
+.gg-footer__policies-item:not(:last-child)::after {
+  content: '·';
+  display: inline-block;
+  margin: 0 0.75rem;
+  color: rgba(var(--gg-white), 0.35);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.gg-footer__policies-item a {
+  color: rgba(var(--gg-white), 0.85);
+  text-decoration: none;
+}
+
+.gg-footer__policies-item a:hover {
+  color: rgb(var(--gg-white));
+  text-decoration: underline;
+}
+
+.gg-footer__policies--rte {
+  margin-top: 1.2rem;
+}
+
+.gg-footer__policies--rte a {
+  color: rgba(var(--gg-white), 0.85);
+}
+
+.gg-footer__payments img {
+  height: auto;
+  margin-top: 1.6rem;
+}
+.list-payment {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+@media screen and (max-width: 749px) {
+  .gg-footer__inner{
+    padding-top: 20px !important;
+  }
+  .gg-footer__grid {
+    padding-bottom: 2rem;
+  }
+  .gg-footer__policies-item {
+    font-size: 12px;
+  }
+  .gg-footer__bottom{
+    flex-flow: wrap;
+  }
+}
+
+.gg-footer__social .list-social__link .svg-wrapper {
+  width: 28px; 
+}
+.list-social__item .icon {
+    height: 2.8rem;
+}

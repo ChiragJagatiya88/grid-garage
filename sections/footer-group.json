@@ -1,0 +1,105 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "gg_footer_grid_garage_BxhKEH": {
+      "type": "gg-footer-grid-garage",
+      "blocks": {
+        "marquee_zWU3P6": {
+          "type": "marquee",
+          "settings": {
+            "text": "✓ Lifetime Tile Warranty"
+          }
+        },
+        "marquee_jwRgzL": {
+          "type": "marquee",
+          "settings": {
+            "text": "✓ DIY Installation"
+          }
+        },
+        "marquee_h637n7": {
+          "type": "marquee",
+          "settings": {
+            "text": "✓ Free Shipping on Garage Kits"
+          }
+        },
+        "marquee_tE9bep": {
+          "type": "marquee",
+          "settings": {
+            "text": "✓ Lifetime Tile Warranty"
+          }
+        },
+        "marquee_ptMJNn": {
+          "type": "marquee",
+          "settings": {
+            "text": "✓ DIY Installation"
+          }
+        },
+        "marquee_dnxDGz": {
+          "type": "marquee",
+          "settings": {
+            "text": "✓ Free Shipping on Garage Kits"
+          }
+        }
+      },
+      "block_order": [
+        "marquee_zWU3P6",
+        "marquee_jwRgzL",
+        "marquee_h637n7",
+        "marquee_tE9bep",
+        "marquee_ptMJNn",
+        "marquee_dnxDGz"
+      ],
+      "name": "GG: Figma footer",
+      "settings": {
+        "accent_color": "#e61e43",
+        "menu_1_title": "Shop",
+        "menu_1": "shop",
+        "menu_2_title": "Garage Inspiration",
+        "menu_2": "garage-inspiration",
+        "menu_3_title": "Help & Support",
+        "menu_3": "help-support",
+        "newsletter_heading": "Upgrade Your Garage",
+        "newsletter_text": "Get garage design inspiration, flooring tips, and exclusive offers.",
+        "newsletter_button_label": "Get on the List",
+        "footer_text": "<p><strong>Grid Garage<br/><br/>Email:</strong> <a href=\"mailto:info@gridgarageinc.com\" target=\"_blank\">info@gridgarageinc.com<br/></a>Expected response time via email: 8 Hours</p><p><strong>Phone:</strong> +1 (888) 898-8022<br/><strong>Hours:</strong> Mon-Sun 8:00 am - 6:00 pm PST</p><p><strong>Address:</strong> 22647 Ventura Blvd Woodland Hills, CA 91364</p>",
+        "policy_menu": "policy-links",
+        "policies_text": "",
+        "copyright": "© 2026 Grid Garage Inc.",
+        "padding_top": 96,
+        "padding_bottom": 64
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-1",
+        "newsletter_enable": true,
+        "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "show_policy": true,
+        "margin_top": 0,
+        "padding_top": 56,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "gg_footer_grid_garage_BxhKEH",
+    "footer"
+  ]
+}

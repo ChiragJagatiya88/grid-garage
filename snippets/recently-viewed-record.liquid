@@ -1,0 +1,27 @@
+{% doc %}
+  Saves the current product handle to localStorage for the recently viewed products section.
+
+  @param product {Object} Product object (expects handle)
+
+  @example
+  {% render 'recently-viewed-record', product: product %}
+{% enddoc %}
+{%- if product != blank and product.handle != blank -%}
+  <script>
+    (function () {
+      var handle = {{ product.handle | json }};
+      var key = 'grid-garage-recently-viewed';
+      var max = 12;
+      try {
+        var list = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!Array.isArray(list)) list = [];
+        list = list.filter(function (h) {
+          return h !== handle;
+        });
+        list.unshift(handle);
+        list = list.slice(0, max);
+        localStorage.setItem(key, JSON.stringify(list));
+      } catch (e) {}
+    })();
+  </script>
+{%- endif -%}

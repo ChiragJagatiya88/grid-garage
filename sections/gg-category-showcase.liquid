@@ -1,0 +1,265 @@
+{%- comment -%}
+  Category Showcase — Horizontal scrollable category cards.
+  Black background, image cards with gradient overlay and bottom text.
+{%- endcomment -%}
+{{ 'gg-category-showcase.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign head_align = 'center'
+  if section.settings.heading_alignment == 'left'
+    assign head_align = 'left'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-cs {
+    --gg-cs-head-align: {{ head_align }};
+    --gg-cs-card-w-m: {{ section.settings.card_width_mobile }}px;
+    --gg-cs-card-h-m: {{ section.settings.card_height_mobile }}px;
+    --gg-cs-card-w-d: {{ section.settings.card_width_desktop }}px;
+    --gg-cs-card-h-d: {{ section.settings.card_height_desktop }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-cs section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="gg-cs__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="gg-cs__heading gg-font-heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="gg-cs__scroll{% if section.settings.enable_snap_scroll %} gg-cs__scroll--snap{% endif %}">
+      <div class="gg-cs__grid">
+        {%- for block in section.blocks -%}
+          <div
+            class="gg-cs__card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+            style="{% if settings.animations_reveal_on_scroll %}--animation-order: {{ forloop.index }}{% endif %}"
+          >
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" class="gg-cs__card-link">
+            {%- else -%}
+              <div class="gg-cs__card-inner">
+            {%- endif -%}
+
+                <div class="gg-cs__card-image">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 600
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'gg-cs__img',
+                        sizes: '200px',
+                        widths: '200,400,600',
+                        alt: block.settings.image.alt | default: block.settings.title | escape
+                    }}
+                  {%- else -%}
+                    {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg gg-cs__img' }}
+                  {%- endif -%}
+                </div>
+
+                <div class="gg-cs__card-overlay"></div>
+
+                {%- if block.settings.title != blank -%}
+                  <h3 class="gg-cs__card-title gg-font-heading">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+
+            {%- if block.settings.link != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: Category showcase",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "More Than Just a Garage Floor"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Card size"
+    },
+    {
+      "type": "range",
+      "id": "card_width_desktop",
+      "min": 160,
+      "max": 240,
+      "step": 10,
+      "unit": "px",
+      "label": "Card width (desktop)",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "card_height_desktop",
+      "min": 120,
+      "max": 220,
+      "step": 10,
+      "unit": "px",
+      "label": "Card height (desktop)",
+      "default": 180
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "min": 140,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Card width (mobile)",
+      "default": 160
+    },
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "min": 100,
+      "max": 180,
+      "step": 10,
+      "unit": "px",
+      "label": "Card height (mobile)",
+      "default": 140
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_snap_scroll",
+      "label": "Enable snap scrolling",
+      "default": true,
+      "info": "Cards snap into place when scrolling on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_card",
+      "name": "Category card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Category"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "URL to collection, page, or product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Category showcase",
+      "blocks": [
+        {
+          "type": "category_card",
+          "settings": {
+            "title": "Garages"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "title": "Home gyms"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "title": "Man caves"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "title": "Workshops"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "title": "Basements"
+          }
+        },
+        {
+          "type": "category_card",
+          "settings": {
+            "title": "Patios"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

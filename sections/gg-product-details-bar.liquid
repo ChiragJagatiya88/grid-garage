@@ -1,0 +1,235 @@
+{%- comment -%}
+  Product Details Bar — Displays product metafields in a dark card.
+  Pulls from product.metafields.custom namespace.
+{%- endcomment -%}
+{{ 'gg-product-details-bar.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign mf_tile_size = product.metafields.custom[section.settings.metafield_tile_size]
+  assign mf_material = product.metafields.custom[section.settings.metafield_material]
+  assign mf_load = product.metafields.custom[section.settings.metafield_load_durability]
+  assign mf_use = product.metafields.custom[section.settings.metafield_use]
+  assign mf_drainage = product.metafields.custom[section.settings.metafield_drainage]
+
+  assign has_any = false
+  if mf_tile_size != blank or mf_material != blank or mf_load != blank or mf_use != blank or mf_drainage != blank
+    assign has_any = true
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-pdb {
+    --gg-pdb-bg: {{ section.settings.background_color.red }},{{ section.settings.background_color.green }},{{ section.settings.background_color.blue }};
+    --gg-pdb-card-bg: {{ section.settings.card_background.red }},{{ section.settings.card_background.green }},{{ section.settings.card_background.blue }};
+    --gg-pdb-border: {{ section.settings.border_color.red }},{{ section.settings.border_color.green }},{{ section.settings.border_color.blue }};
+    --gg-pdb-label: {{ section.settings.label_color.red }},{{ section.settings.label_color.green }},{{ section.settings.label_color.blue }};
+    --gg-pdb-value: {{ section.settings.value_color.red }},{{ section.settings.value_color.green }},{{ section.settings.value_color.blue }};
+  }
+{%- endstyle -%}
+
+{%- if has_any -%}
+  <section
+    class="gg-pdb section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    data-section-id="{{ section.id }}"
+  >
+    <div class="gg-pdb__container">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="gg-pdb__heading gg-font-heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      <div class="gg-pdb__card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="gg-pdb__grid">
+          {%- if mf_tile_size != blank -%}
+            <div class="gg-pdb__item">
+              <span class="gg-pdb__label gg-font-body">{{ section.settings.label_tile_size | escape }}</span>
+              <span class="gg-pdb__value gg-font-heading">{{ mf_tile_size | escape }}</span>
+            </div>
+          {%- endif -%}
+
+          {%- if mf_material != blank -%}
+            <div class="gg-pdb__item">
+              <span class="gg-pdb__label gg-font-body">{{ section.settings.label_material | escape }}</span>
+              <span class="gg-pdb__value gg-font-heading">{{ mf_material | escape }}</span>
+            </div>
+          {%- endif -%}
+
+          {%- if mf_load != blank -%}
+            <div class="gg-pdb__item">
+              <span class="gg-pdb__label gg-font-body">{{ section.settings.label_load_durability | escape }}</span>
+              <span class="gg-pdb__value gg-font-heading">{{ mf_load | escape }}</span>
+            </div>
+          {%- endif -%}
+
+          {%- if mf_use != blank -%}
+            <div class="gg-pdb__item">
+              <span class="gg-pdb__label gg-font-body">{{ section.settings.label_use | escape }}</span>
+              <span class="gg-pdb__value gg-font-heading">{{ mf_use | escape }}</span>
+            </div>
+          {%- endif -%}
+
+          {%- if mf_drainage != blank -%}
+            <div class="gg-pdb__item">
+              <span class="gg-pdb__label gg-font-body">{{ section.settings.label_drainage | escape }}</span>
+              <span class="gg-pdb__value gg-font-heading">{{ mf_drainage | escape }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GG: Product details bar",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Product Details"
+    },
+    {
+      "type": "header",
+      "content": "Metafield Keys",
+      "info": "Define the metafield keys in the 'custom' namespace"
+    },
+    {
+      "type": "text",
+      "id": "metafield_tile_size",
+      "label": "Tile Size metafield key",
+      "default": "tile_size",
+      "info": "product.metafields.custom.[key]"
+    },
+    {
+      "type": "text",
+      "id": "metafield_material",
+      "label": "Material metafield key",
+      "default": "material"
+    },
+    {
+      "type": "text",
+      "id": "metafield_load_durability",
+      "label": "Load Durability metafield key",
+      "default": "load_durability"
+    },
+    {
+      "type": "text",
+      "id": "metafield_use",
+      "label": "Use metafield key",
+      "default": "use"
+    },
+    {
+      "type": "text",
+      "id": "metafield_drainage",
+      "label": "Drainage metafield key",
+      "default": "drainage"
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "text",
+      "id": "label_tile_size",
+      "label": "Tile Size label",
+      "default": "Tile Size"
+    },
+    {
+      "type": "text",
+      "id": "label_material",
+      "label": "Material label",
+      "default": "Material"
+    },
+    {
+      "type": "text",
+      "id": "label_load_durability",
+      "label": "Load Durability label",
+      "default": "Load Durability"
+    },
+    {
+      "type": "text",
+      "id": "label_use",
+      "label": "Use label",
+      "default": "Use"
+    },
+    {
+      "type": "text",
+      "id": "label_drainage",
+      "label": "Drainage label",
+      "default": "Drainage"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card border",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label text",
+      "default": "#aaaaaa"
+    },
+    {
+      "type": "color",
+      "id": "value_color",
+      "label": "Value text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: Product details bar"
+    }
+  ],
+  "templates": ["product"]
+}
+{% endschema %}

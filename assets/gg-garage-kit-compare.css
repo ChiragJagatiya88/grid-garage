@@ -1,0 +1,473 @@
+/* Grid Garage — garage kit compare (Figma 647:815) */
+
+.gg-gkc {
+  color: rgb(var(--gg-gkc-text, 10, 10, 10));
+}
+
+.gg-gkc__inner {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gkc__inner {
+    padding: 0 5rem;
+  }
+}
+
+.gg-gkc__heading {
+  margin: 0 0 2.4rem;
+  font-size: var(--gg-gkc-head-m, clamp(2.8rem, 5vw, 4rem));
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.056em;
+  color: rgb(var(--gg-gkc-heading, 27, 28, 28));
+  text-align: var(--gg-gkc-head-align, center);
+}
+
+@media screen and (min-width: 990px) {
+  .gg-gkc__heading {
+    margin-bottom: 4rem;
+    font-size: var(--gg-gkc-head-d, 4rem);
+  }
+}
+
+.gg-gkc__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gg-gkc-grid-gap-m, 16px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-gkc__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gg-gkc-grid-gap-d, 25px);
+  }
+}
+
+/* Card */
+.gg-gkc-card {
+  background: rgb(var(--gg-gkc-card-bg, 250, 250, 250));
+  border-radius: 0.8rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gg-gkc-card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: rgb(var(--gg-gkc-media-bg, 240, 240, 240));
+}
+
+.gg-gkc-card__media-link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.gg-gkc-card__media-link:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-gkc-accent, 225, 29, 72));
+  outline-offset: 0.2rem;
+}
+
+.gg-gkc-card__media-link--disabled {
+  pointer-events: none;
+}
+
+.gg-gkc-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gg-gkc-card__img--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  background: rgb(var(--gg-gkc-media-bg, 240, 240, 240));
+}
+
+.gg-gkc-card__img--placeholder .placeholder-svg {
+  width: 40%;
+  height: auto;
+  opacity: 0.35;
+}
+
+.gg-gkc-card__badge {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+  padding: 0.4rem 1.6rem;
+  border-radius: 999px;
+  background: rgb(var(--gg-gkc-accent, 225, 29, 72));
+  color: rgb(var(--gg-gkc-badge-text, 255, 255, 255));
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1.33;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.gg-gkc-card__body {
+  padding: 2.4rem 2rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-gkc-card__body {
+    padding: 4rem 4rem 3.2rem;
+  }
+}
+
+.gg-gkc-card__title {
+  margin: 0 0 0.8rem;
+  font-size: clamp(2.4rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: rgb(var(--gg-gkc-title, 27, 28, 28));
+}
+
+.gg-gkc-card__subtitle {
+  margin: 0 0 1.6rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  color: rgb(var(--gg-gkc-subtitle, 10, 10, 10));
+}
+
+.gg-gkc-card__subtitle.rte > p:first-child {
+  margin-top: 0;
+}
+
+.gg-gkc-card__subtitle.rte > p:last-child {
+  margin-bottom: 0;
+}
+
+/* Custom subtitle RTE: list items use same check icon as features */
+.gg-gkc-card__subtitle.rte ul,
+.gg-gkc-card__subtitle.rte ol {
+  list-style: none !important;
+  list-style-type: none !important;
+  list-style-position: outside !important;
+  padding-left: 0 !important;
+  margin: 0 0 1.6rem !important;
+}
+
+.gg-gkc-card__subtitle.rte ul:last-child,
+.gg-gkc-card__subtitle.rte ol:last-child {
+  margin-bottom: 0 !important;
+}
+
+.gg-gkc-card__subtitle.rte ul li,
+.gg-gkc-card__subtitle.rte ol li {
+  position: relative;
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 0 1.6rem !important;
+  padding-left: 3.2rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.gg-gkc-card__subtitle.rte ul li::marker,
+.gg-gkc-card__subtitle.rte ol li::marker {
+  content: none;
+}
+
+.gg-gkc-card__subtitle.rte ul li:last-child,
+.gg-gkc-card__subtitle.rte ol li:last-child {
+  margin-bottom: 0 !important;
+}
+
+.gg-gkc-card__subtitle.rte ul li::before,
+.gg-gkc-card__subtitle.rte ol li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  width: 2rem;
+  height: 2rem;
+  background-color: rgb(var(--gg-gkc-accent, 225, 29, 72));
+  -webkit-mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  pointer-events: none;
+}
+
+.gg-gkc-card__subtitle.rte li > p {
+  margin: 0;
+}
+
+.gg-gkc-card__description {
+  margin: 0 0 2.4rem;
+  flex: 1;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  color: rgb(var(--gg-gkc-text, 10, 10, 10));
+}
+
+.gg-gkc-card__description.rte > *:first-child {
+  margin-top: 0;
+}
+
+.gg-gkc-card__description.rte > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Product description RTE: circle-check SVG on list items (same as custom features) */
+.gg-gkc-card__description.rte ul,
+.gg-gkc-card__description.rte ol {
+  list-style: none !important;
+  list-style-type: none !important;
+  list-style-position: outside !important;
+  padding-left: 0 !important;
+  margin: 0 0 1.6rem !important;
+}
+
+.gg-gkc-card__description.rte ul:last-child,
+.gg-gkc-card__description.rte ol:last-child {
+  margin-bottom: 0 !important;
+}
+
+.gg-gkc-card__description.rte ul li,
+.gg-gkc-card__description.rte ol li {
+  position: relative;
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 0 1.6rem !important;
+  padding-left: 3.2rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.gg-gkc-card__description.rte ul li::marker,
+.gg-gkc-card__description.rte ol li::marker {
+  content: none;
+}
+
+.gg-gkc-card__description.rte ul li:last-child,
+.gg-gkc-card__description.rte ol li:last-child {
+  margin-bottom: 0 !important;
+}
+
+.gg-gkc-card__description.rte ul li::before,
+.gg-gkc-card__description.rte ol li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  width: 2rem;
+  height: 2rem;
+  background-color: rgb(var(--gg-gkc-accent, 225, 29, 72));
+  -webkit-mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  pointer-events: none;
+}
+
+.gg-gkc-card__description.rte li > p {
+  margin: 0;
+}
+
+.gg-gkc-card__features {
+  list-style: none;
+  margin: 0 0 2.4rem;
+  padding: 0;
+  flex: 1;
+}
+
+.gg-gkc-card__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 1.6rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.gg-gkc-card__feature:last-child {
+  margin-bottom: 0;
+}
+
+/* Rich-text features: same red circle + white check as .gg-gkc-card__check (override Dawn .rte ul / li) */
+.gg-gkc-card .gg-gkc-card__features--rte.rte {
+  flex: 1;
+}
+
+.gg-gkc-card .gg-gkc-card__features--rte.rte ul,
+.gg-gkc-card .gg-gkc-card__features--rte.rte ol {
+  list-style: none !important;
+  list-style-type: none !important;
+  list-style-position: outside !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+
+.gg-gkc-card .gg-gkc-card__features--rte.rte ul li,
+.gg-gkc-card .gg-gkc-card__features--rte.rte ol li {
+  position: relative;
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 0 1.6rem !important;
+  padding-left: 3.2rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.gg-gkc-card .gg-gkc-card__features--rte.rte ul li::marker,
+.gg-gkc-card .gg-gkc-card__features--rte.rte ol li::marker {
+  content: none;
+}
+
+.gg-gkc-card .gg-gkc-card__features--rte.rte ul li:last-child,
+.gg-gkc-card .gg-gkc-card__features--rte.rte ol li:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Custom features RTE: same circle-check SVG as product description */
+.gg-gkc-card .gg-gkc-card__features--rte.rte ul li::before,
+.gg-gkc-card .gg-gkc-card__features--rte.rte ol li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  width: 2rem;
+  height: 2rem;
+  background-color: rgb(var(--gg-gkc-accent, 225, 29, 72));
+  -webkit-mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  pointer-events: none;
+}
+
+.gg-gkc-card .gg-gkc-card__features--rte.rte li > p {
+  margin: 0;
+}
+
+/* Non-list rich text (paragraphs only): no check icons */
+.gg-gkc-card .gg-gkc-card__features--rte.rte > p {
+  margin: 0 0 1.6rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.gg-gkc-card .gg-gkc-card__features--rte.rte > p:last-child {
+  margin-bottom: 0;
+}
+
+.gg-gkc-card__check {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.2rem;
+  background-color: rgb(var(--gg-gkc-accent, 225, 29, 72));
+  -webkit-mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  mask: var(--gg-gkc-list-check-mask) no-repeat center / contain;
+  position: relative;
+}
+
+.gg-gkc-card__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.6rem;
+  padding-top: 2.4rem;
+  margin-top: auto;
+  border-top: 0.1rem solid rgb(var(--gg-gkc-border, 228, 226, 225));
+}
+
+/* Row footer only when section grid is 2 columns (matches .gg-gkc__grid @ 990px). Below that, footer stays column so the CTA is full width and left-aligned. */
+@media screen and (min-width: 990px) {
+  .gg-gkc-card__footer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 1.2rem 2rem;
+  }
+
+  .gg-gkc-card__price-col {
+    margin-right: auto;
+  }
+}
+
+.gg-gkc-card__price-col {
+  flex-shrink: 0;
+}
+
+.gg-gkc-card__price-label {
+  margin: 0 0 0.4rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.33;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--gg-gkc-price-label, 95, 94, 94));
+}
+
+.gg-gkc-card__price-value {
+  margin: 0;
+  font-size: clamp(2.8rem, 4vw, 3.6rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: rgb(var(--gg-gkc-accent, 225, 29, 72));
+}
+
+.gg-gkc-card__price-value .money,
+.gg-gkc-card__price-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.gg-gkc-card__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 4.8rem;
+  padding: 1.6rem 3.2rem;
+  border-radius: 0.4rem;
+  border: none;
+  background: rgb(var(--gg-gkc-accent, 225, 29, 72));
+  color: rgb(var(--gg-gkc-btn-text, 255, 255, 255));
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-gkc-card__btn {
+    width: auto;
+    flex-shrink: 0;
+  }
+}
+
+.gg-gkc-card__btn:hover {
+  opacity: 0.92;
+}
+
+.gg-gkc-card__btn:focus-visible {
+  outline: 0.2rem solid rgb(var(--gg-gkc-accent, 225, 29, 72));
+  outline-offset: 0.3rem;
+}
+
+.gg-gkc-card__btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

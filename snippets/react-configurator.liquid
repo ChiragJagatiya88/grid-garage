@@ -1,0 +1,660 @@
+{{ 'gg-react-configurator-custom.css' | asset_url | stylesheet_tag }}
+
+<div class="gg">
+
+  <main class="gg-shell" id="configure">
+    <!-- Product Header -->
+    <section class="gg-phead">
+      <div>
+        <div class="gg-ver-revi"><span>★★★★★</span> 100+ Verified Reviews</div>
+        <span class="gg-eyebrow">Premium Interlocking Floor Kit</span>
+        <h1 class="gg-ptitle">Design Your<br>Perfect Garage</h1>
+      </div>
+      <div class="gg-phead-right">
+        <div class="gg-showcase">
+          <h3 class="gg-sc-title">GRIDGARAGE SHOWCASE PROGRAM</h3>
+          <p class="gg-sc-desc">Share your completed garage, before & after photos, and a short video after installation and receive a <b>$100 reward</b>. <br><span style="font-size: 0.9em; color: var(--muted);">(showcase bonus is available on orders over 300 sqft)</span></p>
+          <ul class="gg-sc-list">
+            <li><span class="gg-sc-check">✅</span> Free Shipping Nationwide</li>
+            <li><span class="gg-sc-check">✅</span> 30-Day Money-Back Guarantee</li>
+            <li><span class="gg-sc-check">✅</span> Ships in 3–5 Business Days</li>
+            <li><span class="gg-sc-check">✅</span> DIY Installation in 3–4 Hours</li>
+            <li><span class="gg-sc-check">✅</span> Financing options available at checkout</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- STEP 01 · CHOOSE YOUR GARAGE -->
+    <section class="gg-kit-section">
+      <div class="gg-kit-head">
+        <div>
+          <span class="gg-eyebrow" style="display: block; margin-bottom: 8px;">Step 01 · Garage</span>
+          <h2 class="gg-coll-h">Choose Your Garage </h2>
+        </div>
+        <span class="gg-coll-hint">Pick a kit size — or start a custom project</span>
+      </div>
+      
+      <div class="gg-kit-grid" id="gg-kit-grid">
+            <!-- Custom Build -->
+        <button class="gg-kit-card" data-kit="custom">
+          <span class="gg-kit-check">✓</span>
+          <div class="gg-kit-img">
+            <img src="https://swatch-whisper.lovable.app/assets/garage-double-border-D9FIEXjN.jpg" alt="Design My Space" loading="lazy">
+            <span class="gg-kit-badge">Custom Build</span>
+          </div>
+          <div class="gg-kit-body">
+            <div class="gg-kit-name">Design My Space</div>
+            <div class="gg-kit-tag">Gym Floors, Commercial Space, Basement, Showroom, Auto Detailing, Patio, Mancave and more</div>
+            <div class="gg-kit-spec">We size your kit to fit — Ships Free.</div>
+          </div>
+        </button>
+        
+        <!-- 2-Car Kit -->
+        <button class="gg-kit-card sel" data-kit="2car">
+          <span class="gg-kit-check">✓</span>
+          <div class="gg-kit-img">
+            <img src="https://swatch-whisper.lovable.app/assets/garage-showroom-BnsTZ9kb.jpg" alt="2-Car Garage" loading="lazy">
+            <span class="gg-kit-badge">Most Popular</span>
+          </div>
+          <div class="gg-kit-body">
+            <div class="gg-kit-name">2-Car Garage</div>
+            <div class="gg-kit-tag">Fits most standard two-car garages</div>
+            <div class="gg-kit-spec">Up to ~430 sq ft · ships free</div>
+          </div>
+        </button>
+
+    
+
+        <!-- 3-Car Kit -->
+        <button class="gg-kit-card" data-kit="3car">
+          <span class="gg-kit-check">✓</span>
+          <div class="gg-kit-img">
+            <img src="https://swatch-whisper.lovable.app/assets/garage-checkered-BK9qb5dY.jpg" alt="3-Car Garage" loading="lazy">
+            <span class="gg-kit-badge">Premium</span>
+          </div>
+          <div class="gg-kit-body">
+            <div class="gg-kit-name">3-Car Garage</div>
+            <div class="gg-kit-tag">Wide bays, extra depth, more storage</div>
+            <div class="gg-kit-spec">Up to ~630 sq ft · ships free</div>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <!-- CUSTOM KIT — shown only when "Design My Space" is selected -->
+    <section class="gg-custom-dims" id="gg-custom-dims" style="display: none;">
+      <div class="gg-custom-head">
+        <div>
+          <span class="gg-eyebrow" style="display: block; margin-bottom: 8px;">Custom Kit</span>
+          <h2 class="gg-coll-h">Design My Space</h2>
+          <p class="gg-custom-sub">Every custom order ships as a <b>complete, ready-to-install kit</b> — interlocking tiles plus all matching <b>edge pieces</b> and <b>corner ramps</b> pre-calculated for your exact floor.</p>
+          <div class="gg-custom-incl-single">✓ Includes All Ramp Edge Pieces.</div>
+        </div>
+        <div class="gg-custom-total">
+          <span class="gg-custom-total-lbl">Net Area</span>
+          <span class="gg-custom-total-val" id="gg-net-area-val">—</span>
+          <span class="gg-custom-total-sub" id="gg-net-area-sub" style="display: none;"></span>
+        </div>
+      </div>
+
+      <div class="gg-cf-two">
+        <div class="gg-cf-block">
+          <div class="gg-cf-h">Floor Size</div>
+          <div class="gg-dim-row">
+            <div class="gg-dim">
+              <label for="gg-dim-w">Width</label>
+              <div class="gg-dim-input">
+                <input id="gg-dim-w" type="number" inputmode="decimal" min="1" step="0.5" placeholder="20">
+                <span class="gg-dim-unit">ft</span>
+              </div>
+            </div>
+            <span class="gg-dim-x">×</span>
+            <div class="gg-dim">
+              <label for="gg-dim-l">Depth</label>
+              <div class="gg-dim-input">
+                <input id="gg-dim-l" type="number" inputmode="decimal" min="1" step="0.5" placeholder="20">
+                <span class="gg-dim-unit">ft</span>
+              </div>
+            </div>
+          </div>
+          <div class="gg-preset-row" id="gg-preset-row">
+            <button type="button" class="gg-preset" data-w="20" data-d="20">20×20</button>
+            <button type="button" class="gg-preset" data-w="20" data-d="24">20×24</button>
+            <button type="button" class="gg-preset" data-w="24" data-d="24">24×24</button>
+            <button type="button" class="gg-preset" data-w="30" data-d="30">30×30</button>
+            <button type="button" class="gg-preset" data-w="40" data-d="40">40×40</button>
+          </div>
+          <p class="gg-cf-help" id="gg-tile-help" style="display: none;"></p>
+        </div>
+
+        <div class="gg-cf-block gg-cf-project">
+          <div class="gg-cf-h">What are you building?</div>
+          <label for="gg-project-type" class="gg-sr-only">Project type</label>
+          <div class="gg-select-wrap">
+            <select id="gg-project-type" class="gg-select">
+              <option>1-Car Garage</option>
+              <option>2-Car Garage</option>
+              <option>3-Car Garage</option>
+              <option>4+ Car Garage</option>
+              <option>Home Gym</option>
+              <option>Workshop</option>
+              <option>Auto Detailing Shop</option>
+              <option>Mechanic / Auto Repair Shop</option>
+              <option>Car Showroom</option>
+              <option>Motorcycle Showroom</option>
+              <option>Dealership Showroom</option>
+              <option>Man Cave</option>
+              <option>Basement</option>
+              <option>Patio</option>
+              <option>Deck</option>
+              <option>Balcony</option>
+              <option>Aircraft Hangar</option>
+              <option>Commercial / Industrial Facility</option>
+              <option>Warehouse</option>
+              <option>Retail Store</option>
+              <option>Trade Show / Event Space</option>
+              <option>Other (Please Specify)</option>
+            </select>
+            <span class="gg-select-caret" aria-hidden="true">▾</span>
+          </div>
+          <p class="gg-cf-help gg-cf-help-sm">This helps us make tailored recomendations if needed</p>
+        </div>
+      </div>
+
+      <div class="gg-cf-block">
+        <div class="gg-cf-h">Floor Shape</div>
+        <p class="gg-cf-help">Most garages are a rectangle. If yours has a <b>set-back bay or cut-out corner</b> (an L-shape), switch to <b>L-shape</b> below and remove that section — the tile counts and edges update to match.</p>
+        <div class="gg-shape-row">
+          <button type="button" class="gg-shape-btn sel" data-shape="rect" aria-pressed="true">Rectangle</button>
+          <button type="button" class="gg-shape-btn" data-shape="lshape" aria-pressed="false">L-shape (cut-out)</button>
+        </div>
+        <div class="gg-cutouts" id="gg-cutouts" style="display: none;"></div>
+      </div>
+
+      <div class="gg-custom-est" id="gg-custom-est" style="display: none;"></div>
+    </section>
+
+    <!-- STEP 02 · TILE COLLECTION -->
+    <section class="gg-coll-section">
+      <div class="gg-coll-head">
+        <div>
+          <span class="gg-eyebrow" style="display: block; margin-bottom: 8px;">Step 02 · Tile Collection</span>
+          <h2 class="gg-coll-h">Choose Your Collection</h2>
+        </div>
+        <span class="gg-coll-hint">Swipe to compare · GridGarage X is our best value</span>
+      </div>
+
+      <div class="gg-coll-rail" id="gg-coll-rail">
+        {% assign gg_collection = collections['complete-garage-floor-kits'] %}
+        {% for coll_product in gg_collection.products %}
+          {% assign is_selected = false %}
+          {% if product.id == coll_product.id %}
+            {% assign is_selected = true %}
+          {% endif %}
+          
+          <button class="gg-coll-card {% if is_selected %}sel{% endif %}" data-product-handle="{{ coll_product.handle }}" data-product-id="{{ coll_product.id }}" onclick="window.location.href='{{ coll_product.url }}'">
+            {% if coll_product.tags contains 'Best Value' %}
+              <span class="gg-coll-badge gg-bb-value">Best Value</span>
+            {% elsif coll_product.tags contains 'Classic Diamond' %}
+              <span class="gg-coll-badge gg-bb-classic-diamond">Classic Diamond Plate</span>
+            {% elsif coll_product.tags contains 'Most Popular' %}
+              <span class="gg-coll-badge gg-bb-pop">Most Popular</span>
+            {% elsif coll_product.tags contains 'Premium' %}
+              <span class="gg-coll-badge gg-bb-prem">Premium</span>
+            {% elsif coll_product.tags contains 'Bold Unique' %}
+              <span class="gg-coll-badge gg-bb-bold">Bold Unique Design</span>
+            {% endif %}
+            
+            <span class="gg-coll-check">✓</span>
+            <div class="gg-coll-img">
+              <img src="{{ coll_product.featured_image | img_url: '400x' }}" alt="{{ coll_product.title }}" loading="lazy">
+            </div>
+            <div>
+              <div class="gg-coll-name">{{ coll_product.title }}</div>
+              {%- capture gg_short_desc -%}
+                {{- coll_product.metafields.custom.short_description | metafield_tag | strip_html | strip -}}
+              {%- endcapture -%}
+              {%- if gg_short_desc == blank -%}
+                {%- assign gg_short_desc = coll_product.description | strip_html -%}
+              {%- endif -%}
+              <div class="gg-coll-sub">{{ gg_short_desc | truncatewords: 8 }}</div>
+            </div>
+            <div class="gg-coll-meta">
+              <span class="gg-coll-size">{{ coll_product.metafields.custom.tile_size | default: '12" × 12"' }}</span>
+              {%- assign _ltags = coll_product.tags | join: ',' | downcase | split: ',' -%}
+              {%- if _ltags contains 'price by consultation' -%}
+                <span class="gg-coll-price" style="font-size: 11px; font-weight: 600; color: var(--muted); text-transform: none; letter-spacing: normal;">Please Call or Email for Pricing</span>
+              {%- else -%}
+                {%- comment -%}
+                  Real kit prices (2-Car / 3-Car), not this product's cheapest
+                  variant — JS shows whichever matches the currently selected
+                  kit size, or for Design My Space, price-per-sqft × entered
+                  area (see updateCollectionCardPrices in the JS).
+                {%- endcomment -%}
+                {%- assign coll_v2 = nil -%}
+                {%- assign coll_v3 = nil -%}
+                {%- for v in coll_product.variants -%}
+                  {%- assign v_norm = v.title | downcase | replace: '-', '' | replace: ' ', '' -%}
+                  {%- if coll_v2 == nil and v_norm contains '2car' -%}
+                    {%- assign coll_v2 = v -%}
+                  {%- endif -%}
+                  {%- if coll_v3 == nil and v_norm contains '3car' -%}
+                    {%- assign coll_v3 = v -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- assign coll_price_2car = coll_v2.price | default: coll_product.price -%}
+                {%- assign coll_price_3car = coll_v3.price | default: coll_product.price -%}
+                <span
+                  class="gg-coll-price"
+                  data-price-2car="{{ coll_price_2car }}"
+                  data-price-3car="{{ coll_price_3car }}"
+                  data-price-per-sqft="{{ coll_product.price }}"
+                >{{ coll_price_2car | money }}</span>
+              {%- endif -%}
+            </div>
+            <div class="gg-coll-sw" id="gg-coll-sw-{{ coll_product.id }}">
+              {%- comment -%}Step 1: Find the color option. First try swatch API, then name-match.{%- endcomment -%}
+              {%- assign gg_sw_opt = nil -%}
+              {%- for opt in coll_product.options_with_values -%}
+                {%- assign gg_has_sw = opt.values | map: 'swatch' | compact | size -%}
+                {%- if gg_has_sw > 0 and gg_sw_opt == nil -%}
+                  {%- assign gg_sw_opt = opt -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if gg_sw_opt == nil -%}
+                {%- for opt in coll_product.options_with_values -%}
+                  {%- assign gg_oname = opt.name | downcase -%}
+                  {%- if gg_oname == 'color' or gg_oname == 'colour' or gg_oname == 'tile color' or gg_oname == 'tile colour' -%}
+                    {%- assign gg_sw_opt = opt -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- comment -%}Step 2: Render up to 6 swatches from the color option values.{%- endcomment -%}
+              {%- if gg_sw_opt -%}
+                {%- assign gg_opt_pos = gg_sw_opt.position -%}
+                {%- assign gg_sw_count = 0 -%}
+                {%- for val in gg_sw_opt.values -%}
+                  {%- if gg_sw_count < 6 -%}
+                    {%- assign gg_val_str = val.name | default: val | strip -%}
+                    {%- comment -%}Find first matching variant for this color value{%- endcomment -%}
+                    {%- assign gg_mv = nil -%}
+                    {%- for v in coll_product.variants -%}
+                      {%- if gg_mv == nil -%}
+                        {%- assign gg_v_opt = '' -%}
+                        {%- if gg_opt_pos == 1 -%}{%- assign gg_v_opt = v.option1 -%}
+                        {%- elsif gg_opt_pos == 2 -%}{%- assign gg_v_opt = v.option2 -%}
+                        {%- elsif gg_opt_pos == 3 -%}{%- assign gg_v_opt = v.option3 -%}
+                        {%- endif -%}
+                        {%- if gg_v_opt == gg_val_str -%}{%- assign gg_mv = v -%}{%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- comment -%}Determine swatch background: swatch.image > swatch.color > variant featured image{%- endcomment -%}
+                    {%- assign gg_sw_bg = blank -%}
+                    {%- if val.swatch.image -%}
+                      {%- assign gg_sw_url = val.swatch.image | image_url: width: 80 -%}
+                      {%- assign gg_sw_bg = 'url(' | append: gg_sw_url | append: ')' -%}
+                    {%- elsif val.swatch.color -%}
+                      {%- assign gg_sw_bg = 'rgb(' | append: val.swatch.color.rgb | append: ')' -%}
+                    {%- elsif gg_mv.featured_media -%}
+                      {%- assign gg_sw_url = gg_mv.featured_media | image_url: width: 80 -%}
+                      {%- assign gg_sw_bg = 'url(' | append: gg_sw_url | append: ')' -%}
+                    {%- elsif gg_mv.featured_image -%}
+                      {%- assign gg_sw_url = gg_mv.featured_image | image_url: width: 80 -%}
+                      {%- assign gg_sw_bg = 'url(' | append: gg_sw_url | append: ')' -%}
+                    {%- endif -%}
+                    {%- if gg_sw_bg != blank -%}
+                      <span style="background: {{ gg_sw_bg }}; background-size: cover; background-position: center;" title="{{ gg_val_str | escape }}"></span>
+                      {%- assign gg_sw_count = gg_sw_count | plus: 1 -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- comment -%}Overflow badge based on total color option values, not variant count{%- endcomment -%}
+                {%- if gg_sw_opt.values.size > 6 -%}
+                  <span class="gg-coll-more">+{{ gg_sw_opt.values.size | minus: 6 }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          </button>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- 3-COLUMN CONFIGURATOR -->
+    <section class="gg-cfg">
+      
+      <!-- LEFT: Controls -->
+      <div class="gg-col">
+        <!-- Pattern -->
+        <div class="gg-panel">
+          <div class="gg-panel-h">
+            <span class="gg-num">03</span> Pattern
+          </div>
+          <div class="gg-pat-grid" id="gg-pat-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Colors -->
+        <div class="gg-panel">
+          <div class="gg-panel-h">
+            <span class="gg-num">04</span> Choose Your Colors
+          </div>
+          <div class="gg-cp-hint">Watch the sticky zone diagram above update as you pick colors for each zone.</div>
+          <div id="gg-zones-container">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER: Stage -->
+      <div class="gg-stage">
+        <div class="gg-stage-img">
+          <img id="gg-hero-img" src="{{ product.featured_image | img_url: '1000x' }}" alt="{{ product.title }}">
+          <div class="gg-stage-grad"></div>
+          <div class="gg-nameplate">
+            <div>
+              <div class="gg-np-eyebrow">Design Mode · Your Floor</div>
+              <div class="gg-np-name" id="gg-np-name">Pattern Name</div>
+              <div class="gg-np-colors" id="gg-np-colors">Color 1 + Color 2</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Zone Diagram -->
+        <div class="gg-stage-diagram">
+          <div class="gg-stage-diagram-h">
+            <span>Zone Guide</span>
+            <em><span id="gg-diag-name">Pattern</span> · updates live</em>
+          </div>
+          <div id="gg-svg-container">
+            <!-- SVG rendered by JS -->
+          </div>
+          <div class="gg-stage-legend" id="gg-stage-legend">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Buy Panel -->
+      <aside class="gg-buy-panel">
+        <div>
+          <div class="gg-sel-head">Your Selections</div>
+          <div class="gg-sel-list" id="gg-sel-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        {%- assign _is_consultation = false -%}
+        {%- assign _pbc_tags = product.tags | join: ',' | downcase -%}
+        {%- if _pbc_tags contains 'price by consultation' -%}
+          {%- assign _is_consultation = true -%}
+        {%- endif -%}
+
+        {%- if _is_consultation -%}
+          <div class="gg-price-block">
+            <div class="gg-price-label">Pricing</div>
+            <div style="font-size:22px;font-weight:800;font-family:var(--f-disp);letter-spacing:-.01em;color:var(--ink);margin-top:8px;">Please Call or Email for Pricing</div>
+            <div class="gg-price-foot">Contact us for a custom quote tailored to your project.</div>
+          </div>
+          <a href="/pages/contact" id="gg-request-quote-btn" class="gg-add-btn" style="text-decoration:none;margin-top:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Request a Quote
+          </a>
+          <p class="gg-quote-hint">Our team will follow up with pricing tailored to your custom design.</p>
+        {%- else -%}
+          <div class="gg-price-block">
+            <div class="gg-price-label">Total Price</div>
+            <div class="gg-price-amt" id="gg-price-amt">{{ product.price | money }}</div>
+            <div class="gg-price-foot">All-in price &middot; Shipping included &middot; No surprises</div>
+          </div>
+
+          <div class="gg-buy-contact">
+            <div class="gg-buy-contact-l"></div>
+            <div class="gg-buy-contact-row">
+              <a href="tel:+18888988022">📞 (888) 898-8022</a>
+              <a href="mailto:info@gridgarageinc.com">✉️ info@gridgarageinc.com</a>
+            </div>
+          </div>
+
+          <form method="post" action="/cart/add" id="gg-add-to-cart-form">
+            <input type="hidden" name="id" id="gg-variant-id" value="{{ product.variants.first.id }}">
+            <input type="hidden" name="quantity" id="gg-add-qty" value="1">
+            <div id="gg-properties-container"></div>
+
+            <button type="submit" class="gg-add-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              Add to Cart
+            </button>
+          </form>
+          
+          <button type="button" class="gg-download-design-btn" id="gg-download-design-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Design Summary
+          </button>
+
+          <div class="gg-pay" aria-label="Accepted payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <span class="gg-pay-pill">{{ type | payment_type_svg_tag: class: 'gg-pay-icon' }}</span>
+            {%- endfor -%}
+          </div>
+          <button type="button" class="gg-pay-shop-btn">Shop Pay Financing</button>
+        {%- endif -%}
+
+ <button class="gg-samples" onclick="window.open('https://www.gridgarageinc.com/collections/sample-packs', '_blank');">
+  Order Sample Pack
+</button>
+        <div class="gg-trust">
+          <span>Lifetime Warranty</span>
+          <span>Financing Available</span>
+          <span>Free Shipping Nationwide</span>
+          <span>Ships in 3&ndash;5 Business Days</span>
+          <span>30-Day Money-Back Guarantee</span>
+        </div>
+      </aside>
+    </section>
+
+
+<!-- CUSTOMER REVIEWS (fetched from Judge.me public API) -->
+    <section class="gg-reviews" id="reviews">
+      <div class="gg-reviews-head">
+        <div>
+          <span class="gg-eyebrow" style="display: block; margin-bottom: 8px;">Customer Reviews</span>
+          <h2 class="gg-coll-h">Loved by garage owners nationwide</h2>
+        </div>
+        <div class="gg-reviews-avg">
+          <span class="gg-stars">★★★★★</span>
+          <span>Verified Store Reviews</span>
+        </div>
+      </div>
+      <div class="gg-reviews-rail-wrap">
+        <!-- Hidden source for Judge.me to render into -->
+        <div class="gg-jdgm-source" aria-hidden="true" style="position:absolute;visibility:hidden;pointer-events:none;height:0;overflow:hidden">
+          {{ shop.metafields.judgeme.featured_carousel }}
+        </div>
+        <!-- Our visible custom rail -->
+        <div class="gg-reviews-rail" id="gg-reviews-rail">
+          <div class="gg-reviews-loading">Loading reviews…</div>
+        </div>
+      </div>
+    </section>
+    <script>
+    (function() {
+      function extractAndRender() {
+        var source = document.querySelector('.gg-jdgm-source');
+        var rail = document.getElementById('gg-reviews-rail');
+        if (!source || !rail) return false;
+
+        var items = source.querySelectorAll('.jdgm-carousel-item');
+        if (!items || items.length === 0) return false;
+
+        // Strips submission-date text Judge.me sometimes bundles into the same
+        // node as the reviewer name (e.g. "Jessica Reynolds 07/04/2026").
+        function stripDate(s) {
+          if (!s) return s;
+          return s
+            .replace(/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/g, '')
+            .replace(/\b\d{4}-\d{1,2}-\d{1,2}\b/g, '')
+            .replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}\b/gi, '')
+            .replace(/\s{2,}/g, ' ')
+            .trim();
+        }
+
+        var cards = [];
+        items.forEach(function(item) {
+          var ratingEl = item.querySelector('[class*="rating"], [class*="star"], [aria-label*="star"], [aria-label*="Star"]');
+          var titleEl = item.querySelector('[class*="title"], [class*="review-title"]');
+          var bodyEl = item.querySelector('[class*="body"], [class*="review-body"], [class*="review-text"], p');
+          // Exact class first — Judge.me's name-only element — so we don't
+          // accidentally match a wrapper like ".jdgm-rev__author-and-timestamp"
+          // that contains both the name AND the date as one text node.
+          var nameEl = item.querySelector('.jdgm-rev__author') ||
+            item.querySelector('[class*="reviewer-name"]') ||
+            item.querySelector('[class*="author"], [class*="name"]');
+
+          // Count filled stars
+          var starCount = 5;
+          if (ratingEl) {
+            var filled = ratingEl.querySelectorAll('[class*="full"], [class*="filled"], .jdgm-star--full');
+            if (filled.length > 0) starCount = filled.length;
+            else {
+              var lbl = ratingEl.getAttribute('aria-label') || '';
+              var m = lbl.match(/(\d)/);
+              if (m) starCount = parseInt(m[1]);
+            }
+          }
+
+          var stars = '★'.repeat(starCount) + '☆'.repeat(5 - starCount);
+          var title = stripDate(titleEl ? titleEl.textContent.trim() : '');
+          var body = stripDate(bodyEl ? bodyEl.textContent.trim() : '');
+          var name = stripDate(nameEl ? nameEl.textContent.trim() : 'Customer') || 'Customer';
+
+          if (!body && !title) return; // skip empty
+
+          cards.push(
+            '<figure class="gg-review-card">' +
+              '<div class="gg-stars" aria-label="' + starCount + ' out of 5 stars">' + stars + '</div>' +
+              (title ? '<strong class="gg-rev-title">' + title + '</strong>' : '') +
+              '<blockquote>&#8220;' + body + '&#8221;</blockquote>' +
+              '<figcaption><b>' + name + '</b><em>Verified Buyer</em></figcaption>' +
+            '</figure>'
+          );
+        });
+
+        if (cards.length === 0) return false;
+
+        rail.innerHTML = cards.join('');
+        return true;
+      }
+
+      // Try immediately, then poll until Judge.me renders
+      if (!extractAndRender()) {
+        var attempts = 0;
+        var interval = setInterval(function() {
+          attempts++;
+          if (extractAndRender() || attempts > 30) {
+            clearInterval(interval);
+          }
+        }, 200);
+      }
+    })();
+    </script>
+
+
+  </main>
+
+  <!-- Sticky mobile bar -->
+  <div class="gg-sticky">
+    <div>
+      <div class="l">Total</div>
+      <div class="a" id="gg-sticky-price">{{ product.price | money }}</div>
+    </div>
+    <button type="button" class="gg-add-btn" id="gg-sticky-add-btn">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="gg-toast" id="gg-toast"></div>
+  <div class="gg-quote-toast" id="gg-quote-toast"></div>
+
+  <!-- Product Data JSON -->
+  <script type="application/json" id="gg-product-json">
+    {{ product | json }}
+  </script>
+
+  <!-- Tile Colors JSON — every color option value on this product, pulled dynamically -->
+  <script type="application/json" id="gg-colors-json">
+    [
+      {%- liquid
+        assign gg_color_opt = nil
+        for opt in product.options_with_values
+          assign gg_has_sw = opt.values | map: 'swatch' | compact | size
+          if gg_has_sw > 0 and gg_color_opt == nil
+            assign gg_color_opt = opt
+          endif
+        endfor
+        if gg_color_opt == nil
+          for opt in product.options_with_values
+            assign gg_oname = opt.name | downcase
+            if gg_oname == 'color' or gg_oname == 'colour' or gg_oname == 'tile color' or gg_oname == 'tile colour'
+              assign gg_color_opt = opt
+              break
+            endif
+          endfor
+        endif
+      -%}
+      {%- if gg_color_opt -%}
+        {%- assign gg_opt_pos = gg_color_opt.position -%}
+        {%- for val in gg_color_opt.values -%}
+          {%- assign gg_val_str = val.name | default: val | strip -%}
+          {%- assign gg_mv = nil -%}
+          {%- for v in product.variants -%}
+            {%- if gg_mv == nil -%}
+              {%- assign gg_v_opt = '' -%}
+              {%- if gg_opt_pos == 1 -%}{%- assign gg_v_opt = v.option1 -%}
+              {%- elsif gg_opt_pos == 2 -%}{%- assign gg_v_opt = v.option2 -%}
+              {%- elsif gg_opt_pos == 3 -%}{%- assign gg_v_opt = v.option3 -%}
+              {%- endif -%}
+              {%- if gg_v_opt == gg_val_str -%}{%- assign gg_mv = v -%}{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign gg_sw_img = blank -%}
+          {%- if val.swatch.image -%}
+            {%- assign gg_sw_img = val.swatch.image | image_url: width: 200 -%}
+          {%- elsif gg_mv.featured_media -%}
+            {%- assign gg_sw_img = gg_mv.featured_media | image_url: width: 200 -%}
+          {%- elsif gg_mv.featured_image -%}
+            {%- assign gg_sw_img = gg_mv.featured_image | image_url: width: 200 -%}
+          {%- endif -%}
+          {%- assign gg_sw_rgb = '' -%}
+          {%- if val.swatch.color -%}
+            {%- assign gg_sw_rgb = val.swatch.color.rgb -%}
+          {%- endif -%}
+          {
+            "name": {{ gg_val_str | json }},
+            "image": {{ gg_sw_img | json }},
+            "rgb": {{ gg_sw_rgb | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      {%- endif -%}
+    ]
+  </script>
+
+  <!-- Script logic -->
+  <script>
+    window.GG_JSPDF_URL = {{ 'jspdf.umd.min.js' | asset_url | json }};
+    window.GG_PATTERN_IMAGES = {
+      checkered: {{ 'gg-pattern-checkered-classic.jpeg' | asset_url | json }},
+      racetrack: {{ 'gg-pattern-racetrack.jpeg' | asset_url | json }},
+      showroom: {{ 'gg-pattern-showroom.jpeg' | asset_url | json }},
+      doubleborder: {{ 'gg-pattern-double-border.jpeg' | asset_url | json }},
+      solid: {{ 'gg-pattern-stealth-solid.jpeg' | asset_url | json }}
+    };
+  </script>
+  <script src="{{ 'gg-react-configurator-custom.js' | asset_url }}" defer></script>
+
+</div>

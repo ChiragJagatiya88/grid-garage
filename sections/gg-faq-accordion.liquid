@@ -1,0 +1,242 @@
+{%- comment -%}
+  FAQ Accordion — Expandable question/answer section.
+  Light grey background, accordion behavior, smooth animations.
+{%- endcomment -%}
+{{ 'gg-faq-accordion.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'gg-faq-accordion.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign head_align = 'center'
+  if section.settings.heading_alignment == 'left'
+    assign head_align = 'left'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shopify-section-{{ section.id }} .gg-faq {
+    --gg-faq-bg: {{ section.settings.background_color.red }},{{ section.settings.background_color.green }},{{ section.settings.background_color.blue }};
+    --gg-faq-question: {{ section.settings.question_color.red }},{{ section.settings.question_color.green }},{{ section.settings.question_color.blue }};
+    --gg-faq-answer: {{ section.settings.answer_color.red }},{{ section.settings.answer_color.green }},{{ section.settings.answer_color.blue }};
+    --gg-faq-border: {{ section.settings.border_color.red }},{{ section.settings.border_color.green }},{{ section.settings.border_color.blue }};
+    --gg-faq-max-width: {{ section.settings.container_max_width }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="gg-faq section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-open-first="{{ section.settings.open_first_item }}"
+>
+  <div class="gg-faq__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="gg-faq__heading gg-font-heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="gg-faq__list" role="region" aria-label="Frequently asked questions">
+        {%- for block in section.blocks -%}
+          <div
+            class="gg-faq__item{% if section.settings.open_first_item and forloop.first %} is-open{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+            style="{% if settings.animations_reveal_on_scroll %}--animation-order: {{ forloop.index }}{% endif %}"
+          >
+            <button
+              type="button"
+              class="gg-faq__question"
+              aria-expanded="{% if section.settings.open_first_item and forloop.first %}true{% else %}false{% endif %}"
+            >
+              <span class="gg-faq__question-text gg-font-heading">{{ block.settings.question | escape }}</span>
+              <span class="gg-faq__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path class="gg-faq__icon-h" d="M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path class="gg-faq__icon-v" d="M10 4V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+
+            {% if block.settings.answer != blank %}
+              <div class="gg-faq__answer" role="region">
+                <div class="gg-faq__answer-inner gg-font-body">
+                  {{ block.settings.answer }}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GG: FAQ accordion",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "min": 600,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Container max width",
+      "default": 800
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_item",
+      "label": "Open first item by default",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "question_color",
+      "label": "Question text",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "answer_color",
+      "label": "Answer text",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Divider color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is your question?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Enter your answer here. This can include formatting like <strong>bold</strong> or <em>italic</em> text.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GG: FAQ accordion",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do I need to measure my garage?",
+            "answer": "<p>No, our standard kits are designed to fit most 2-car and 3-car garages. Each kit includes tiles that can be easily trimmed to fit your exact space.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is shipping really included?",
+            "answer": "<p>Yes! All our garage flooring kits include free shipping within the continental United States. No hidden fees or surprises at checkout.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I install this myself?",
+            "answer": "<p>Absolutely. Our modular tiles snap together easily without any special tools, glue, or professional help. Most installations take just a few hours.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What if my garage is slightly different in size?",
+            "answer": "<p>Our tiles can be easily cut with a utility knife or saw to fit any space. We also offer expansion kits for larger garages.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Most orders arrive within 5-7 business days. You'll receive tracking information as soon as your order ships.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

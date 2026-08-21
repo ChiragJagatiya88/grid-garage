@@ -1,0 +1,238 @@
+{%- comment -%}
+  Figma node 551:930 — Floor page: full-bleed image, dark panel, feature list with icons.
+{%- endcomment -%}
+{{ 'floor-garage-sections.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign panel_a = section.settings.panel_opacity | times: 0.01
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .flr-epoxy {
+    --floor-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};
+    --floor-epoxy-panel-rgb: {{ section.settings.panel_color.red }},{{ section.settings.panel_color.green }},{{ section.settings.panel_color.blue }};
+    --floor-epoxy-panel-a: {{ panel_a }};
+    --floor-epoxy-min-h: {{ section.settings.min_height }}px;
+    --floor-epoxy-panel-w: {{ section.settings.panel_width }}%;
+  }
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section class="floor-sec flr-epoxy section-{{ section.id }}-padding">
+  <div class="flr-epoxy__bg" aria-hidden="true">
+    {%- if section.settings.background_image != blank -%}
+      {{
+        section.settings.background_image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'lazy',
+          sizes: '100vw',
+          widths: '750,1100,1500,2000,2400',
+          alt: section.settings.background_image.alt | escape
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+
+  <div class="gg-page-width flr-epoxy__page">
+    <div class="flr-epoxy__layout">
+      <div class="flr-epoxy__panel">
+        {%- if section.settings.heading_image != blank -%}
+          <div class="flr-epoxy__heading-img">
+            {{
+              section.settings.heading_image
+              | image_url: width: 1200
+              | image_tag:
+                loading: 'lazy',
+                sizes: '(min-width: 750px) min(38.75rem, 38vw), calc(100vw - 8rem)',
+                widths: '375,550,800,1100,1200',
+                alt: section.settings.heading_image.alt | default: section.settings.heading | escape
+            }}
+          </div>
+        {%- elsif section.settings.heading != blank -%}
+          <h2 class="flr-epoxy__heading-text">{{ section.settings.heading | newline_to_br }}</h2>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'feature' -%}
+              <div class="flr-epoxy__feature" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon != blank -%}
+                  {{
+                    block.settings.icon
+                    | image_url: width: 120
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'flr-epoxy__icon',
+                      widths: '80,120',
+                      alt: block.settings.title | escape
+                  }}
+                {%- endif -%}
+                {%- if block.settings.title != blank -%}
+                  <h3 class="flr-epoxy__feature-title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <div class="flr-epoxy__feature-body rte">{{ block.settings.text }}</div>
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      <div class="flr-epoxy__spacer" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Floor: Epoxy comparison",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_image",
+      "label": "Heading image",
+      "info": "Optional graphic (for example SVG). If empty, heading text is used."
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading (text fallback)",
+      "default": "Leave epoxy in the dust"
+    },
+    {
+      "type": "color",
+      "id": "panel_color",
+      "label": "Panel color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "panel_opacity",
+      "min": 50,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Panel opacity",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "panel_width",
+      "min": 30,
+      "max": 55,
+      "step": 1,
+      "unit": "%",
+      "label": "Panel width (large screens)",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "min": 320,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Minimum height",
+      "default": 720
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (rich text highlights)",
+      "default": "#E11D48"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add descriptive copy for this benefit.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floor: Epoxy comparison",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Eliminate hot tire pickup",
+            "text": "<p>Most epoxy coatings don't stand up against scuffing issues caused by tires from a vehicle.</p>"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Avoid epoxy yellowing from UV exposure",
+            "text": "<p>If areas of your garage are exposed to sunlight, over time an epoxy coating will yellow from UV exposure.</p>"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Don't worry about fixing peeling epoxy",
+            "text": "<p>The biggest issue with epoxy garage floor coatings is that they eventually start to chip and peel.</p>"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Skip use of dangerous chemicals",
+            "text": "<p>Epoxy garage floor coatings require prep, often with hazardous chemicals. Choose the <strong>quick and easy garage floor installation</strong> option instead.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

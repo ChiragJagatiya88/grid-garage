@@ -1,0 +1,934 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "if-new-pdp-v1",
+      "blocks": {
+        "gallery_image_wH4ekE": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625936.jpg"
+          }
+        },
+        "gallery_image_fmYTTR": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625937.jpg"
+          }
+        },
+        "gallery_image_8LKeTe": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625940_ec1d81f4-e935-412d-9358-d4be6e5666f0.jpg"
+          }
+        },
+        "gallery_image_YF8bK6": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625937_d59f4fc3-f3aa-4c96-9d36-55f5099280f0.jpg"
+          }
+        },
+        "gallery_image_hPxGGX": {
+          "type": "gallery_image",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625938.jpg"
+          }
+        },
+        "benefit_shipping": {
+          "type": "benefit",
+          "settings": {
+            "text": "Free Shipping Included",
+            "icon_preset": "truck",
+            "icon": "shopify://shop_images/truck-fast.svg"
+          }
+        },
+        "benefit_clean": {
+          "type": "benefit",
+          "settings": {
+            "text": "Stain Resistant and Easy to Clean",
+            "icon_preset": "clean",
+            "icon": "shopify://shop_images/Weigher.svg"
+          }
+        },
+        "benefit_diy": {
+          "type": "benefit",
+          "settings": {
+            "text": "DIY Installation in Hours",
+            "icon_preset": "clock",
+            "icon": "shopify://shop_images/History_3.svg"
+          }
+        },
+        "benefit_delivery": {
+          "type": "benefit",
+          "settings": {
+            "text": "Delivered in 2-6 days",
+            "icon_preset": "package",
+            "icon": "shopify://shop_images/3d-rotate.svg"
+          }
+        },
+        "benefit_return": {
+          "type": "benefit",
+          "settings": {
+            "text": "30-Day Money-Back",
+            "icon_preset": "return",
+            "icon": "shopify://shop_images/money-send.svg"
+          }
+        },
+        "benefit_water": {
+          "type": "benefit",
+          "settings": {
+            "text": "Water Resistant",
+            "icon_preset": "water",
+            "icon": "shopify://shop_images/Waterdrop.svg"
+          }
+        },
+        "acc_why": {
+          "type": "accordion",
+          "settings": {
+            "title": "WHY IT WORKS",
+            "content": "<p>Engineered for everyday garage use, our premium interlocking tiles create a durable, professional-looking floor that handles vehicles, tools, spills, and heavy use. The open-grid design allows airflow and drainage while the interlocking system keeps your floor securely in place.</p>"
+          }
+        },
+        "acc_how": {
+          "type": "accordion",
+          "settings": {
+            "title": "EASY TO INSTALL",
+            "content": "<p>No glue, coatings, or professional installer required. Start on a clean, level surface and simply snap the tiles together row by row. Trim tiles where needed along walls and finish the garage entrance with the included tapered edge pieces. Most garages can be transformed in just a few hours.</p>"
+          }
+        },
+        "acc_specs": {
+          "type": "accordion",
+          "settings": {
+            "title": "SPECIFICATIONS",
+            "content": "<p>Your GridGarage kit is custom calculated for your space and includes the interlocking floor tiles needed for your selected size, pattern, and colors, plus matching front entrance edge pieces. Tile dimensions, construction, 45,000 weight capacity, warranty, and available colors vary by the collection selected.</p>"
+          }
+        },
+        "acc_shipping": {
+          "type": "accordion",
+          "settings": {
+            "title": "SHIPPING & RETURNS",
+            "content": "<p>Free nationwide shipping is included with qualifying GridGarage kits. Most orders ship within 2–6 business days. Every kit is backed by our 30-day money-back guarantee. See our Shipping & Returns Policy for complete details. All tiles have a 20 year warranty.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "gallery_image_wH4ekE",
+        "gallery_image_fmYTTR",
+        "gallery_image_8LKeTe",
+        "gallery_image_YF8bK6",
+        "gallery_image_hPxGGX",
+        "benefit_shipping",
+        "benefit_clean",
+        "benefit_diy",
+        "benefit_delivery",
+        "benefit_return",
+        "benefit_water",
+        "acc_why",
+        "acc_how",
+        "acc_specs",
+        "acc_shipping"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "use_product_media": true,
+        "show_rating": true,
+        "rating_stars": 5,
+        "rating_text": "<p><strong>4.9/5</strong></p>",
+        "badge_text": "",
+        "badge_icon": "shopify://shop_images/Heart_Angle.svg",
+        "eyebrow": "PREMIUM GARAGE FLOOR KIT",
+        "heading": "Transform Your Garage Into a Space You're Proud to Show Off.",
+        "description": "<p>Upgrade cracked concrete into a clean, premium garage floor in just a few hours. Our modular interlocking tiles are built to handle heavy vehicles, resist stains, and install without glue, or contractors.</p>",
+        "use_product_description": false,
+        "benefits_heading": "Key Benefits",
+        "primary_btn_label": "LET'S START CUSTOMIZING",
+        "primary_btn_link": "",
+        "secondary_btn_label": "2-CAR GARAGE KIT",
+        "secondary_btn_link": "",
+        "finance_text": "Finance Available at Checkout",
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#e61e43",
+        "accent_soft": "#fce9eb",
+        "enable_custom_padding": true,
+        "padding_desk": "40px",
+        "padding_mob": "24px"
+      }
+    },
+    "configurator": {
+      "type": "if-pdp-configurator",
+      "blocks": {
+        "ugc_install": {
+          "type": "ugc",
+          "settings": {
+            "text": "Easy Install, Snap and go technology",
+            "icon_preset": "clock",
+            "icon": "shopify://shop_images/History_3.svg"
+          }
+        },
+        "ugc_weight": {
+          "type": "ugc",
+          "settings": {
+            "text": "Supports Up to 75,000 lbs",
+            "icon_preset": "clean",
+            "icon": "shopify://shop_images/Weigher.svg"
+          }
+        },
+        "ugc_shipping": {
+          "type": "ugc",
+          "settings": {
+            "text": "Free Shipping Included",
+            "icon_preset": "truck",
+            "icon": "shopify://shop_images/truck-fast.svg"
+          }
+        },
+        "ugc_clean": {
+          "type": "ugc",
+          "settings": {
+            "text": "Easy to Clean, Vac Blower or Hose Off",
+            "icon_preset": "package",
+            "icon": "shopify://shop_images/3d-rotate.svg"
+          }
+        },
+        "ugc_return": {
+          "type": "ugc",
+          "settings": {
+            "text": "30-Day Money-Back",
+            "icon_preset": "return",
+            "icon": "shopify://shop_images/money-send.svg"
+          }
+        },
+        "ugc_drainage": {
+          "type": "ugc",
+          "settings": {
+            "text": "Flow Thur Self Drainage - Keeps Floors Dry & Slip Free",
+            "icon_preset": "water",
+            "icon": "shopify://shop_images/Waterdrop.svg"
+          }
+        }
+      },
+      "block_order": [
+        "ugc_install",
+        "ugc_weight",
+        "ugc_shipping",
+        "ugc_clean",
+        "ugc_return",
+        "ugc_drainage"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "heading": "Design Your Own Perfect Garage",
+        "subtitle": "From cracked concrete to a garage you’ll actually be proud to open every day. (Select your tile here, then continue below to customize your size, pattern & colors.)",
+        "intro_logo": "shopify://shop_images/Authorized_Dealer_Logo_2.png",
+        "intro_logo_width": 96,
+        "choose_label": "Step 1: Choose Tile",
+        "tile_collection": "complete-garage-floor-kits",
+        "show_swatches": true,
+        "size_heading": "Step 2: Enter Floor Size",
+        "pattern_heading": "Step 3: Choose Pattern",
+        "color_heading": "Step 4: Choose Color",
+        "custom_banner_text": "<p>Every custom order ships as a complete, ready-to-install kit interlocking tiles plus all Front Entrance Edge Pieces Included Every GridGarage kit includes tapered edge pieces for your garage entrance pre-calculated for your exact floor.</p>",
+        "show_spaces": false,
+        "spaces_heading": "Great for these spaces",
+        "spaces_text": "Garage Floors, Gyms, Workshops, Auto Detailing, Showrooms, Basements, Patios, Man Caves & more.",
+        "summary_heading": "Your Dream Garage",
+        "quote_url": "",
+        "support_phone_label": "(888) 898-8022",
+        "support_phone": "8888988022",
+        "support_email": "info@gridgarageinc.com",
+        "show_edge_notice": true,
+        "edge_notice_text": "<p>Front Entrance Edge Pieces Included. Every 1, 2, and 3-car garage kit includes matching tapered front edge pieces. Need full-perimeter edges? Contact us via email.</p>",
+        "edge_notice_bg": "#ffffff",
+        "edge_notice_border": "#e8e8e8",
+        "show_bonus_box": true,
+        "bonus_box_heading": "GRIDGARAGE SHOWCASE BONUS",
+        "bonus_box_text": "Share photos, a short video, and a review of your completed project to earn $50. (Eligible on projects over 300 sq. ft)",
+        "bonus_box_bg": "#fce9eb",
+        "bonus_box_border": "#f5b8c0",
+        "bonus_box_title_color": "#dc1c1b",
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#e61e43",
+        "enable_custom_padding": true,
+        "padding_desk": "40px 0",
+        "padding_mob": "28px 0"
+      }
+    },
+    "reviews": {
+      "type": "if-customer-reviews",
+      "blocks": {
+        "rev_1": {
+          "type": "review",
+          "settings": {
+            "title": "Perfect for our home gym",
+            "body": "“Love this for our gym out here in Florida, the SwissTrax line is highly recommended. It handles all our heavy workout gear with zero issues.”",
+            "author": "Jessica Reynolds",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "rev_2": {
+          "type": "review",
+          "settings": {
+            "title": "Answered all my questions",
+            "body": "“I was building my mancave and couldn't figure out the right flooring system. GridGarage answered all my questions.”",
+            "author": "Jason Peters",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "rev_3": {
+          "type": "review",
+          "settings": {
+            "title": "Affordable and easy decision",
+            "body": "“No brainer decision once I did my research, the price was very affordable compared to other flooring options.”",
+            "author": "Marcus T.",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "rev_4": {
+          "type": "review",
+          "settings": {
+            "title": "Amazing customer service",
+            "body": "“Highly recommend grid garage, amazing customer service.”",
+            "author": "Rachel G.",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "rev_5": {
+          "type": "review",
+          "settings": {
+            "title": "Brilliant",
+            "body": "“A tinkerers dream. As someone who spends every weekend fixing up old motorcycles, I needed a clean, durable workspace. Ordering the full flooring package allowed me to transform the room in one afternoon. The modular aspect is brilliant.”",
+            "author": "Elena R.",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "review_CpfCyc": {
+          "type": "review",
+          "settings": {
+            "title": "Premium Quality",
+            "body": "“Worth every penny. It is a premium price, but you get premium quality. The interlocking tiles do not budge even under my heaviest equipment. The website installation videos were also a massive help.”",
+            "author": "Chloe V.",
+            "verified": true,
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "rev_1",
+        "rev_2",
+        "rev_3",
+        "rev_4",
+        "rev_5",
+        "review_CpfCyc"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "eyebrow": "Customer Reviews",
+        "heading": "Loved by garage owners nationwide",
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "70px 0",
+        "padding_mob": "50px 0"
+      }
+    },
+    "1786021508590ff12d": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_hh3k3p": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "disabled": true,
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_hh3k3p"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "upgrade": {
+      "type": "if-upgrade-garage",
+      "blocks": {
+        "feat_1": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/img_1.png",
+            "title": "No More Cracked Concrete",
+            "text": "Cover damaged slabs with a finished interlocking surface that looks clean and professional.",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "feat_2": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/img_2.png",
+            "title": "Skip the Epoxy Mess",
+            "text": "No grinding, fumes, or cure times — modular tiles install dry and are ready for use the same day.",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "feat_3": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/img_3.png",
+            "title": "Built for Spills & Traffic",
+            "text": "Resist oil, dirt, and daily wear while staying easy to wipe down and keep looking sharp.",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "feat_4": {
+          "type": "feature",
+          "settings": {
+            "image": "shopify://shop_images/img_4.png",
+            "title": "A Garage You're Proud Of",
+            "text": "Turn storage space into a show-ready floor that elevates every vehicle and tool in the room.",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "feat_1",
+        "feat_2",
+        "feat_3",
+        "feat_4"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "columns": 4,
+        "heading": "Upgrade Your Garage Floor",
+        "subheading": "",
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "70px",
+        "padding_mob": "50px"
+      }
+    },
+    "promise": {
+      "type": "if-promise-banner",
+      "blocks": {
+        "prm_1": {
+          "type": "promise",
+          "settings": {
+            "icon_preset": "click",
+            "icon": "shopify://shop_images/Layer_1.svg",
+            "title": "One Click",
+            "text": "No measuring or calculators needed"
+          }
+        },
+        "prm_2": {
+          "type": "promise",
+          "settings": {
+            "icon_preset": "money",
+            "icon": "shopify://shop_images/Capa_1.svg",
+            "title": "One Price",
+            "text": "Shipping and essentials included"
+          }
+        },
+        "prm_3": {
+          "type": "promise",
+          "settings": {
+            "icon_preset": "gift",
+            "icon": "shopify://shop_images/Layer_1_1.svg",
+            "title": "No Surprises",
+            "text": "Everything arrives ready to install"
+          }
+        }
+      },
+      "block_order": [
+        "prm_1",
+        "prm_2",
+        "prm_3"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "section_bg": "#dc1c1b",
+        "section_gradient_bg": "",
+        "bg_image": "shopify://shop_images/Group_2147228641.jpg",
+        "bg_image_mobile": "shopify://shop_images/Group_2147228687.jpg",
+        "show_pattern": true,
+        "text_color": "#ffffff",
+        "icon_bg": "#ffffff",
+        "icon_color": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "30px",
+        "padding_mob": "30px"
+      }
+    },
+    "before_after": {
+      "type": "if-before-after",
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": false,
+        "eyebrow": "",
+        "heading": "",
+        "before_image": "shopify://shop_images/0b8dcc0fe2afc974834122460ea0ea391308f6a1.png",
+        "after_image": "shopify://shop_images/cb1fb75d32edfbb3b6539f319b981e0e1d919c4f.png",
+        "before_label": "BEFORE",
+        "after_label": "AFTER",
+        "initial_position": 50,
+        "aspect_w": 16,
+        "aspect_h": 9,
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "70px 0",
+        "padding_mob": "50px 0"
+      }
+    },
+    "product_details": {
+      "type": "if-product-details",
+      "blocks": {
+        "pd_tl": {
+          "type": "detail",
+          "settings": {
+            "position": "tl",
+            "title": "Tile Size",
+            "value": "{{ product.metafields.custom.tile_size.value }}"
+          }
+        },
+        "pd_tr": {
+          "type": "detail",
+          "settings": {
+            "position": "tr",
+            "title": "Use",
+            "value": "{{ product.metafields.custom.use.value }}"
+          }
+        },
+        "pd_ml": {
+          "type": "detail",
+          "settings": {
+            "position": "ml",
+            "title": "Material",
+            "value": "{{ product.metafields.custom.material.value }}"
+          }
+        },
+        "pd_mr": {
+          "type": "detail",
+          "settings": {
+            "position": "mr",
+            "title": "Drainage",
+            "value": "{{ product.metafields.custom.drainage.value }}"
+          }
+        },
+        "pd_bt": {
+          "type": "detail",
+          "settings": {
+            "position": "bottom",
+            "title": "Durability",
+            "value": "{{ product.metafields.custom.load_durability.value }}"
+          }
+        }
+      },
+      "block_order": [
+        "pd_tl",
+        "pd_tr",
+        "pd_ml",
+        "pd_mr",
+        "pd_bt"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "heading": "Product Details",
+        "image": "{{ product.featured_image }}",
+        "section_bg": "#ffffff",
+        "section_gradient_bg": "",
+        "accent_color": "#dc1c1b",
+        "card_bg": "#fce9e9",
+        "card_glow": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "70px",
+        "padding_mob": "50px"
+      }
+    },
+    "choose_style": {
+      "type": "if-choose-style",
+      "blocks": {
+        "sty_1": {
+          "type": "style",
+          "settings": {
+            "title": "Grid Garage X",
+            "image": "shopify://shop_images/Black.png"
+          }
+        },
+        "sty_2": {
+          "type": "style",
+          "settings": {
+            "title": "DiamondTrax",
+            "image": "shopify://shop_images/product2.png"
+          }
+        },
+        "sty_3": {
+          "type": "style",
+          "settings": {
+            "title": "Ribtrax Smooth",
+            "image": "shopify://shop_images/RackMultipart20260427-14316-cpg6mo.webp"
+          }
+        },
+        "sty_4": {
+          "type": "style",
+          "settings": {
+            "title": "Ribtrax Pro",
+            "image": "shopify://shop_images/RackMultipart20260427-9321-s1m6qr.webp"
+          }
+        }
+      },
+      "block_order": [
+        "sty_1",
+        "sty_2",
+        "sty_3",
+        "sty_4"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "heading": "Choose Your Style",
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "panel_bg": "#e8e8e8",
+        "accent_color": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "50px 0",
+        "padding_mob": "50px 0"
+      }
+    },
+    "spaces_grid": {
+      "type": "if-spaces-grid",
+      "blocks": {
+        "sp_1": {
+          "type": "space",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625969.jpg",
+            "title": "Garage",
+            "link": ""
+          }
+        },
+        "sp_2": {
+          "type": "space",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625970.jpg",
+            "title": "Home Gyms",
+            "link": ""
+          }
+        },
+        "sp_3": {
+          "type": "space",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625971.jpg",
+            "title": "Man Caves",
+            "link": ""
+          }
+        },
+        "sp_4": {
+          "type": "space",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625972.jpg",
+            "title": "Workshops",
+            "link": ""
+          }
+        },
+        "sp_5": {
+          "type": "space",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625973.jpg",
+            "title": "Basements",
+            "link": ""
+          }
+        },
+        "sp_6": {
+          "type": "space",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625974.jpg",
+            "title": "Patios",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "sp_1",
+        "sp_2",
+        "sp_3",
+        "sp_4",
+        "sp_5",
+        "sp_6"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "mobile_per_page": 3,
+        "heading": "More Than Just a Garage Floor",
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "70px 0",
+        "padding_mob": "50px 0"
+      }
+    },
+    "faq": {
+      "type": "if-faq-accordion",
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "Do I need to measure my garage?",
+            "answer": "<p>No, our standard kits are designed to fit most 2-car and 3-car garages. Each kit includes tiles that can be easily trimmed to fit your exact space.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Is shipping really included?",
+            "answer": "<p>Yes! All our garage flooring kits include free shipping within the continental United States. No hidden fees or surprises at checkout.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I install this myself?",
+            "answer": "<p>Absolutely. Our modular tiles snap together easily without any special tools, glue, or professional help. Most installations take just a few hours.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "What if my garage is slightly different in size?",
+            "answer": "<p>Our tiles can be easily cut with a utility knife or saw to fit any space. We also offer expansion kits for larger garages.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Most orders arrive within 3-6 business days. You'll receive tracking information as soon as your order ships.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "open_first": true,
+        "one_at_a_time": true,
+        "heading": "Frequently Asked Questions",
+        "section_bg": "#f5f5f5",
+        "section_gradient_bg": "",
+        "panel_bg": "#ffffff",
+        "row_bg": "#f7f7f7",
+        "accent_color": "#111111",
+        "enable_custom_padding": true,
+        "padding_desk": "60px",
+        "padding_mob": "50px"
+      }
+    },
+    "style_coverflow": {
+      "type": "if-style-coverflow",
+      "blocks": {
+        "cf_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/fd14424e60e6de2d7562ab5ba24e1d2755a188f7.png",
+            "title": ""
+          }
+        },
+        "cf_2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ba05f280caeb7a9a0b91ad89a5760deed54b36a3.png",
+            "title": ""
+          }
+        },
+        "cf_3": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/8638e1b9ec18709e7433b86bbd056597499f481c.png",
+            "title": ""
+          }
+        },
+        "cf_4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/3b72b9f9233e5b5077ea01fdc7ee8a8ed2b9f069.png",
+            "title": ""
+          }
+        },
+        "cf_5": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/e6e333cd18816cebd7b5a177a9dc086482c87260.png",
+            "title": ""
+          }
+        },
+        "cf_6": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/9ef470d9be8c09943b9c76f474985dfd05f8fdb3.png",
+            "title": ""
+          }
+        },
+        "cf_7": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/93fa9983982ba9b5951dad6e432085d72d6e1310.png",
+            "title": ""
+          }
+        },
+        "cf_8": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/9ef470d9be8c09943b9c76f474985dfd05f8fdb3.png",
+            "title": ""
+          }
+        },
+        "cf_9": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/93fa9983982ba9b5951dad6e432085d72d6e1310.png",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "cf_1",
+        "cf_2",
+        "cf_3",
+        "cf_4",
+        "cf_5",
+        "cf_6",
+        "cf_7",
+        "cf_8",
+        "cf_9"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "heading": "Choose Your Style. One Price. No Surprises. Shipping is included.",
+        "bg_image": "shopify://shop_images/Rectangle_34625976.jpg",
+        "overlay_opacity": 0,
+        "btn_label": "SHOP NOW",
+        "btn_link": "",
+        "accent_color": "#dc1c1b",
+        "enable_custom_padding": true,
+        "padding_desk": "60px",
+        "padding_mob": "50px"
+      }
+    },
+    "ticker_bar": {
+      "type": "if-ticker-bar",
+      "blocks": {
+        "tk_1": {
+          "type": "item",
+          "settings": {
+            "text": "Lifetime Tile Warranty",
+            "show_check": true
+          }
+        },
+        "tk_2": {
+          "type": "item",
+          "settings": {
+            "text": "Free Shipping on Garage Kits",
+            "show_check": true
+          }
+        },
+        "tk_3": {
+          "type": "item",
+          "settings": {
+            "text": "DIY Installation",
+            "show_check": true
+          }
+        },
+        "tk_4": {
+          "type": "item",
+          "settings": {
+            "text": "Lifetime Tile Warranty",
+            "show_check": true
+          }
+        }
+      },
+      "block_order": [
+        "tk_1",
+        "tk_2",
+        "tk_3",
+        "tk_4"
+      ],
+      "disabled": true,
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "speed": 30,
+        "bar_bg": "#dc1c1b",
+        "text_color": "#ffffff",
+        "enable_custom_padding": false,
+        "padding_desk": "0",
+        "padding_mob": "0"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "configurator",
+    "reviews",
+    "1786021508590ff12d",
+    "upgrade",
+    "promise",
+    "before_after",
+    "product_details",
+    "choose_style",
+    "spaces_grid",
+    "faq",
+    "style_coverflow",
+    "ticker_bar"
+  ]
+}

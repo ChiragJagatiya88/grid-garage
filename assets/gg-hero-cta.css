@@ -1,0 +1,168 @@
+/* Grid Garage — Hero CTA Banner
+   Full-width background image with overlay, centered content. */
+
+.gg-hc {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--gg-hc-height-m, 350px);
+  overflow: hidden;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-hc {
+    min-height: var(--gg-hc-height-d, 450px);
+  }
+}
+
+/* Background */
+.gg-hc__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Image */
+.gg-hc__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.gg-hc__image--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--gg-black), 0.1);
+}
+
+.gg-hc__image--placeholder .placeholder-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Overlay */
+.gg-hc__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(var(--gg-hc-overlay, 0, 0, 0), var(--gg-hc-overlay-opacity, 0.5));
+  z-index: 1;    display: block !important;
+}
+
+/* Content */
+.gg-hc__content {
+  position: relative;
+  z-index: 2;
+  max-width: var(--gg-hc-max-width, 700px);
+  padding: 3rem var(--gg-page-pad);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-hc__content {
+    padding: 4rem var(--gg-page-pad);
+    gap: 3rem;
+  }
+}
+
+/* Heading */
+.gg-hc__heading {
+  font-size: var(--gg-hc-head-m, 28px);
+  font-weight: 700;
+  color: rgb(var(--gg-white));
+  line-height: 1.25;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+@media screen and (min-width: 750px) {
+  .gg-hc__heading {
+    font-size: var(--gg-hc-head-d, 40px);
+    line-height: 1.2;
+  }
+}
+
+/* Button */
+.gg-hc__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem 3.2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.6rem;
+  transition: transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+  will-change: transform;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-hc__button {
+    font-size: 1.6rem;
+    padding: 1.6rem 4rem;
+  }
+}
+
+.gg-hc__button:not(:disabled):hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(var(--gg-accent), 0.4);
+}
+
+.gg-hc__button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.gg-hc__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button styles */
+.gg-hc__button.gg-btn {
+  background-color: rgb(var(--gg-accent));
+  color: rgb(var(--gg-white));
+  border: none;
+}
+
+.gg-hc__button.gg-btn--secondary {
+  background-color: rgb(var(--gg-white));
+  color: rgb(var(--gg-black));
+  border: none;
+}
+
+.gg-hc__button.gg-btn--outline {
+  background-color: transparent;
+  color: rgb(var(--gg-white));
+  border: 2px solid rgb(var(--gg-white));
+}
+
+.gg-hc__button.gg-btn--outline:not(:disabled):hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Form */
+.gg-hc__form {
+  display: flex;
+  justify-content: center;
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 749px) {
+  .gg-hc__heading {
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .gg-hc__button {
+    width: 100%;
+    max-width: 30rem;
+  }
+}
