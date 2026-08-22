@@ -235,29 +235,7 @@
                       <p class="if-cfg__tile-name">{{ tile_title | escape }}</p>
                       <p class="if-cfg__tile-size">{{ tile_size | escape }}</p>
                       {%- if section.settings.show_price -%}
-                        {%- assign if_tile_tags = tile_product.tags | join: ',' | downcase -%}
-                        {%- if if_tile_tags contains 'price by consultation' -%}
-                          <p class="if-cfg__tile-price if-cfg__tile-price--quote">Please Call or Email for Pricing</p>
-                        {%- else -%}
-                          {%- assign if_tile_custom = nil -%}
-                          {%- for v in tile_product.variants -%}
-                            {%- assign vt = v.title | downcase -%}
-                            {%- assign v_is_custom_sqft = false -%}
-                            {%- if vt contains 'per sq' or vt contains 'per-sq' or vt contains 'sqft' or vt contains 'sq ft' -%}
-                              {%- assign v_is_custom_sqft = true -%}
-                            {%- elsif v.option1 != blank -%}
-                              {%- assign o1 = v.option1 | downcase -%}
-                              {%- if o1 contains 'per sq' or o1 contains 'per-sq' or o1 contains 'custom (per' -%}
-                                {%- assign v_is_custom_sqft = true -%}
-                              {%- endif -%}
-                            {%- endif -%}
-                            {%- if if_tile_custom == nil and v_is_custom_sqft -%}
-                              {%- assign if_tile_custom = v -%}
-                            {%- endif -%}
-                          {%- endfor -%}
-                          {%- assign if_tile_price = if_tile_custom.price | default: tile_product.price -%}
-                          <p class="if-cfg__tile-price">{{ if_tile_price | money }}</p>
-                        {%- endif -%}
+                        {%- render 'if-product-tile-price', tile_product: tile_product, price_class: 'if-cfg' -%}
                       {%- endif -%}
 
                       {%- if section.settings.show_swatches -%}
@@ -333,29 +311,7 @@
                     <p class="if-cfg__tile-name">{{ coll_product.title | escape }}</p>
                     <p class="if-cfg__tile-size">{{ tile_size | escape }}</p>
                     {%- if section.settings.show_price -%}
-                      {%- assign if_tile_tags = coll_product.tags | join: ',' | downcase -%}
-                      {%- if if_tile_tags contains 'price by consultation' -%}
-                        <p class="if-cfg__tile-price if-cfg__tile-price--quote">Please Call or Email for Pricing</p>
-                      {%- else -%}
-                        {%- assign if_tile_custom = nil -%}
-                        {%- for v in coll_product.variants -%}
-                          {%- assign vt = v.title | downcase -%}
-                          {%- assign v_is_custom_sqft = false -%}
-                          {%- if vt contains 'per sq' or vt contains 'per-sq' or vt contains 'sqft' or vt contains 'sq ft' -%}
-                            {%- assign v_is_custom_sqft = true -%}
-                          {%- elsif v.option1 != blank -%}
-                            {%- assign o1 = v.option1 | downcase -%}
-                            {%- if o1 contains 'per sq' or o1 contains 'per-sq' or o1 contains 'custom (per' -%}
-                              {%- assign v_is_custom_sqft = true -%}
-                            {%- endif -%}
-                          {%- endif -%}
-                          {%- if if_tile_custom == nil and v_is_custom_sqft -%}
-                            {%- assign if_tile_custom = v -%}
-                          {%- endif -%}
-                        {%- endfor -%}
-                        {%- assign if_tile_price = if_tile_custom.price | default: coll_product.price -%}
-                        <p class="if-cfg__tile-price">{{ if_tile_price | money }}</p>
-                      {%- endif -%}
+                      {%- render 'if-product-tile-price', tile_product: coll_product, price_class: 'if-cfg' -%}
                     {%- endif -%}
 
                     {%- if section.settings.show_swatches -%}

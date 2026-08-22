@@ -1441,6 +1441,12 @@
   font-weight: 600;
 }
 
+.if-cfg__tile-price-unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--if-cfg-muted);
+}
+
 .if-cfg__dream-btns {
   display: grid;
   grid-template-columns: 1fr;

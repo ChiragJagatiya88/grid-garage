@@ -1,0 +1,18 @@
+{%- comment -%}
+  Tile card price from custom.price_sq_ft metafield (single line text, e.g. "$4.00 / Sq Ft").
+
+  Accepts:
+  - tile_product: {Object} Product Liquid object
+  - price_class: {String} CSS prefix — 'if-cfg' or 'if-fc'
+{%- endcomment -%}
+{%- if tile_product != blank -%}
+  {%- assign if_tile_tags = tile_product.tags | join: ',' | downcase -%}
+  {%- if if_tile_tags contains 'price by consultation' -%}
+    <p class="{{ price_class }}__tile-price {{ price_class }}__tile-price--quote">Please Call or Email for Pricing</p>
+  {%- else -%}
+    {%- assign if_price_sq_ft = tile_product.metafields.custom.price_sq_ft.value | default: tile_product.metafields.custom.price_sq_ft -%}
+    {%- if if_price_sq_ft != blank -%}
+      <p class="{{ price_class }}__tile-price">{{ if_price_sq_ft | escape }}</p>
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
