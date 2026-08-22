@@ -58,6 +58,11 @@
   if show_sw == nil
     assign show_sw = true
   endif
+
+  assign show_pr = show_price
+  if show_pr == nil
+    assign show_pr = true
+  endif
 -%}
 <a
   class="if-fc__tile{% if is_selected %} is-selected{% endif %}"
@@ -105,6 +110,32 @@
 
   <p class="if-fc__tile-name">{{ tile_title | escape }}</p>
   <p class="if-fc__tile-size">{{ tile_size | escape }}</p>
+
+  {%- if show_pr -%}
+    {%- assign if_tile_tags = tile_product.tags | join: ',' | downcase -%}
+    {%- if if_tile_tags contains 'price by consultation' -%}
+      <p class="if-fc__tile-price if-fc__tile-price--quote">Please Call or Email for Pricing</p>
+    {%- else -%}
+      {%- assign if_tile_custom = nil -%}
+      {%- for v in tile_product.variants -%}
+        {%- assign vt = v.title | downcase -%}
+        {%- assign v_is_custom_sqft = false -%}
+        {%- if vt contains 'per sq' or vt contains 'per-sq' or vt contains 'sqft' or vt contains 'sq ft' -%}
+          {%- assign v_is_custom_sqft = true -%}
+        {%- elsif v.option1 != blank -%}
+          {%- assign o1 = v.option1 | downcase -%}
+          {%- if o1 contains 'per sq' or o1 contains 'per-sq' or o1 contains 'custom (per' -%}
+            {%- assign v_is_custom_sqft = true -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- if if_tile_custom == nil and v_is_custom_sqft -%}
+          {%- assign if_tile_custom = v -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign if_tile_price = if_tile_custom.price | default: tile_product.price -%}
+      <p class="if-fc__tile-price">{{ if_tile_price | money }}</p>
+    {%- endif -%}
+  {%- endif -%}
 
   {%- if show_sw -%}
     <div class="if-fc__tile-swatches swiper-no-swiping">

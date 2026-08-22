@@ -560,7 +560,7 @@
       '17" x 17" inch';
 
     const state = {
-      kit: '2car',
+      kit: 'custom',
       pattern: 'checkered',
       zoneColors: [],
       activeZone: 0,
@@ -2121,9 +2121,9 @@
       if (!sizeGrid) return;
       const selected = sizeGrid.querySelector('.if-cfg__size-card.is-selected');
       const fallback =
-        sizeGrid.querySelector('.if-cfg__size-card[data-kit="2car"]') ||
+        sizeGrid.querySelector('.if-cfg__size-card[data-kit="custom"]') ||
         sizeGrid.querySelector('.if-cfg__size-card');
-      state.kit = (selected || fallback).getAttribute('data-kit') || '2car';
+      state.kit = (selected || fallback).getAttribute('data-kit') || 'custom';
       applyKitDims(state.kit);
       syncHeroCtas(state.kit);
       syncCustomPanel(state.kit);

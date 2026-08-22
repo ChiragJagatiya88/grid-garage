@@ -235,6 +235,21 @@
   text-align: center;
 }
 
+.if-fc__tile-price {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--if-fc-ink);
+}
+
+.if-fc__tile-price--quote {
+  color: var(--if-fc-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
 .if-fc__tile-swatches {
   display: block;
   margin-top: auto;

@@ -8,6 +8,7 @@
   assign if_collection = section.settings.collection
   assign if_limit = section.settings.products_to_show | default: 8
   assign if_show_swatches = section.settings.show_swatches
+  assign if_show_price = section.settings.show_price
 -%}
 
 <div
@@ -49,6 +50,7 @@
               {%- render 'if-product-tile-card',
                 tile_product: coll_product,
                 show_swatches: if_show_swatches,
+                show_price: if_show_price,
                 is_selected: false,
                 badge_mode: 'auto'
               -%}
@@ -137,6 +139,12 @@
       "type": "checkbox",
       "id": "show_swatches",
       "label": "Show color swatches",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show product price",
       "default": true
     },
     {
