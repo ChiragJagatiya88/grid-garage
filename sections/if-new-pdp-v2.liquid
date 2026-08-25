@@ -1,0 +1,1374 @@
+{{ 'if-new-pdp-v2.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign if_accent = section.settings.accent_color | default: '#e61e43'
+  assign if_use_product_media = section.settings.use_product_media
+  assign if_gallery_blocks = section.blocks | where: 'type', 'gallery_image'
+  assign if_benefit_blocks = section.blocks | where: 'type', 'benefit'
+  assign if_trust_blocks = section.blocks | where: 'type', 'trust'
+  assign if_accordion_blocks = section.blocks | where: 'type', 'accordion'
+  assign if_slide_count = 0
+  assign product_form_id = 'if-pdp2-form-' | append: section.id
+
+  assign if_mf_title = product.metafields.custom.product_title.value | default: product.metafields.custom.product_title
+  if if_mf_title != blank
+    assign if_product_title = if_mf_title
+  else
+    assign if_product_title = product.title
+  endif
+
+  assign if_price_sq_ft = product.metafields.custom.price_sq_ft.value | default: product.metafields.custom.price_sq_ft
+  assign if_variant = product.selected_or_first_available_variant
+
+  assign if_tile_size_raw = product.metafields.custom.tile_size.value | default: product.metafields.custom.tile_size | strip
+  assign if_sq_ft_per_tile = product.metafields.custom.sq_ft_per_tile.value | default: product.metafields.custom.sq_ft_per_tile | default: section.settings.sq_ft_per_tile | default: '2.01'
+  assign if_tile_coverage_label = if_sq_ft_per_tile | append: ' Sq Ft'
+  assign if_current_color = blank
+-%}
+
+{%- comment -%} Coverage from custom.tile_size (e.g. 17" x 17" → 2.01 Sq Ft) {%- endcomment -%}
+{%- if if_tile_size_raw != blank -%}
+  {%- liquid
+    assign if_ts_clean = if_tile_size_raw | replace: '"', ' ' | replace: "'", ' ' | replace: '″', ' ' | replace: '×', 'x' | replace: 'X', 'x' | downcase | replace: 'inches', '' | replace: 'inch', '' | replace: 'in', '' | strip
+    assign if_ts_parts = if_ts_clean | split: 'x'
+    assign if_tile_w = if_ts_parts | first | strip | plus: 0.0
+    assign if_tile_h = if_tile_w
+    if if_ts_parts.size > 1
+      assign if_tile_h = if_ts_parts | last | strip | plus: 0.0
+    endif
+    if if_tile_w > 0 and if_tile_h > 0
+      assign if_cov = if_tile_w | divided_by: 12.0 | times: if_tile_h | divided_by: 12.0
+      assign if_cov_rounded = if_cov | times: 100.0 | round | divided_by: 100.0
+      assign if_sq_ft_per_tile = if_cov_rounded
+      assign if_tile_coverage_label = if_cov_rounded | append: ' Sq Ft'
+    endif
+  -%}
+{%- endif -%}
+
+{%- comment -%} Resolve color option for swatches {%- endcomment -%}
+{%- liquid
+  assign if_color_opt = nil
+  for opt in product.options_with_values
+    assign if_has_sw = opt.values | map: 'swatch' | compact | size
+    if if_has_sw > 0 and if_color_opt == nil
+      assign if_color_opt = opt
+    endif
+  endfor
+  if if_color_opt == nil
+    for opt in product.options_with_values
+      assign if_oname = opt.name | downcase
+      if if_oname == 'color' or if_oname == 'colour' or if_oname == 'tile color' or if_oname == 'tile colour'
+        assign if_color_opt = opt
+        break
+      endif
+    endfor
+  endif
+  if if_color_opt
+    assign if_color_pos = if_color_opt.position
+    if if_color_pos == 1
+      assign if_current_color = if_variant.option1
+    elsif if_color_pos == 2
+      assign if_current_color = if_variant.option2
+    elsif if_color_pos == 3
+      assign if_current_color = if_variant.option3
+    endif
+  endif
+-%}
+
+{%- comment -%} Unit price: Garage option "Custom (Per Sq Ft)" (+ matching color when present) {%- endcomment -%}
+{%- liquid
+  assign if_unit_variant = nil
+  assign if_unit_variant_fallback = nil
+  for v in product.variants
+    assign vt = v.title | downcase
+    assign v_is_unit = false
+    if vt contains 'per sq' or vt contains 'per-sq' or vt contains 'custom (per'
+      assign v_is_unit = true
+    endif
+    for opt in v.options
+      assign ol = opt | downcase
+      if ol contains 'per sq' or ol contains 'per-sq' or ol contains 'custom (per'
+        assign v_is_unit = true
+      endif
+    endfor
+    if v_is_unit
+      if if_unit_variant_fallback == nil
+        assign if_unit_variant_fallback = v
+      endif
+      if if_current_color != blank
+        if v.option1 == if_current_color or v.option2 == if_current_color or v.option3 == if_current_color
+          assign if_unit_variant = v
+          break
+        endif
+      endif
+    endif
+  endfor
+  if if_unit_variant == nil
+    assign if_unit_variant = if_unit_variant_fallback | default: if_variant
+  endif
+-%}
+
+<div
+  class="section_{{ section.id }} if-pdp2{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  data-if-pdp2
+  data-section-id="{{ section.id }}"
+  style="--if-pdp2-accent: {{ if_accent }}; --if-pdp2-accent-soft: {{ section.settings.accent_soft | default: '#fce9eb' }};"
+>
+  <div class="{% if section.settings.enable_container %}if-pdp2__inner{% else %}if-pdp2__inner if-pdp2__inner--fluid{% endif %}">
+    <div class="if-pdp2__grid">
+
+      {%- comment -%} LEFT: Gallery + promo {%- endcomment -%}
+      <div class="if-pdp2__media-col">
+        <div class="if-pdp2__gallery" data-if-pdp2-gallery>
+          <div class="if-pdp2__gallery-frame">
+            <div class="if-pdp2__gallery-track" data-if-pdp2-gallery-track>
+              {%- if if_gallery_blocks.size > 0 -%}
+                {%- for block in if_gallery_blocks -%}
+                  {%- if block.settings.image != blank -%}
+                    {%- assign if_slide_count = if_slide_count | plus: 1 -%}
+                    <figure class="if-pdp2__slide" {{ block.shopify_attributes }}>
+                      {{
+                        block.settings.image
+                        | image_url: width: 1600
+                        | image_tag:
+                          loading: 'lazy',
+                          sizes: '(min-width: 990px) 50vw, 100vw',
+                          widths: '400,600,800,1000,1200,1600',
+                          alt: block.settings.image.alt | default: if_product_title | escape
+                      }}
+                    </figure>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- elsif if_use_product_media and product.media.size > 0 -%}
+                {%- for media in product.media -%}
+                  {%- if media.media_type == 'image' -%}
+                    {%- assign if_slide_count = if_slide_count | plus: 1 -%}
+                    <figure class="if-pdp2__slide" data-media-id="{{ media.id }}">
+                      {{
+                        media
+                        | image_url: width: 1600
+                        | image_tag:
+                          loading: 'lazy',
+                          sizes: '(min-width: 990px) 50vw, 100vw',
+                          widths: '400,600,800,1000,1200,1600',
+                          alt: media.alt | default: if_product_title | escape
+                      }}
+                    </figure>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- if if_slide_count == 0 -%}
+                {%- assign if_slide_count = 1 -%}
+                <figure class="if-pdp2__slide">
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </figure>
+              {%- endif -%}
+            </div>
+
+            {%- if if_slide_count > 1 -%}
+              <button type="button" class="if-pdp2__nav if-pdp2__nav--prev" data-if-pdp2-gallery-prev aria-label="Previous image">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button type="button" class="if-pdp2__nav if-pdp2__nav--next" data-if-pdp2-gallery-next aria-label="Next image">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- if section.settings.promo_text != blank -%}
+          <div class="if-pdp2__promo">
+            <span class="if-pdp2__promo-icon" aria-hidden="true">
+              {%- if section.settings.promo_icon != blank -%}
+                {{
+                  section.settings.promo_icon
+                  | image_url: width: 64
+                  | image_tag: loading: 'lazy', width: 22, height: 22, alt: ''
+                }}
+              {%- else -%}
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" stroke="{{ if_accent }}" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M12 22V7" stroke="{{ if_accent }}" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M12 7H8.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7z" stroke="{{ if_accent }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 7h3.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z" stroke="{{ if_accent }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 12h20" stroke="{{ if_accent }}" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              {%- endif -%}
+            </span>
+            <p class="if-pdp2__promo-text">{{ section.settings.promo_text | escape }}</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} RIGHT: Blocks {%- endcomment -%}
+      <div class="if-pdp2__info">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- when 'gallery_image' -%}
+              {%- comment -%} Rendered in left column {%- endcomment -%}
+
+            {%- when 'rating' -%}
+              {%- if block.settings.show_rating -%}
+                <div class="if-pdp2__rating" {{ block.shopify_attributes }}>
+                  <span class="if-pdp2__stars" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="84" height="16" viewBox="0 0 84 16" fill="none">
+                      <path d="M14.9527 6.87536L11.8382 9.91136L12.5737 14.1994C12.5895 14.2913 12.5792 14.3858 12.544 14.4722C12.5089 14.5587 12.4502 14.6335 12.3747 14.6883C12.2993 14.7432 12.2099 14.7758 12.1169 14.7825C12.0239 14.7892 11.9308 14.7698 11.8482 14.7264L7.99721 12.7019L4.14671 14.7259C4.06413 14.7693 3.97106 14.7887 3.87801 14.782C3.78496 14.7753 3.69565 14.7427 3.62017 14.6878C3.54469 14.633 3.48606 14.5582 3.4509 14.4717C3.41574 14.3853 3.40545 14.2908 3.42121 14.1989L4.15671 9.91086L1.04171 6.87536C0.974844 6.81022 0.927554 6.72766 0.905188 6.63703C0.882823 6.5464 0.886275 6.45132 0.915153 6.36255C0.944032 6.27378 0.997184 6.19487 1.06859 6.13475C1.14 6.07462 1.22681 6.03569 1.31921 6.02236L5.62371 5.39736L7.54871 1.49636C7.71721 1.15486 8.27721 1.15486 8.44571 1.49636L10.3707 5.39736L14.6752 6.02236C14.7674 6.03604 14.8539 6.07516 14.9251 6.13533C14.9963 6.1955 15.0492 6.27432 15.0781 6.36294C15.1069 6.45156 15.1104 6.54646 15.0883 6.63698C15.0661 6.72751 15.0192 6.81006 14.9527 6.87536Z" fill="#FF783F"/>
+                      <path d="M31.9527 6.87536L28.8382 9.91136L29.5737 14.1994C29.5895 14.2913 29.5792 14.3858 29.544 14.4722C29.5089 14.5587 29.4502 14.6335 29.3747 14.6883C29.2993 14.7432 29.2099 14.7758 29.1169 14.7825C29.0239 14.7892 28.9308 14.7698 28.8482 14.7264L24.9972 12.7019L21.1467 14.7259C21.0641 14.7693 20.9711 14.7887 20.878 14.782C20.785 14.7753 20.6956 14.7427 20.6202 14.6878C20.5447 14.633 20.4861 14.5582 20.4509 14.4717C20.4157 14.3853 20.4055 14.2908 20.4212 14.1989L21.1567 9.91086L18.0417 6.87536C17.9748 6.81022 17.9276 6.72766 17.9052 6.63703C17.8828 6.5464 17.8863 6.45132 17.9152 6.36255C17.944 6.27378 17.9972 6.19487 18.0686 6.13475C18.14 6.07462 18.2268 6.03569 18.3192 6.02236L22.6237 5.39736L24.5487 1.49636C24.7172 1.15486 25.2772 1.15486 25.4457 1.49636L27.3707 5.39736L31.6752 6.02236C31.7674 6.03604 31.8539 6.07516 31.9251 6.13533C31.9963 6.1955 32.0492 6.27432 32.0781 6.36294C32.1069 6.45156 32.1104 6.54646 32.0883 6.63698C32.0661 6.72751 32.0192 6.81006 31.9527 6.87536Z" fill="#FF783F"/>
+                      <path d="M48.9527 6.87536L45.8382 9.91136L46.5737 14.1994C46.5895 14.2913 46.5792 14.3858 46.544 14.4722C46.5089 14.5587 46.4502 14.6335 46.3747 14.6883C46.2993 14.7432 46.2099 14.7758 46.1169 14.7825C46.0239 14.7892 45.9308 14.7698 45.8482 14.7264L41.9972 12.7019L38.1467 14.7259C38.0641 14.7693 37.9711 14.7887 37.878 14.782C37.785 14.7753 37.6956 14.7427 37.6202 14.6878C37.5447 14.633 37.4861 14.5582 37.4509 14.4717C37.4157 14.3853 37.4055 14.2908 37.4212 14.1989L38.1567 9.91086L35.0417 6.87536C34.9748 6.81022 34.9276 6.72766 34.9052 6.63703C34.8828 6.5464 34.8863 6.45132 34.9152 6.36255C34.944 6.27378 34.9972 6.19487 35.0686 6.13475C35.14 6.07462 35.2268 6.03569 35.3192 6.02236L39.6237 5.39736L41.5487 1.49636C41.7172 1.15486 42.2772 1.15486 42.4457 1.49636L44.3707 5.39736L48.6752 6.02236C48.7674 6.03604 48.8539 6.07516 48.9251 6.13533C48.9963 6.1955 49.0492 6.27432 49.0781 6.36294C49.1069 6.45156 49.1104 6.54646 49.0883 6.63698C49.0661 6.72751 49.0192 6.81006 48.9527 6.87536Z" fill="#FF783F"/>
+                      <path d="M65.9527 6.87536L62.8382 9.91136L63.5737 14.1994C63.5895 14.2913 63.5792 14.3858 63.544 14.4722C63.5089 14.5587 63.4502 14.6335 63.3747 14.6883C63.2993 14.7432 63.2099 14.7758 63.1169 14.7825C63.0239 14.7892 62.9308 14.7698 62.8482 14.7264L58.9972 12.7019L55.1467 14.7259C55.0641 14.7693 54.9711 14.7887 54.878 14.782C54.785 14.7753 54.6956 14.7427 54.6202 14.6878C54.5447 14.633 54.4861 14.5582 54.4509 14.4717C54.4157 14.3853 54.4055 14.2908 54.4212 14.1989L55.1567 9.91086L52.0417 6.87536C51.9748 6.81022 51.9276 6.72766 51.9052 6.63703C51.8828 6.5464 51.8863 6.45132 51.9152 6.36255C51.944 6.27378 51.9972 6.19487 52.0686 6.13475C52.14 6.07462 52.2268 6.03569 52.3192 6.02236L56.6237 5.39736L58.5487 1.49636C58.7172 1.15486 59.2772 1.15486 59.4457 1.49636L61.3707 5.39736L65.6752 6.02236C65.7674 6.03604 65.8539 6.07516 65.9251 6.13533C65.9963 6.1955 66.0492 6.27432 66.0781 6.36294C66.1069 6.45156 66.1104 6.54646 66.0883 6.63698C66.0661 6.72751 66.0192 6.81006 65.9527 6.87536Z" fill="#FF783F"/>
+                      <path d="M82.9527 6.87536L79.8382 9.91136L80.5737 14.1994C80.5895 14.2913 80.5792 14.3858 80.544 14.4722C80.5089 14.5587 80.4502 14.6335 80.3747 14.6883C80.2993 14.7432 80.2099 14.7758 80.1169 14.7825C80.0239 14.7892 79.9308 14.7698 79.8482 14.7264L75.9972 12.7019L72.1467 14.7259C72.0641 14.7693 71.9711 14.7887 71.878 14.782C71.785 14.7753 71.6956 14.7427 71.6202 14.6878C71.5447 14.633 71.4861 14.5582 71.4509 14.4717C71.4157 14.3853 71.4055 14.2908 71.4212 14.1989L72.1567 9.91086L69.0417 6.87536C68.9748 6.81022 68.9276 6.72766 68.9052 6.63703C68.8828 6.5464 68.8863 6.45132 68.9152 6.36255C68.944 6.27378 68.9972 6.19487 69.0686 6.13475C69.14 6.07462 69.2268 6.03569 69.3192 6.02236L73.6237 5.39736L75.5487 1.49636C75.7172 1.15486 76.2772 1.15486 76.4457 1.49636L78.3707 5.39736L82.6752 6.02236C82.7674 6.03604 82.8539 6.07516 82.9251 6.13533C82.9963 6.1955 83.0492 6.27432 83.0781 6.36294C83.1069 6.45156 83.1104 6.54646 83.0883 6.63698C83.0661 6.72751 83.0192 6.81006 82.9527 6.87536Z" fill="#FF783F"/>
+                    </svg>
+                  </span>
+                  {%- if block.settings.rating_text != blank -%}
+                    <span class="if-pdp2__rating-text">{{ block.settings.rating_text }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+            {%- when 'title' -%}
+              {%- liquid
+                assign block_title = if_product_title
+                if block.settings.title_override != blank
+                  assign block_title = block.settings.title_override
+                endif
+              -%}
+              {%- if block_title != blank -%}
+                <h1 class="if-pdp2__title" {{ block.shopify_attributes }}>{{ block_title | escape }}</h1>
+              {%- endif -%}
+
+            {%- when 'pricing' -%}
+              <div class="if-pdp2__pricing" {{ block.shopify_attributes }} data-if-pdp2-pricing>
+                {%- if if_price_sq_ft != blank -%}
+                  {%- liquid
+                    comment
+                      Metafield custom.price_sq_ft is single-line text, e.g. "$3.49 Sq Ft"
+                      or "$3.49 / Sq Ft". Split into red price + muted unit suffix.
+                    endcomment
+                    assign sq_raw = if_price_sq_ft | strip
+                    assign sq_price = ''
+                    assign sq_suffix = ''
+
+                    if sq_raw contains '/'
+                      assign sq_parts = sq_raw | split: '/'
+                      assign sq_price = sq_parts.first | strip
+                      assign sq_suffix = sq_raw | remove_first: sq_price | strip
+                    else
+                      assign sq_parts = sq_raw | split: ' '
+                      assign sq_price = sq_parts.first | strip
+                      assign sq_suffix = sq_raw | remove_first: sq_price | strip
+                      if sq_suffix != blank
+                        assign sq_suffix = '/ ' | append: sq_suffix
+                      endif
+                    endif
+
+                    if sq_suffix == blank and block.settings.sqft_suffix != blank
+                      assign sq_suffix = block.settings.sqft_suffix
+                    endif
+                  -%}
+                  <p class="if-pdp2__sqft">
+                    <span class="if-pdp2__sqft-price">{{ sq_price | escape }}</span>
+                    {%- if sq_suffix != blank -%}
+                      <span class="if-pdp2__sqft-suffix">{{ sq_suffix | escape }}</span>
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+
+                {%- if if_unit_variant != blank -%}
+                  {%- liquid
+                    assign unit_tpl = block.settings.unit_price_text | default: 'Only [price] per tile (No Sales Tax at checkout)'
+                    assign unit_before = unit_tpl
+                    assign unit_after = ''
+                    if unit_tpl contains '[price]'
+                      assign unit_before = unit_tpl | split: '[price]' | first
+                      assign unit_after = unit_tpl | remove_first: unit_before | remove_first: '[price]'
+                    endif
+                  -%}
+                  <p class="if-pdp2__unit" data-if-pdp2-unit-price>
+                    <span class="if-pdp2__unit-label">Unit Price: </span>
+                    {%- if unit_before != blank -%}
+                      <span class="if-pdp2__unit-text">{{ unit_before | escape }}</span>
+                    {%- endif -%}
+                    <span class="if-pdp2__unit-value" data-if-pdp2-money>
+                      {%- if settings.currency_code_enabled -%}
+                        {{ if_unit_variant.price | money_with_currency }}
+                      {%- else -%}
+                        {{ if_unit_variant.price | money }}
+                      {%- endif -%}
+                    </span>
+                    {%- if unit_after != blank -%}
+                      <span class="if-pdp2__unit-text">{{ unit_after | escape }}</span>
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+              </div>
+
+            {%- when 'benefit' -%}
+              {%- if block.id == if_benefit_blocks.first.id -%}
+                <div class="if-pdp2__benefits" data-if-pdp2-benefits>
+                  {%- if section.settings.benefits_heading != blank -%}
+                    <div class="if-pdp2__benefits-head">
+                      <span class="if-pdp2__benefits-icon" aria-hidden="true">
+                        {%- if section.settings.benefits_icon != blank -%}
+                          {{
+                            section.settings.benefits_icon
+                            | image_url: width: 64
+                            | image_tag: loading: 'lazy', width: 20, height: 20, alt: ''
+                          }}
+                        {%- else -%}
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 22L2 22" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path d="M3 22.0001V11.3472C3 10.4903 3.36644 9.67432 4.00691 9.10502L10.0069 3.77169C11.1436 2.76133 12.8564 2.76133 13.9931 3.77169L19.9931 9.10502C20.6336 9.67432 21 10.4903 21 11.3472V22.0001" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path d="M10 9H14" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path opacity="0.5" d="M9 15.5H15" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path opacity="0.5" d="M9 18.5H15" stroke="#0E100F" stroke-width="1.5" stroke-linecap="round"></path>
+                            <path opacity="0.5" d="M18 22V16C18 14.1144 18 13.1716 17.4142 12.5858C16.8284 12 15.8856 12 14 12H10C8.11438 12 7.17157 12 6.58579 12.5858C6 13.1716 6 14.1144 6 16V22" stroke="#0E100F" stroke-width="1.5"></path>
+                          </svg>
+                        {%- endif -%}
+                      </span>
+                      <h2 class="if-pdp2__benefits-title">{{ section.settings.benefits_heading | escape }}</h2>
+                    </div>
+                  {%- endif -%}
+                  <ul class="if-pdp2__benefits-grid" role="list">
+              {%- endif -%}
+
+              <li class="if-pdp2__benefit" {{ block.shopify_attributes }}>
+                <span class="if-pdp2__benefit-icon" aria-hidden="true">
+                  {%- if block.settings.icon != blank -%}
+                    {{
+                      block.settings.icon
+                      | image_url: width: 88
+                      | image_tag: loading: 'lazy', width: 22, height: 22, alt: ''
+                    }}
+                  {%- else -%}
+                    {%- case block.settings.icon_preset -%}
+                      {%- when 'truck' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                      {%- when 'weight' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M8 6h8l1.5 3H6.5L8 6z"/><rect x="5" y="9" width="14" height="11" rx="2"/><path d="M9 14h6"/></svg>
+                      {%- when 'warranty' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+                      {%- when 'return' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/></svg>
+                      {%- when 'clean' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13 7l4 4"/></svg>
+                      {%- when 'water' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5S6 9 6 13.5a6 6 0 0 0 12 0C18 9 12 2.5 12 2.5z"/></svg>
+                      {%- when 'clock' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                      {%- else -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                    {%- endcase -%}
+                  {%- endif -%}
+                </span>
+                {%- if block.settings.text != blank -%}
+                  <span class="if-pdp2__benefit-text">{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              </li>
+
+              {%- if block.id == if_benefit_blocks.last.id -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+
+            {%- when 'colors' -%}
+              {%- if if_color_opt -%}
+                <div class="if-pdp2__colors" {{ block.shopify_attributes }} data-if-pdp2-colors>
+                  <p class="if-pdp2__colors-label">
+                    {{ block.settings.label | default: 'Color' | escape }}:
+                    <span data-if-pdp2-color-name>{{ if_current_color | escape }}</span>
+                  </p>
+                  <div class="if-pdp2__swatches" role="list">
+                    {%- assign if_opt_pos = if_color_opt.position -%}
+                    {%- for val in if_color_opt.values -%}
+                      {%- liquid
+                        assign if_val_str = val.name | default: val | strip
+                        assign if_mv = nil
+                        assign if_unit_mv = nil
+                        for v in product.variants
+                          assign if_v_opt = ''
+                          if if_opt_pos == 1
+                            assign if_v_opt = v.option1
+                          elsif if_opt_pos == 2
+                            assign if_v_opt = v.option2
+                          elsif if_opt_pos == 3
+                            assign if_v_opt = v.option3
+                          endif
+                          if if_v_opt == if_val_str
+                            assign vt = v.title | downcase
+                            assign v_is_unit = false
+                            if vt contains 'per sq' or vt contains 'per-sq' or vt contains 'custom (per'
+                              assign v_is_unit = true
+                            endif
+                            for opt in v.options
+                              assign ol = opt | downcase
+                              if ol contains 'per sq' or ol contains 'per-sq' or ol contains 'custom (per'
+                                assign v_is_unit = true
+                              endif
+                            endfor
+                            if v_is_unit and if_unit_mv == nil
+                              assign if_unit_mv = v
+                            endif
+                            if if_mv == nil
+                              assign if_mv = v
+                            endif
+                          endif
+                        endfor
+                        if if_unit_mv != nil
+                          assign if_mv = if_unit_mv
+                        endif
+                        assign if_sw_bg = blank
+                        assign if_tile_img = blank
+                        assign if_media_id = blank
+                        if if_mv.featured_media
+                          assign if_tile_img = if_mv.featured_media | image_url: width: 1600
+                          assign if_media_id = if_mv.featured_media.id
+                        elsif if_mv.featured_image
+                          assign if_tile_img = if_mv.featured_image | image_url: width: 1600
+                        endif
+                        if val.swatch.image
+                          assign if_sw_url = val.swatch.image | image_url: width: 120
+                          assign if_sw_bg = 'url(' | append: if_sw_url | append: ')'
+                        elsif val.swatch.color
+                          assign if_sw_bg = 'rgb(' | append: val.swatch.color.rgb | append: ')'
+                        elsif if_mv.featured_media
+                          assign if_sw_url = if_mv.featured_media | image_url: width: 120
+                          assign if_sw_bg = 'url(' | append: if_sw_url | append: ')'
+                        elsif if_mv.featured_image
+                          assign if_sw_url = if_mv.featured_image | image_url: width: 120
+                          assign if_sw_bg = 'url(' | append: if_sw_url | append: ')'
+                        endif
+                        assign if_is_selected = false
+                        if if_val_str == if_current_color
+                          assign if_is_selected = true
+                        endif
+                      -%}
+                      <button
+                        type="button"
+                        class="if-pdp2__swatch{% if if_is_selected %} is-selected{% endif %}"
+                        role="listitem"
+                        data-if-pdp2-swatch
+                        data-variant-id="{{ if_mv.id }}"
+                        data-color-name="{{ if_val_str | escape }}"
+                        data-price="{{ if_mv.price }}"
+                        data-unit-price="{{ if_mv.price }}"
+                        data-image="{{ if_tile_img | escape }}"
+                        data-media-id="{{ if_media_id }}"
+                        data-available="{{ if_mv.available }}"
+                        aria-pressed="{{ if_is_selected }}"
+                        aria-label="{{ if_val_str | escape }}"
+                        title="{{ if_val_str | escape }}"
+                        {% unless if_mv.available %}disabled{% endunless %}
+                        {% if if_sw_bg != blank %}style="background: {{ if_sw_bg }}; background-size: cover; background-position: center;"{% endif %}
+                      ></button>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endif -%}
+
+            {%- when 'support' -%}
+              <div class="if-pdp2__support" {{ block.shopify_attributes }}>
+                {%- if block.settings.help_text != blank -%}
+                  <p class="if-pdp2__support-text">{{ block.settings.help_text | escape }}</p>
+                {%- endif -%}
+                <div class="if-pdp2__support-links">
+                  {%- if block.settings.phone != blank -%}
+                    <a class="if-pdp2__support-link" href="tel:{{ block.settings.phone | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}">
+                      <span class="if-pdp2__support-link-icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg>
+                      </span>
+                      {{ block.settings.phone | escape }}
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.email != blank -%}
+                    <a class="if-pdp2__support-link" href="mailto:{{ block.settings.email | escape }}">
+                      <span class="if-pdp2__support-link-icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                      </span>
+                      {{ block.settings.email | escape }}
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+
+            {%- when 'note' -%}
+              {%- if block.settings.text != blank -%}
+                {%- liquid
+                  assign note_tpl = block.settings.text
+                  assign note_before = note_tpl
+                  assign note_after = ''
+                  if note_tpl contains '[sq_ft]'
+                    assign note_before = note_tpl | split: '[sq_ft]' | first
+                    assign note_after = note_tpl | remove_first: note_before | remove_first: '[sq_ft]'
+                  endif
+                -%}
+                <div class="if-pdp2__note" {{ block.shopify_attributes }}>
+                  {%- if note_tpl contains '[sq_ft]' -%}
+                    {%- if note_before != blank -%}<span class="if-pdp2__note-text">{{ note_before }}</span>{%- endif -%}
+                    <span class="if-pdp2__note-value">{{ if_tile_coverage_label | escape }}</span>
+                    {%- if note_after != blank -%}<span class="if-pdp2__note-text">{{ note_after }}</span>{%- endif -%}
+                  {%- else -%}
+                    {{ note_tpl }}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+            {%- when 'quantity' -%}
+              {%- liquid
+                assign qty_default = block.settings.default_qty | default: 60
+                if block.settings.sq_ft_per_tile != blank
+                  assign sq_per = block.settings.sq_ft_per_tile
+                else
+                  assign sq_per = if_sq_ft_per_tile
+                endif
+              -%}
+              <div
+                class="if-pdp2__qty-wrap"
+                {{ block.shopify_attributes }}
+                data-if-pdp2-qty
+                data-sq-ft-per-tile="{{ sq_per }}"
+              >
+                <div class="if-pdp2__qty-col">
+                  {%- if block.settings.qty_label != blank -%}
+                    <label class="if-pdp2__qty-label" for="if-pdp2-qty-{{ section.id }}">{{ block.settings.qty_label | escape }}</label>
+                  {%- endif -%}
+                  <div class="if-pdp2__qty-control">
+                    <button type="button" class="if-pdp2__qty-btn" data-if-pdp2-qty-minus aria-label="Decrease quantity">−</button>
+                    <input
+                      id="if-pdp2-qty-{{ section.id }}"
+                      class="if-pdp2__qty-input"
+                      type="number"
+                      name="quantity"
+                      form="{{ product_form_id }}"
+                      value="{{ qty_default }}"
+                      min="{{ block.settings.min_qty | default: 1 }}"
+                      step="1"
+                      data-if-pdp2-qty-input
+                      inputmode="numeric"
+                    >
+                    <button type="button" class="if-pdp2__qty-btn" data-if-pdp2-qty-plus aria-label="Increase quantity">+</button>
+                  </div>
+                </div>
+                <div class="if-pdp2__coverage-col">
+                  {%- if block.settings.coverage_label != blank -%}
+                    <p class="if-pdp2__qty-label">{{ block.settings.coverage_label | escape }}</p>
+                  {%- endif -%}
+                  {%- if block.settings.coverage_help != blank -%}
+                    <p class="if-pdp2__coverage-help">{{ block.settings.coverage_help | escape }}</p>
+                  {%- endif -%}
+                  <div class="if-pdp2__coverage-result" data-if-pdp2-coverage-result>
+                    <span data-if-pdp2-coverage-text>{{ qty_default }} tile = {{ qty_default | times: sq_per }} sq ft Coverage</span>
+                  </div>
+                </div>
+              </div>
+
+            {%- when 'buttons' -%}
+              <div class="if-pdp2__cta" {{ block.shopify_attributes }}>
+                {%- if block.settings.show_add_to_cart -%}
+                  <product-form class="if-pdp2__product-form" data-hide-errors="false">
+                    {%- form 'product', product, id: product_form_id, class: 'if-pdp2__form', novalidate: 'novalidate' -%}
+                      <input type="hidden" name="id" value="{{ if_unit_variant.id }}" data-if-pdp2-variant-id>
+                      {%- assign if_qty_block = section.blocks | where: 'type', 'quantity' | first -%}
+                      {%- if if_qty_block == blank -%}
+                        <input type="hidden" name="quantity" value="1">
+                      {%- endif -%}
+                      <button
+                        type="submit"
+                        name="add"
+                        class="if-pdp2__btn if-pdp2__btn--primary"
+                        data-sold-out-label="{{ block.settings.sold_out_label | default: 'SOLD OUT' | escape }}"
+                        {% unless if_unit_variant.available %}disabled{% endunless %}
+                      >
+                        <span>
+                          {%- if if_unit_variant.available -%}
+                            {{ block.settings.atc_label | default: 'ADD TO CART' | escape }}
+                          {%- else -%}
+                            {{ block.settings.sold_out_label | default: 'SOLD OUT' | escape }}
+                          {%- endif -%}
+                        </span>
+                        <div class="loading__spinner hidden">
+                          <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                          </svg>
+                        </div>
+                      </button>
+                      <div class="product-form__error-message-wrapper" role="alert" hidden>
+                        <span class="product-form__error-message"></span>
+                      </div>
+                    {%- endform -%}
+                  </product-form>
+                {%- endif -%}
+
+                {%- if block.settings.secondary_label != blank -%}
+                  <a
+                    class="if-pdp2__btn if-pdp2__btn--secondary"
+                    href="{{ block.settings.secondary_link | default: '#if-configure' }}"
+                  >
+                    {{ block.settings.secondary_label | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+
+            {%- when 'trust' -%}
+              {%- if block.id == if_trust_blocks.first.id -%}
+                <ul class="if-pdp2__trust" role="list">
+              {%- endif -%}
+              <li class="if-pdp2__trust-item" {{ block.shopify_attributes }}>
+                <span class="if-pdp2__trust-icon" aria-hidden="true">
+                  {%- if block.settings.icon != blank -%}
+                    {{
+                      block.settings.icon
+                      | image_url: width: 64
+                      | image_tag: loading: 'lazy', width: 18, height: 18, alt: ''
+                    }}
+                  {%- else -%}
+                    {%- case block.settings.icon_preset -%}
+                      {%- when 'secure' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+                      {%- when 'warranty' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M12 12v5"/><path d="M3.3 7.5L12 12l8.7-4.5"/></svg>
+                      {%- when 'truck' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                      {%- when 'diy' -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                      {%- else -%}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>
+                    {%- endcase -%}
+                  {%- endif -%}
+                </span>
+                {%- if block.settings.text != blank -%}
+                  <span class="if-pdp2__trust-text">{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              </li>
+              {%- if block.id == if_trust_blocks.last.id -%}
+                </ul>
+              {%- endif -%}
+
+            {%- when 'accordion' -%}
+              {%- if block.id == if_accordion_blocks.first.id -%}
+                <div class="if-pdp2__accordion" data-if-pdp2-accordion>
+              {%- endif -%}
+              <div class="if-pdp2__acc-item" {{ block.shopify_attributes }} data-if-pdp2-acc-item>
+                <button
+                  type="button"
+                  class="if-pdp2__acc-btn"
+                  data-if-pdp2-acc-btn
+                  aria-expanded="false"
+                  id="if-pdp2-acc-btn-{{ section.id }}-{{ block.id }}"
+                  aria-controls="if-pdp2-acc-panel-{{ section.id }}-{{ block.id }}"
+                >
+                  <span class="if-pdp2__acc-title">{{ block.settings.title | escape }}</span>
+                  <span class="if-pdp2__acc-icon" aria-hidden="true"></span>
+                </button>
+                <div
+                  class="if-pdp2__acc-panel"
+                  id="if-pdp2-acc-panel-{{ section.id }}-{{ block.id }}"
+                  role="region"
+                  aria-labelledby="if-pdp2-acc-btn-{{ section.id }}-{{ block.id }}"
+                  hidden
+                >
+                  {%- if block.settings.use_product_description and product.description != blank -%}
+                    {{ product.description }}
+                  {%- else -%}
+                    {{ block.settings.content }}
+                  {%- endif -%}
+                </div>
+              </div>
+              {%- if block.id == if_accordion_blocks.last.id -%}
+                </div>
+              {%- endif -%}
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% style %}
+  .section_{{ section.id }} {
+    {% if section.settings.section_bg != blank %}background: {{ section.settings.section_bg }};{% endif %}
+    {% if section.settings.section_gradient_bg != blank %}background: {{ section.settings.section_gradient_bg }};{% endif %}
+    {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_desk }};{% endif %}
+  }
+  @media screen and (max-width: 767px) {
+    .section_{{ section.id }} {
+      {% if section.settings.enable_custom_padding %}padding-block: {{ section.settings.padding_mob }};{% endif %}
+    }
+  }
+{% endstyle %}
+
+<script type="application/json" data-if-pdp2-variants>
+  {{ product.variants | json }}
+</script>
+
+<script>
+  (function () {
+    var root = document.querySelector('.section_{{ section.id }}[data-if-pdp2]');
+    if (!root) return;
+
+    /* Gallery */
+    var gallery = root.querySelector('[data-if-pdp2-gallery]');
+    var track = gallery ? gallery.querySelector('[data-if-pdp2-gallery-track]') : null;
+    var slides = track ? Array.prototype.slice.call(track.querySelectorAll('.if-pdp2__slide')) : [];
+    var prev = gallery ? gallery.querySelector('[data-if-pdp2-gallery-prev]') : null;
+    var next = gallery ? gallery.querySelector('[data-if-pdp2-gallery-next]') : null;
+    var index = 0;
+
+    function goTo(i) {
+      if (!slides.length || !track) return;
+      index = (i + slides.length) % slides.length;
+      track.style.transform = 'translateX(' + (-index * 100) + '%)';
+    }
+
+    if (prev) prev.addEventListener('click', function () { goTo(index - 1); });
+    if (next) next.addEventListener('click', function () { goTo(index + 1); });
+
+    /* Quantity + coverage */
+    var qtyWrap = root.querySelector('[data-if-pdp2-qty]');
+    var qtyInput = root.querySelector('[data-if-pdp2-qty-input]');
+    var coverageText = root.querySelector('[data-if-pdp2-coverage-text]');
+    var sqPer = qtyWrap ? parseFloat(qtyWrap.getAttribute('data-sq-ft-per-tile')) || 2.01 : 2.01;
+
+    function formatCoverage(n) {
+      var total = Math.round((n * sqPer) * 100) / 100;
+      var label = n === 1 ? 'tile' : 'tile';
+      return n + ' ' + label + ' = ' + total + ' sq ft Coverage';
+    }
+
+    function syncCoverage() {
+      if (!qtyInput || !coverageText) return;
+      var n = parseInt(qtyInput.value, 10);
+      if (isNaN(n) || n < 1) n = 1;
+      qtyInput.value = n;
+      coverageText.textContent = formatCoverage(n);
+    }
+
+    if (qtyWrap && qtyInput) {
+      var minus = qtyWrap.querySelector('[data-if-pdp2-qty-minus]');
+      var plus = qtyWrap.querySelector('[data-if-pdp2-qty-plus]');
+      if (minus) minus.addEventListener('click', function () {
+        qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) - 1);
+        syncCoverage();
+      });
+      if (plus) plus.addEventListener('click', function () {
+        qtyInput.value = (parseInt(qtyInput.value, 10) || 0) + 1;
+        syncCoverage();
+      });
+      qtyInput.addEventListener('input', syncCoverage);
+      qtyInput.addEventListener('change', syncCoverage);
+      syncCoverage();
+    }
+
+    /* Color swatches */
+    var variantInput = root.querySelector('[data-if-pdp2-variant-id]');
+    var colorNameEl = root.querySelector('[data-if-pdp2-color-name]');
+    var atcBtn = root.querySelector('.if-pdp2__btn--primary');
+    var atcLabel = atcBtn ? atcBtn.querySelector('span') : null;
+    var atcLabelDefault = atcLabel ? atcLabel.textContent.trim() : 'ADD TO CART';
+    var soldOutLabel = (atcBtn && atcBtn.getAttribute('data-sold-out-label')) || 'SOLD OUT';
+    var moneyFormat = {{ shop.money_format | json }};
+
+    function formatMoney(cents) {
+      if (window.Shopify && typeof Shopify.formatMoney === 'function') {
+        return Shopify.formatMoney(cents, moneyFormat);
+      }
+      return '$' + (cents / 100).toFixed(2);
+    }
+
+    root.querySelectorAll('[data-if-pdp2-swatch]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        root.querySelectorAll('[data-if-pdp2-swatch]').forEach(function (b) {
+          b.classList.remove('is-selected');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('is-selected');
+        btn.setAttribute('aria-pressed', 'true');
+
+        var vid = btn.getAttribute('data-variant-id');
+        if (variantInput && vid) variantInput.value = vid;
+
+        var cname = btn.getAttribute('data-color-name');
+        if (colorNameEl && cname) colorNameEl.textContent = cname;
+
+        var price = parseInt(btn.getAttribute('data-unit-price') || btn.getAttribute('data-price'), 10);
+        var moneyEl = root.querySelector('[data-if-pdp2-money]');
+        if (moneyEl && !isNaN(price)) {
+          moneyEl.textContent = formatMoney(price);
+        }
+
+        var available = btn.getAttribute('data-available') === 'true';
+        if (atcBtn) {
+          atcBtn.disabled = !available;
+          if (atcLabel) atcLabel.textContent = available ? atcLabelDefault : soldOutLabel;
+        }
+
+        var mediaId = btn.getAttribute('data-media-id');
+        if (mediaId && slides.length) {
+          var targetIdx = slides.findIndex(function (s) {
+            return s.getAttribute('data-media-id') === mediaId;
+          });
+          if (targetIdx >= 0) goTo(targetIdx);
+        }
+      });
+    });
+
+    /* Accordion */
+    root.querySelectorAll('[data-if-pdp2-acc-item]').forEach(function (item) {
+      var btn = item.querySelector('[data-if-pdp2-acc-btn]');
+      var panel = item.querySelector('.if-pdp2__acc-panel');
+      if (!btn || !panel) return;
+      btn.addEventListener('click', function () {
+        var open = item.classList.contains('is-open');
+        root.querySelectorAll('[data-if-pdp2-acc-item]').forEach(function (other) {
+          other.classList.remove('is-open');
+          var ob = other.querySelector('[data-if-pdp2-acc-btn]');
+          var op = other.querySelector('.if-pdp2__acc-panel');
+          if (ob) ob.setAttribute('aria-expanded', 'false');
+          if (op) op.hidden = true;
+        });
+        if (!open) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          panel.hidden = false;
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "IF New PDP v2",
+  "class": "if_new_pdp_v2",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable Custom Class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom Class For Section",
+      "visible_if": "{{ section.settings.enable_custom_class == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_container",
+      "label": "Enable Container",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_product_media",
+      "label": "Use product media (when no Gallery Image blocks)",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Promo banner (under gallery)"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "Promo text",
+      "default": "Black Front Ramp Edges Included - Free. Every flooring order includes the required front entrance ramp edge pieces."
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_icon",
+      "label": "Promo icon (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Key Benefits heading"
+    },
+    {
+      "type": "text",
+      "id": "benefits_heading",
+      "label": "Benefits heading",
+      "default": "Key Benefits"
+    },
+    {
+      "type": "image_picker",
+      "id": "benefits_icon",
+      "label": "Benefits heading icon (optional)"
+    },
+    {
+      "type": "header",
+      "content": "Coverage fallback"
+    },
+    {
+      "type": "text",
+      "id": "sq_ft_per_tile",
+      "label": "Default sq ft per tile",
+      "default": "2.01",
+      "info": "Used when quantity block does not set its own value. Metafield custom.sq_ft_per_tile overrides this."
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "color_background",
+      "id": "section_gradient_bg",
+      "label": "Section Gradient Background"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#e61e43"
+    },
+    {
+      "type": "color",
+      "id": "accent_soft",
+      "label": "Soft accent (icons / soft bg)",
+      "default": "#fce9eb"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding",
+      "label": "Enable Section Custom Padding",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Padding Desktop",
+      "default": "40px",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Padding Mobile",
+      "default": "24px",
+      "visible_if": "{{ section.settings.enable_custom_padding == true }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gallery_image",
+      "name": "Gallery Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "rating",
+      "name": "Rating",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "label": "Show rating",
+          "default": true
+        },
+        {
+          "type": "richtext",
+          "id": "rating_text",
+          "label": "Rating text",
+          "default": "<p><strong>4.9/5</strong></p>"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Uses metafield custom.product_title. Falls back to product title if blank."
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Title override (optional)",
+          "info": "Leave blank to use metafield / product title."
+        }
+      ]
+    },
+    {
+      "type": "pricing",
+      "name": "Pricing",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Sq ft price from custom.price_sq_ft. Unit price from Garage option Custom (Per Sq Ft)."
+        },
+        {
+          "type": "text",
+          "id": "sqft_suffix",
+          "label": "Sq ft suffix fallback",
+          "default": "/ Sq Ft",
+          "info": "Used only if metafield has no unit text. Metafield example: $3.49 Sq Ft"
+        },
+        {
+          "type": "text",
+          "id": "unit_price_text",
+          "label": "Unit price text",
+          "default": "Only [price] per tile (No Sales Tax at checkout)",
+          "info": "Use [price] where the variant price should appear."
+        }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free Shipping, Ships in 3 - 6 days"
+        },
+        {
+          "type": "select",
+          "id": "icon_preset",
+          "label": "Icon preset",
+          "options": [
+            { "value": "truck", "label": "Truck / Shipping" },
+            { "value": "weight", "label": "Weight / Load" },
+            { "value": "warranty", "label": "Warranty" },
+            { "value": "return", "label": "Return / Money-back" },
+            { "value": "clean", "label": "Easy to Clean" },
+            { "value": "water", "label": "Water / Drainage" },
+            { "value": "clock", "label": "Clock / DIY" },
+            { "value": "check", "label": "Check" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Custom icon (overrides preset)"
+        }
+      ]
+    },
+    {
+      "type": "colors",
+      "name": "Color swatches",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Color"
+        }
+      ]
+    },
+    {
+      "type": "support",
+      "name": "Customer support",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "help_text",
+          "label": "Help text",
+          "default": "Questions Before or After Checkout? Call or Email us. We're Happy to Help!"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone",
+          "default": "(888) 896-8022"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email",
+          "default": "info@gridgarageinc.com"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "name": "Info note",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Each Tile Covers: [sq_ft] | Click 'Design My Floor' if you want to design your floor in 4 easy steps.</p>",
+          "info": "Use [sq_ft] for dynamic coverage from custom.tile_size (e.g. 17\" x 17\" → 2.01 Sq Ft)."
+        }
+      ]
+    },
+    {
+      "type": "quantity",
+      "name": "Quantity & coverage",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "qty_label",
+          "label": "Quantity label",
+          "default": "Quantity"
+        },
+        {
+          "type": "number",
+          "id": "default_qty",
+          "label": "Default quantity",
+          "default": 60
+        },
+        {
+          "type": "number",
+          "id": "min_qty",
+          "label": "Minimum quantity",
+          "default": 1
+        },
+        {
+          "type": "text",
+          "id": "coverage_label",
+          "label": "Coverage label",
+          "default": "Calculate Coverage"
+        },
+        {
+          "type": "text",
+          "id": "coverage_help",
+          "label": "Coverage help text",
+          "default": "Enter the number of tiles to see total coverage area."
+        },
+        {
+          "type": "text",
+          "id": "sq_ft_per_tile",
+          "label": "Sq ft per tile override",
+          "default": "",
+          "info": "Leave blank to auto-calculate from custom.tile_size. Coverage = quantity × this value."
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_add_to_cart",
+          "label": "Show Add to Cart",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "atc_label",
+          "label": "Add to Cart label",
+          "default": "ADD TO CART"
+        },
+        {
+          "type": "text",
+          "id": "sold_out_label",
+          "label": "Sold out label",
+          "default": "SOLD OUT"
+        },
+        {
+          "type": "text",
+          "id": "secondary_label",
+          "label": "Secondary button label",
+          "default": "DESIGN MY FLOOR"
+        },
+        {
+          "type": "url",
+          "id": "secondary_link",
+          "label": "Secondary button link"
+        }
+      ]
+    },
+    {
+      "type": "trust",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Secure Checkout"
+        },
+        {
+          "type": "select",
+          "id": "icon_preset",
+          "label": "Icon preset",
+          "options": [
+            { "value": "secure", "label": "Secure / Shield" },
+            { "value": "warranty", "label": "Warranty / Box" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "diy", "label": "DIY / Clock" },
+            { "value": "check", "label": "Check" }
+          ],
+          "default": "secure"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Custom icon (overrides preset)"
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Description"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_product_description",
+          "label": "Use product description",
+          "default": false,
+          "info": "When enabled, ignores custom content below."
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Add accordion content here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "IF New PDP v2",
+      "category": "IF Section",
+      "blocks": [
+        { "type": "rating" },
+        { "type": "title" },
+        { "type": "pricing" },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Free Shipping, Ships in 3 - 6 days",
+            "icon_preset": "truck"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Supports Up to 45,000 lbs",
+            "icon_preset": "weight"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "20 Year Warranty",
+            "icon_preset": "warranty"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "30-Day Money-Back",
+            "icon_preset": "return"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Easy to Clean, Vac Blower or Hose Off",
+            "icon_preset": "clean"
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "text": "Flow Thur Self Drainage - Keeps Floors Dry & Slip Free",
+            "icon_preset": "water"
+          }
+        },
+        { "type": "colors" },
+        { "type": "support" },
+        { "type": "note" },
+        { "type": "quantity" },
+        { "type": "buttons" },
+        {
+          "type": "trust",
+          "settings": { "text": "Secure Checkout", "icon_preset": "secure" }
+        },
+        {
+          "type": "trust",
+          "settings": { "text": "20 Year Warranty", "icon_preset": "warranty" }
+        },
+        {
+          "type": "trust",
+          "settings": { "text": "Free Shipping", "icon_preset": "truck" }
+        },
+        {
+          "type": "trust",
+          "settings": { "text": "DIY - Transform your space in hours", "icon_preset": "diy" }
+        },
+        {
+          "type": "accordion",
+          "settings": { "title": "Description", "use_product_description": true }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "Why It Works",
+            "content": "<p>Engineered for everyday garage use, our premium interlocking tiles create a durable, professional-looking floor.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "How to Apply",
+            "content": "<p>No glue required. Snap tiles together row by row on a clean, level surface.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "Specifications",
+            "content": "<p>Tile dimensions, weight capacity, warranty, and colors vary by collection.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "title": "Shipping & Returns",
+            "content": "<p>Free nationwide shipping on qualifying orders. 30-day money-back guarantee.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
