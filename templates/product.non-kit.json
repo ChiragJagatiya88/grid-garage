@@ -55,8 +55,20 @@
             "show_dynamic_checkout": false,
             "show_gift_card_recipient": false,
             "free_text": "",
-            "buy_sample": "Buy Samples",
-            "buy_sample_url": "shopify://collections/sample-packs"
+            "buy_sample": "",
+            "buy_sample_url": ""
+          }
+        },
+        "icon_with_text_fnVJki": {
+          "type": "icon-with-text",
+          "settings": {
+            "layout": "horizontal",
+            "icon_1": "lock",
+            "heading_1": "1-Year Warranty on parts",
+            "icon_2": "none",
+            "heading_2": "",
+            "icon_3": "none",
+            "heading_3": ""
           }
         },
         "collapsible_tab_eRwPhG": {
@@ -94,6 +106,7 @@
         "quantity_selector",
         "complementary_WDkJV6",
         "buy_buttons",
+        "icon_with_text_fnVJki",
         "collapsible_tab_eRwPhG",
         "collapsible_tab_xj3mUw",
         "share_EVryit"
