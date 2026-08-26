@@ -19,6 +19,15 @@
   endif
 
   assign if_price_sq_ft = product.metafields.custom.price_sq_ft.value | default: product.metafields.custom.price_sq_ft
+  assign if_price_sq_ft_value = ''
+  if if_price_sq_ft != blank
+    assign if_sq_gtm_raw = if_price_sq_ft | strip
+    if if_sq_gtm_raw contains '/'
+      assign if_sq_gtm_raw = if_sq_gtm_raw | split: '/' | first | strip
+    endif
+    assign if_sq_gtm_raw = if_sq_gtm_raw | remove: '$' | remove: ',' | strip
+    assign if_price_sq_ft_value = if_sq_gtm_raw | split: ' ' | first | strip
+  endif
   assign if_variant = product.selected_or_first_available_variant
 
   assign if_tile_size_raw = product.metafields.custom.tile_size.value | default: product.metafields.custom.tile_size | strip
@@ -113,6 +122,11 @@
   class="section_{{ section.id }} if-pdp2{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
   data-if-pdp2
   data-section-id="{{ section.id }}"
+  data-if-pdp2-product-id="{{ product.id }}"
+  data-if-pdp2-product-title="{{ if_product_title | escape }}"
+  data-if-pdp2-price-sq-ft="{{ if_price_sq_ft_value }}"
+  data-if-pdp2-price-sq-ft-display="{{ if_price_sq_ft | escape }}"
+  data-if-pdp2-currency="{{ cart.currency.iso_code }}"
   style="--if-pdp2-accent: {{ if_accent }}; --if-pdp2-accent-soft: {{ section.settings.accent_soft | default: '#fce9eb' }};"
 >
   <div class="{% if section.settings.enable_container %}if-pdp2__inner{% else %}if-pdp2__inner if-pdp2__inner--fluid{% endif %}">
@@ -910,6 +924,93 @@
         }
       });
     });
+
+    /* Google Tag Manager — per sq ft price */
+    function parsePriceSqFt(raw, display) {
+      var n = parseFloat(raw);
+      if (!isNaN(n)) return n;
+      var src = (display || raw || '').replace(/,/g, '');
+      var match = src.match(/[\d]+(?:\.\d+)?/);
+      return match ? parseFloat(match[0]) : null;
+    }
+
+    var priceSqFt = parsePriceSqFt(
+      root.getAttribute('data-if-pdp2-price-sq-ft'),
+      root.getAttribute('data-if-pdp2-price-sq-ft-display')
+    );
+    var priceSqFtDisplay = root.getAttribute('data-if-pdp2-price-sq-ft-display') || '';
+    var productId = root.getAttribute('data-if-pdp2-product-id') || '';
+    var productTitle = root.getAttribute('data-if-pdp2-product-title') || '';
+    var currency = root.getAttribute('data-if-pdp2-currency') || 'USD';
+    var variantsEl = root.querySelector('[data-if-pdp2-variants]');
+    var variants = [];
+    if (variantsEl && variantsEl.textContent) {
+      try { variants = JSON.parse(variantsEl.textContent); } catch (e) { variants = []; }
+    }
+
+    function getActiveVariant() {
+      var vid = variantInput ? variantInput.value : '';
+      if (!vid && variants.length) return variants[0];
+      for (var i = 0; i < variants.length; i++) {
+        if (String(variants[i].id) === String(vid)) return variants[i];
+      }
+      return variants.length ? variants[0] : null;
+    }
+
+    function pushGtm(eventName, extra) {
+      window.dataLayer = window.dataLayer || [];
+      var variant = getActiveVariant();
+      var variantPrice = variant ? variant.price / 100 : null;
+      var payload = {
+        event: eventName,
+        product_id: productId,
+        product_title: productTitle,
+        currency: currency,
+        price_per_sq_ft: priceSqFt,
+        price_per_sq_ft_display: priceSqFtDisplay
+      };
+      if (variant) {
+        payload.variant_id = String(variant.id);
+        payload.variant_title = variant.title || '';
+        payload.item_price = variantPrice;
+      }
+      if (extra) {
+        for (var key in extra) {
+          if (Object.prototype.hasOwnProperty.call(extra, key)) payload[key] = extra[key];
+        }
+      }
+      if (variant && (eventName === 'view_item' || eventName === 'add_to_cart')) {
+        var qty = extra && extra.quantity ? extra.quantity : 1;
+        window.dataLayer.push({ ecommerce: null });
+        payload.ecommerce = {
+          currency: currency,
+          value: variantPrice != null ? variantPrice * qty : null,
+          items: [{
+            item_id: String(variant.id),
+            item_name: productTitle,
+            item_variant: variant.title || '',
+            price: variantPrice,
+            quantity: qty,
+            price_per_sq_ft: priceSqFt,
+            price_per_sq_ft_display: priceSqFtDisplay
+          }]
+        };
+      }
+      window.dataLayer.push(payload);
+    }
+
+    if (priceSqFt != null || priceSqFtDisplay) {
+      pushGtm('view_item');
+    }
+
+    var pdpForm = root.querySelector('.if-pdp2__form');
+    if (pdpForm) {
+      pdpForm.addEventListener('submit', function () {
+        var qty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+        if (isNaN(qty) || qty < 1) qty = 1;
+        pushGtm('add_to_cart', { quantity: qty });
+      });
+    }
   })();
 </script>
 

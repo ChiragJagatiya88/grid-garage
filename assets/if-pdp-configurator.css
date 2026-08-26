@@ -8,6 +8,7 @@
   --if-cfg-muted: #0e100f;
   --if-cfg-line: #e8e8e8;
   --if-cfg-soft: #f7f7f7;
+  --if-cfg-white: #ffffff;
   font-family: "Be Vietnam Pro", sans-serif;
   color: var(--if-cfg-ink);
   -webkit-font-smoothing: antialiased;
@@ -810,14 +811,13 @@
   align-items: center;
   gap: 10px;
   padding: 14px 16px;
-  border: 1px solid #f5b8c0;
   border-radius: 10px;
-  background: #fce9eb;
+  background: #0E100F;
 }
 
 .if-cfg__custom-banner-icon {
   flex: none;
-  color: var(--if-cfg-accent);
+  color: var(--if-cfg-white);
   margin-top: 1px;
   display: flex;
 }
@@ -826,7 +826,7 @@
   margin: 0;
   font-size: 14px;
   line-height: 1.2;
-  color: var(--if-cfg-accent);
+  color: var(--if-cfg-white);
   font-weight: 400;
 }
 
@@ -1268,14 +1268,14 @@
 
 .if-cfg__dream-head {
   padding: 12px 20px;
-  background: #dc1c1b1a;
+  background: #0E100F;
 }
 
 .if-cfg__dream-title {
   margin: 0;
   font-size: 24px;
   font-weight: 500;
-  color: var(--if-cfg-accent);
+  color: var(--if-cfg-white);
   letter-spacing: 0;
 }
 
@@ -1611,8 +1611,7 @@
 .if-cfg__info-box--bonus {
   margin-top: 20px;
   margin-bottom: 0;
-  border-color: var(--if-cfg-bonus-border, #f0dada);
-  background: var(--if-cfg-bonus-bg, #fff5f5);
+  background: #0E100F;
 }
 
 .if-cfg__info-box-title {
@@ -1622,7 +1621,7 @@
   letter-spacing: 0;
   line-height: 1.3;
   text-transform: uppercase;
-  color: var(--if-cfg-bonus-title, #dc1c1b);
+  color: var(--if-cfg-white);
 }
 
 .if-cfg__info-box-text, 
@@ -1631,7 +1630,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 1.45;
-  color: var(--if-cfg-ink);
+  color: var(--if-cfg-white);
   P {
     margin: 0;
   }
