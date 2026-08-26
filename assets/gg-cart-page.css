@@ -115,6 +115,12 @@
   max-width: none;
   margin: 1rem 0 0;
   width: 100%;
+  shop-pay-wallet-button,
+  shopify-paypal-button,
+  shopify-google-pay-button {
+    border-radius: 8px;
+    overflow: hidden;
+  }
 }
 
 #main-cart-footer .cart__blocks {
