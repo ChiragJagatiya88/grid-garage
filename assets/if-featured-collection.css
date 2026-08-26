@@ -343,3 +343,16 @@
     font-size: 14px;
   }
 }
+
+
+.gg-design-garage--grid {
+  .if-fc__tile-img {
+    aspect-ratio: auto;
+  }
+  .if-fc__tile-img img, .if-fc__tile-img .placeholder-svg {
+    height: auto;
+  }
+  .if-fc__tile-img:after {
+    height: 50%;
+  }
+} 

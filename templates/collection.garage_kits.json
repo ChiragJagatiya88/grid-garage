@@ -12,8 +12,8 @@
     "gg_design_garage_qBhYQM": {
       "type": "gg-design-garage",
       "settings": {
-        "enable_custom_class": false,
-        "section_class": "",
+        "enable_custom_class": true,
+        "section_class": "gg-design-garage--grid",
         "enable_container": true,
         "heading": "Design Your Own Perfect Garage",
         "subtitle": "<p>From cracked concrete to a garage you'll actually be proud to open every day.</p>",
