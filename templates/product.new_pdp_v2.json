@@ -238,6 +238,7 @@
     },
     "main": {
       "type": "if-new-pdp-v1",
+      "disabled": true,
       "blocks": {
         "gallery_image_wH4ekE": {
           "type": "gallery_image",
