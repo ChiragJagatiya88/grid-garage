@@ -712,21 +712,93 @@
 
     /* Gallery */
     var gallery = root.querySelector('[data-if-pdp2-gallery]');
+    var frame = gallery ? gallery.querySelector('.if-pdp2__gallery-frame') : null;
     var track = gallery ? gallery.querySelector('[data-if-pdp2-gallery-track]') : null;
     var slides = track ? Array.prototype.slice.call(track.querySelectorAll('.if-pdp2__slide')) : [];
     var prev = gallery ? gallery.querySelector('[data-if-pdp2-gallery-prev]') : null;
     var next = gallery ? gallery.querySelector('[data-if-pdp2-gallery-next]') : null;
     var index = 0;
+    var drag = {
+      active: false,
+      startX: 0,
+      currentX: 0,
+      width: 0,
+      moved: false,
+      pointerId: null
+    };
 
-    function goTo(i) {
+    function goTo(i, animate) {
       if (!slides.length || !track) return;
       index = (i + slides.length) % slides.length;
+      if (animate === false) {
+        track.style.transition = 'none';
+      } else {
+        track.style.transition = '';
+      }
       track.style.transform = 'translateX(' + (-index * 100) + '%)';
+    }
+
+    function dragOffsetPercent() {
+      if (!drag.width) return 0;
+      return (drag.currentX - drag.startX) / drag.width * 100;
+    }
+
+    function onPointerDown(e) {
+      if (!slides.length || slides.length < 2 || !track || !frame) return;
+      if (e.target.closest && e.target.closest('.if-pdp2__nav')) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+      drag.active = true;
+      drag.moved = false;
+      drag.startX = e.clientX;
+      drag.currentX = e.clientX;
+      drag.width = frame.offsetWidth || 1;
+      drag.pointerId = e.pointerId;
+
+      track.style.transition = 'none';
+      frame.classList.add('is-dragging');
+      try { frame.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+
+    function onPointerMove(e) {
+      if (!drag.active || !track) return;
+      drag.currentX = e.clientX;
+      var dx = drag.currentX - drag.startX;
+      if (Math.abs(dx) > 4) drag.moved = true;
+      if (drag.moved && e.cancelable) e.preventDefault();
+
+      var offset = -index * 100 + dragOffsetPercent();
+      track.style.transform = 'translateX(' + offset + '%)';
+    }
+
+    function onPointerUp(e) {
+      if (!drag.active || !track) return;
+      drag.active = false;
+      frame.classList.remove('is-dragging');
+      try {
+        if (drag.pointerId != null) frame.releasePointerCapture(drag.pointerId);
+      } catch (err) {}
+      drag.pointerId = null;
+
+      track.style.transition = '';
+      var pct = dragOffsetPercent();
+      if (Math.abs(pct) > 15) {
+        goTo(pct < 0 ? index + 1 : index - 1);
+      } else {
+        goTo(index);
+      }
     }
 
     if (prev) prev.addEventListener('click', function () { goTo(index - 1); });
     if (next) next.addEventListener('click', function () { goTo(index + 1); });
 
+    if (frame && slides.length > 1) {
+      frame.addEventListener('pointerdown', onPointerDown);
+      frame.addEventListener('pointermove', onPointerMove);
+      frame.addEventListener('pointerup', onPointerUp);
+      frame.addEventListener('pointercancel', onPointerUp);
+      frame.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    }
     /* Quantity + coverage */
     var qtyWrap = root.querySelector('[data-if-pdp2-qty]');
     var qtyInput = root.querySelector('[data-if-pdp2-qty-input]');
