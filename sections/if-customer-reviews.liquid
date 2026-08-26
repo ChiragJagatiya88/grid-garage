@@ -47,12 +47,32 @@
             {%- if stars < 1 -%}{%- assign stars = 1 -%}{%- endif -%}
             {%- if stars > 5 -%}{%- assign stars = 5 -%}{%- endif -%}
             <div class="swiper-slide" role="listitem" {{ block.shopify_attributes }}>
-              <article class="if-rev__card">
+              <article class="if-rev__card{% if block.settings.image != blank %} if-rev__card--has-media{% endif %}">
+                {%- if block.settings.image != blank -%}
+                  {%- liquid
+                    assign if_rev_img_alt = block.settings.image.alt | default: block.settings.title | default: block.settings.author
+                  -%}
+                  <div class="if-rev__media">
+                    {{
+                      block.settings.image
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '320,480,640,900',
+                        sizes: '(min-width: 990px) 25vw, (min-width: 750px) 40vw, 80vw',
+                        alt: if_rev_img_alt,
+                        class: 'if-rev__media-img'
+                    }}
+                  </div>
+                {%- endif -%}
+                <div class="if-rev__card-body-wrap">
+                {%- if section.settings.show_quote_icon -%}
                 <span class="if-rev__quote" aria-hidden="true">
                   <svg xmlns="http://www.w3.org/2000/svg" width="45" height="35" viewBox="0 0 45 35" fill="none">
                   <path d="M12.6699 16.9427C16.8932 18.2803 19.0049 21.327 19.0049 26.0828C19.0049 28.6093 18.1311 30.7643 16.3835 32.5478C14.6359 34.1826 12.3786 35 9.61165 35C6.69903 35 4.36893 34.034 2.62136 32.1019C0.873786 30.1699 0 27.569 0 24.2994C0 16.7197 4.80582 8.61996 14.4175 0L19.8786 3.78981C16.3835 9.28875 13.9806 13.673 12.6699 16.9427ZM37.7913 16.9427C42.0146 18.2803 44.1262 21.327 44.1262 26.0828C44.1262 28.6093 43.2524 30.7643 41.5049 32.5478C39.7573 34.1826 37.5 35 34.733 35C31.8204 35 29.4903 34.034 27.7427 32.1019C25.9951 30.1699 25.1214 27.569 25.1214 24.2994C25.1214 16.7197 29.9272 8.61996 39.5388 0L45 3.78981C41.5049 9.28875 39.1019 13.673 37.7913 16.9427Z" fill="#0E100F" fill-opacity="0.1"/>
                   </svg>
                 </span>
+                {%- endif -%}
                 {%- if block.settings.title != blank -%}
                   <h3 class="if-rev__card-title">{{ block.settings.title | escape }}</h3>
                 {%- endif -%}
@@ -84,6 +104,7 @@
                     <path d="M71.5644 0.772788C71.7557 0.433466 72.2443 0.433465 72.4356 0.772787L74.4269 4.30569C74.4982 4.43228 74.6211 4.52157 74.7636 4.55031L78.7389 5.35241C79.1207 5.42945 79.2717 5.89417 79.0081 6.18092L76.2634 9.16648C76.1651 9.27346 76.1182 9.41793 76.1348 9.56228L76.6004 13.5909C76.6452 13.9778 76.2498 14.2651 75.8957 14.103L72.2081 12.4152C72.076 12.3548 71.924 12.3548 71.7919 12.4152L68.1043 14.103C67.7502 14.2651 67.3548 13.9778 67.3996 13.5909L67.8652 9.56228C67.8818 9.41793 67.8349 9.27346 67.7366 9.16648L64.9919 6.18093C64.7283 5.89417 64.8793 5.42945 65.2611 5.35241L69.2364 4.55031C69.3789 4.52157 69.5018 4.43228 69.5731 4.30569L71.5644 0.772788Z" fill="#F79E1B"/>
                     </svg>
                   </div>
+                </div>
                 </div>
               </article>
             </div>
@@ -154,6 +175,12 @@
       "default": "Loved by garage owners nationwide"
     },
     {
+      "type": "checkbox",
+      "id": "show_quote_icon",
+      "label": "Show quote icon on cards",
+      "default": false
+    },
+    {
       "type": "header",
       "content": "Colors"
     },
@@ -204,6 +231,11 @@
       "type": "review",
       "name": "Review",
       "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Review image"
+        },
         {
           "type": "text",
           "id": "title",

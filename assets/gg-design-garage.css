@@ -1,0 +1,76 @@
+/* Design your garage — grid or slider (IF Featured Collection tiles)
+───────────────────────────────────────── */
+
+.gg-dg.if-fc {
+  --if-fc-accent: var(--if-fc-accent, #dc1c1b);
+}
+
+/* Grid layout (default) */
+.gg-dg--grid .if-fc__head {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 2.8rem;
+}
+
+.gg-dg--grid .if-fc__heading {
+  font-size: clamp(2.4rem, 3vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.gg-dg__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.gg-dg__item {
+  flex: 0 1 calc(50% - 0.6rem);
+  max-width: calc(50% - 0.6rem);
+  min-width: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .gg-dg__grid {
+    gap: 1.6rem;
+  }
+
+  .gg-dg__item {
+    flex: 0 1 calc(25% - 1.2rem);
+    max-width: calc(25% - 1.2rem);
+  }
+}
+
+.gg-dg--grid .if-fc__tile {
+  text-align: center;
+  height: 100%;
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgba(14, 16, 15, 0.04);
+}
+
+/* Hover only — no selected state */
+.gg-dg .if-fc__tile.is-selected {
+  border-color: transparent;
+}
+
+.gg-dg--grid .if-fc__tile:hover,
+.gg-dg--slider .if-fc__tile:hover {
+  border-color: var(--if-fc-accent, #dc1c1b);
+  box-shadow: 0 4px 16px rgba(14, 16, 15, 0.06);
+}
+
+.gg-dg--slider .if-fc__tile {
+  border-color: transparent;
+}
+
+@media screen and (max-width: 749px) {
+  .gg-dg--grid .if-fc__head {
+    margin-bottom: 2rem;
+  }
+
+  .gg-dg--grid .if-fc__subtitle {
+    font-size: 1.35rem;
+  }
+}

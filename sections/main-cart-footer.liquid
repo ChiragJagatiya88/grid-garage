@@ -1,5 +1,6 @@
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
+{{ 'gg-cart-page.css' | asset_url | stylesheet_tag }}
 <link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
 
@@ -44,7 +45,7 @@
               {% render block %}
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
-                <div>
+                <div class="gg-cart-summary">
                   {%- if cart.cart_level_discount_applications.size > 0 -%}
                     <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
                       {%- for discount in cart.cart_level_discount_applications -%}
@@ -56,52 +57,57 @@
                       {%- endfor -%}
                     </ul>
                   {%- endif -%}
-                </div>
 
-                <div class="totals">
-                  <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  <p  data-hulkapps-cart-total class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
-                </div>
+                  <div class="totals gg-cart-totals">
+                    <h2 class="totals__total visually-hidden">{{ 'sections.cart.estimated_total' | t }}</h2>
+                    {%- if cart.original_total_price > cart.total_price -%}
+                      <p class="totals__compare">
+                        <s>{{ cart.original_total_price | money }}</s>
+                      </p>
+                    {%- endif -%}
+                    <p data-hulkapps-cart-total class="totals__total-value">{{ cart.total_price | money }}</p>
+                  </div>
 
-                <small class="tax-note caption-large rte">
-                  {%- if cart.duties_included and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
+                  <small class="tax-note caption-large rte">
+                    {%- if cart.duties_included and cart.taxes_included -%}
+                      {%- if shop.shipping_policy.body == blank -%}
+                        {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
+                      {%- else -%}
+                        {{
+                          'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
+                          | t: link: shop.shipping_policy.url
+                        }}
+                      {%- endif -%}
+                    {%- elsif cart.duties_included == false and cart.taxes_included -%}
+                      {%- if shop.shipping_policy.body == blank -%}
+                        {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
+                      {%- else -%}
+                        {{
+                          'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
+                          | t: link: shop.shipping_policy.url
+                        }}
+                      {%- endif -%}
+                    {%- elsif cart.duties_included and cart.taxes_included == false -%}
+                      {%- if shop.shipping_policy.body == blank -%}
+                        {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
+                      {%- else -%}
+                        {{
+                          'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
+                          | t: link: shop.shipping_policy.url
+                        }}
+                      {%- endif -%}
+                    {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
+                      {%- if shop.shipping_policy.body == blank -%}
+                        {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
+                      {%- else -%}
+                        {{
+                          'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
+                          | t: link: shop.shipping_policy.url
+                        }}
+                      {%- endif -%}
                     {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- endif -%}
-                </small>
+                  </small>
+                </div>
               </div>
             {%- else -%}
               <div class="cart__ctas" {{ block.shopify_attributes }}>
@@ -124,7 +130,7 @@
                   {{ content_for_additional_checkout_buttons }}
                 </div>
               {%- endif -%}
-          {%- endcase -%}
+            {%- endcase -%}
         {% endfor %}
 
         <div id="cart-errors"></div>

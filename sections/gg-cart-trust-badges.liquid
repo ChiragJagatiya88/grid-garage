@@ -1,0 +1,186 @@
+{{ 'gg-cart-trust-badges.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign gg_pad_d = section.settings.padding_desk | default: '40px'
+  assign gg_pad_m = section.settings.padding_mob | default: '28px'
+  assign gg_card_bg = section.settings.card_bg | default: '#f2f2f2'
+-%}
+
+{%- if section.blocks.size > 0 -%}
+  <div
+    id="gg-cart-trust-{{ section.id }}"
+    class="gg-cart-trust{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+    style="--gg-ct-pad-d: {{ gg_pad_d }}; --gg-ct-pad-m: {{ gg_pad_m }}; --gg-ct-card: {{ gg_card_bg }};"
+  >
+    <div class="{% if section.settings.enable_container %}page-width{% endif %} gg-cart-trust__inner">
+      <ul class="gg-cart-trust__grid" role="list">
+        {%- for block in section.blocks -%}
+          <li class="gg-cart-trust__card" {{ block.shopify_attributes }}>
+            <span class="gg-cart-trust__icon" aria-hidden="true">
+              {%- if block.settings.icon != blank -%}
+                {{
+                  block.settings.icon
+                  | image_url: width: 120
+                  | image_tag: loading: 'lazy', widths: '60,90,120', sizes: '56px', alt: '', class: 'gg-cart-trust__icon-img'
+                }}
+              {%- else -%}
+                {%- case block.settings.icon_preset -%}
+                  {%- when 'shipping' -%}
+                    <svg class="gg-cart-trust__badge" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#0E100F" d="M32 2.5c2.4 0 4.3 1.2 6.1 2.7 1.8 1.5 3.7 2.1 5.8 1.8 2.1-.3 3.9.7 5.5 2.1 1.6 1.4 3.5 1.9 5.4 1.5 1.9-.4 3.5.6 4.8 2.1 1.3 1.5 1.9 3.4 1.5 5.4-.4 1.9.1 3.8 1.5 5.4 1.4 1.6 2.4 3.4 2.1 5.5-.3 2.1.3 4 1.8 5.8 1.5 1.8 2.7 3.7 2.7 6.1s-1.2 4.3-2.7 6.1c-1.5 1.8-2.1 3.7-1.8 5.8.3 2.1-.7 3.9-2.1 5.5-1.4 1.6-1.9 3.5-1.5 5.4.4 1.9-.6 3.5-2.1 4.8-1.5 1.3-3.4 1.9-5.4 1.5-1.9-.4-3.8.1-5.4 1.5-1.6 1.4-3.4 2.4-5.5 2.1-2.1-.3-4 .3-5.8 1.8-1.8 1.5-3.7 2.7-6.1 2.7s-4.3-1.2-6.1-2.7c-1.8-1.5-3.7-2.1-5.8-1.8-2.1.3-3.9-.7-5.5-2.1-1.6-1.4-3.5-1.9-5.4-1.5-1.9.4-3.5-.6-4.8-2.1-1.3-1.5-1.9-3.4-1.5-5.4.4-1.9-.1-3.8-1.5-5.4-1.4-1.6-2.4-3.4-2.1-5.5.3-2.1-.3-4-1.8-5.8C3.7 36.3 2.5 34.4 2.5 32s1.2-4.3 2.7-6.1c1.5-1.8 2.1-3.7 1.8-5.8-.3-2.1.7-3.9 2.1-5.5 1.4-1.6 1.9-3.5 1.5-5.4-.4-1.9.6-3.5 2.1-4.8 1.5-1.3 3.4-1.9 5.4-1.5 1.9.4 3.8-.1 5.4-1.5 1.6-1.4 3.4-2.4 5.5-2.1 2.1.3 4-.3 5.8-1.8C27.7 3.7 29.6 2.5 32 2.5z"/>
+                      <path fill="#fff" d="M14 28.5h18.5v10.2H14V28.5zm18.5 2.2h7.2l4.3 3.5v4.5h-11.5V30.7z"/>
+                      <text x="23.2" y="36.2" fill="#0E100F" font-size="5.2" font-weight="800" font-family="system-ui,sans-serif" text-anchor="middle">FREE</text>
+                      <circle cx="19.2" cy="41.2" r="2.4" fill="#fff"/>
+                      <circle cx="19.2" cy="41.2" r="1.1" fill="#0E100F"/>
+                      <circle cx="34.8" cy="41.2" r="2.4" fill="#fff"/>
+                      <circle cx="34.8" cy="41.2" r="1.1" fill="#0E100F"/>
+                    </svg>
+                  {%- when 'warranty' -%}
+                    <svg class="gg-cart-trust__badge" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#0E100F" d="M32 2.5c2.4 0 4.3 1.2 6.1 2.7 1.8 1.5 3.7 2.1 5.8 1.8 2.1-.3 3.9.7 5.5 2.1 1.6 1.4 3.5 1.9 5.4 1.5 1.9-.4 3.5.6 4.8 2.1 1.3 1.5 1.9 3.4 1.5 5.4-.4 1.9.1 3.8 1.5 5.4 1.4 1.6 2.4 3.4 2.1 5.5-.3 2.1.3 4 1.8 5.8 1.5 1.8 2.7 3.7 2.7 6.1s-1.2 4.3-2.7 6.1c-1.5 1.8-2.1 3.7-1.8 5.8.3 2.1-.7 3.9-2.1 5.5-1.4 1.6-1.9 3.5-1.5 5.4.4 1.9-.6 3.5-2.1 4.8-1.5 1.3-3.4 1.9-5.4 1.5-1.9-.4-3.8.1-5.4 1.5-1.6 1.4-3.4 2.4-5.5 2.1-2.1-.3-4 .3-5.8 1.8-1.8 1.5-3.7 2.7-6.1 2.7s-4.3-1.2-6.1-2.7c-1.8-1.5-3.7-2.1-5.8-1.8-2.1.3-3.9-.7-5.5-2.1-1.6-1.4-3.5-1.9-5.4-1.5-1.9.4-3.5-.6-4.8-2.1-1.3-1.5-1.9-3.4-1.5-5.4.4-1.9-.1-3.8-1.5-5.4-1.4-1.6-2.4-3.4-2.1-5.5.3-2.1-.3-4-1.8-5.8C3.7 36.3 2.5 34.4 2.5 32s1.2-4.3 2.7-6.1c1.5-1.8 2.1-3.7 1.8-5.8-.3-2.1.7-3.9 2.1-5.5 1.4-1.6 1.9-3.5 1.5-5.4-.4-1.9.6-3.5 2.1-4.8 1.5-1.3 3.4-1.9 5.4-1.5 1.9.4 3.8-.1 5.4-1.5 1.6-1.4 3.4-2.4 5.5-2.1 2.1.3 4-.3 5.8-1.8C27.7 3.7 29.6 2.5 32 2.5z"/>
+                      <text x="32" y="39" fill="#fff" font-size="22" font-weight="800" font-family="system-ui,sans-serif" text-anchor="middle">20</text>
+                    </svg>
+                  {%- when 'moneyback' -%}
+                    <svg class="gg-cart-trust__badge" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#0E100F" d="M32 2.5c2.4 0 4.3 1.2 6.1 2.7 1.8 1.5 3.7 2.1 5.8 1.8 2.1-.3 3.9.7 5.5 2.1 1.6 1.4 3.5 1.9 5.4 1.5 1.9-.4 3.5.6 4.8 2.1 1.3 1.5 1.9 3.4 1.5 5.4-.4 1.9.1 3.8 1.5 5.4 1.4 1.6 2.4 3.4 2.1 5.5-.3 2.1.3 4 1.8 5.8 1.5 1.8 2.7 3.7 2.7 6.1s-1.2 4.3-2.7 6.1c-1.5 1.8-2.1 3.7-1.8 5.8.3 2.1-.7 3.9-2.1 5.5-1.4 1.6-1.9 3.5-1.5 5.4.4 1.9-.6 3.5-2.1 4.8-1.5 1.3-3.4 1.9-5.4 1.5-1.9-.4-3.8.1-5.4 1.5-1.6 1.4-3.4 2.4-5.5 2.1-2.1-.3-4 .3-5.8 1.8-1.8 1.5-3.7 2.7-6.1 2.7s-4.3-1.2-6.1-2.7c-1.8-1.5-3.7-2.1-5.8-1.8-2.1.3-3.9-.7-5.5-2.1-1.6-1.4-3.5-1.9-5.4-1.5-1.9.4-3.5-.6-4.8-2.1-1.3-1.5-1.9-3.4-1.5-5.4.4-1.9-.1-3.8-1.5-5.4-1.4-1.6-2.4-3.4-2.1-5.5.3-2.1-.3-4-1.8-5.8C3.7 36.3 2.5 34.4 2.5 32s1.2-4.3 2.7-6.1c1.5-1.8 2.1-3.7 1.8-5.8-.3-2.1.7-3.9 2.1-5.5 1.4-1.6 1.9-3.5 1.5-5.4-.4-1.9.6-3.5 2.1-4.8 1.5-1.3 3.4-1.9 5.4-1.5 1.9.4 3.8-.1 5.4-1.5 1.6-1.4 3.4-2.4 5.5-2.1 2.1.3 4-.3 5.8-1.8C27.7 3.7 29.6 2.5 32 2.5z"/>
+                      <path fill="#fff" d="M22.5 40.5c0-2.2 1.4-4 3.8-4.8 1.1-2.8 3.5-4.7 6.7-4.7 3.8 0 6.5 2.6 6.5 6.2 0 .6-.1 1.2-.2 1.7 2.1.7 3.5 2.4 3.5 4.5 0 2.6-2.2 4.6-5.2 4.6H27.2c-2.7 0-4.7-1.9-4.7-4.5 0-1.1.4-2.1 1-2.9-.5-.7-.8-1.5-.8-2.4z"/>
+                      <circle cx="33" cy="28.5" r="6.2" fill="#fff"/>
+                      <circle cx="33" cy="28.5" r="4.6" fill="none" stroke="#0E100F" stroke-width="1.4"/>
+                      <text x="33" y="31.2" fill="#0E100F" font-size="7.5" font-weight="800" font-family="system-ui,sans-serif" text-anchor="middle">$</text>
+                    </svg>
+                  {%- when 'secure' -%}
+                    <svg class="gg-cart-trust__badge" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#0E100F" d="M32 2.5c2.4 0 4.3 1.2 6.1 2.7 1.8 1.5 3.7 2.1 5.8 1.8 2.1-.3 3.9.7 5.5 2.1 1.6 1.4 3.5 1.9 5.4 1.5 1.9-.4 3.5.6 4.8 2.1 1.3 1.5 1.9 3.4 1.5 5.4-.4 1.9.1 3.8 1.5 5.4 1.4 1.6 2.4 3.4 2.1 5.5-.3 2.1.3 4 1.8 5.8 1.5 1.8 2.7 3.7 2.7 6.1s-1.2 4.3-2.7 6.1c-1.5 1.8-2.1 3.7-1.8 5.8.3 2.1-.7 3.9-2.1 5.5-1.4 1.6-1.9 3.5-1.5 5.4.4 1.9-.6 3.5-2.1 4.8-1.5 1.3-3.4 1.9-5.4 1.5-1.9-.4-3.8.1-5.4 1.5-1.6 1.4-3.4 2.4-5.5 2.1-2.1-.3-4 .3-5.8 1.8-1.8 1.5-3.7 2.7-6.1 2.7s-4.3-1.2-6.1-2.7c-1.8-1.5-3.7-2.1-5.8-1.8-2.1.3-3.9-.7-5.5-2.1-1.6-1.4-3.5-1.9-5.4-1.5-1.9.4-3.5-.6-4.8-2.1-1.3-1.5-1.9-3.4-1.5-5.4.4-1.9-.1-3.8-1.5-5.4-1.4-1.6-2.4-3.4-2.1-5.5.3-2.1-.3-4-1.8-5.8C3.7 36.3 2.5 34.4 2.5 32s1.2-4.3 2.7-6.1c1.5-1.8 2.1-3.7 1.8-5.8-.3-2.1.7-3.9 2.1-5.5 1.4-1.6 1.9-3.5 1.5-5.4-.4-1.9.6-3.5 2.1-4.8 1.5-1.3 3.4-1.9 5.4-1.5 1.9.4 3.8-.1 5.4-1.5 1.6-1.4 3.4-2.4 5.5-2.1 2.1.3 4-.3 5.8-1.8C27.7 3.7 29.6 2.5 32 2.5z"/>
+                      <path fill="#fff" d="M32 18.5l12 4.2v8.8c0 7.2-4.6 12.2-12 14.8-7.4-2.6-12-7.6-12-14.8v-8.8l12-4.2z"/>
+                      <path stroke="#0E100F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M26.5 32.2l4 4 7.2-7.2"/>
+                    </svg>
+                  {%- else -%}
+                    <svg class="gg-cart-trust__badge" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="32" cy="32" r="28" fill="#0E100F"/>
+                      <path stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M20 33l8 8 16-16"/>
+                    </svg>
+                {%- endcase -%}
+              {%- endif -%}
+            </span>
+            {%- if block.settings.text != blank -%}
+              <p class="gg-cart-trust__text">{{ block.settings.text | escape | newline_to_br }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cart trust badges",
+  "tag": "section",
+  "class": "section-gg-cart-trust",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_container",
+      "label": "Enable page width container",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card background",
+      "default": "#f2f2f2"
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Desktop padding",
+      "default": "40px"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Mobile padding",
+      "default": "28px"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable custom class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom class",
+      "visible_if": "{{ section.settings.enable_custom_class }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Free Shipping, Ships in 3-6 days"
+        },
+        {
+          "type": "select",
+          "id": "icon_preset",
+          "label": "Icon preset",
+          "options": [
+            { "value": "shipping", "label": "Free shipping" },
+            { "value": "warranty", "label": "20 Year warranty" },
+            { "value": "moneyback", "label": "Money back" },
+            { "value": "secure", "label": "Secure checkout" },
+            { "value": "check", "label": "Check" }
+          ],
+          "default": "shipping"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Custom icon (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart trust badges",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "text": "Free Shipping, Ships in 3-6 days",
+            "icon_preset": "shipping"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "text": "20 Year Warranty",
+            "icon_preset": "warranty"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "text": "30 Days Money Back Guarantee",
+            "icon_preset": "moneyback"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "text": "Secure Checkout",
+            "icon_preset": "secure"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

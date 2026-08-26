@@ -575,6 +575,7 @@
         "enable_container": true,
         "eyebrow": "Customer Reviews",
         "heading": "Loved by garage owners nationwide",
+        "show_quote_icon": true,
         "section_bg": "#f7f7f7",
         "section_gradient_bg": "",
         "accent_color": "#dc1c1b",

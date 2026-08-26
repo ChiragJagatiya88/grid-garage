@@ -120,11 +120,13 @@ class CartItems extends HTMLElement {
   }
 
   getSectionsToRender() {
-    return [
+    const cartItems = document.getElementById('main-cart-items');
+    const cartFooter = document.getElementById('main-cart-footer');
+    const sections = [
       {
         id: 'main-cart-items',
-        section: document.getElementById('main-cart-items').dataset.id,
-        selector: '.js-contents',
+        section: cartItems.dataset.id,
+        selector: '.gg-cart-items-contents',
       },
       {
         id: 'cart-icon-bubble',
@@ -136,12 +138,17 @@ class CartItems extends HTMLElement {
         section: 'cart-live-region-text',
         selector: '.shopify-section',
       },
-      {
-        id: 'main-cart-footer',
-        section: document.getElementById('main-cart-footer').dataset.id,
-        selector: '.js-contents',
-      },
     ];
+
+    if (cartFooter) {
+      sections.push({
+        id: 'main-cart-footer',
+        section: cartFooter.dataset.id || cartItems.dataset.id,
+        selector: '.gg-cart-footer-contents',
+      });
+    }
+
+    return sections;
   }
 
   updateQuantity(line, quantity, event, name, variantId) {

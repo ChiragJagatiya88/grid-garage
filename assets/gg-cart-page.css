@@ -1,0 +1,229 @@
+/* GridGarage cart page — items + summary in one section
+───────────────────────────────────────── */
+
+.cart-item__unit-price,
+.cart-item__final-price {
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.35;
+}
+
+.cart-item__sqft {
+  margin-top: 0.15rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(var(--color-foreground), 0.9);
+}
+
+.cart-item__details .product-option {
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.85);
+}
+
+.cart-item__details .product-option dt,
+.cart-item__details .product-option dd {
+  display: inline;
+  margin: 0;
+  font-weight: 400;
+}
+
+.cart-item__name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+/* Quantity + remove spacing */
+#MainContent .cart-item__quantity-wrapper {
+  align-items: center;
+  gap: 1rem;
+}
+
+#MainContent .cart-item cart-remove-button {
+  margin: 0;
+}
+
+#MainContent .cart-item__totals .price {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* Summary card */
+.gg-cart-summary {
+  width: 100%;
+}
+
+.gg-cart-totals {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.gg-cart-totals .totals__compare {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  color: rgba(var(--color-foreground), 0.45);
+}
+
+.gg-cart-totals .totals__compare s {
+  text-decoration: line-through;
+}
+
+.gg-cart-totals .totals__total-value {
+  margin: 0;
+  font-size: clamp(3rem, 3.2vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: rgb(var(--color-foreground));
+}
+
+#main-cart-footer .tax-note {
+  display: none;
+}
+
+#main-cart-footer .cart__ctas {
+  display: block;
+  text-align: left;
+  margin-top: 1.6rem;
+}
+
+#main-cart-footer .cart__checkout-button {
+  width: 100%;
+  max-width: none;
+  min-height: 5rem;
+  background: #dc1c1b;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 1.6rem;
+}
+
+#main-cart-footer .cart__checkout-button:hover {
+  background: #c21818;
+  color: #fff;
+}
+
+#main-cart-footer .cart__dynamic-checkout-buttons {
+  max-width: none;
+  margin: 1rem 0 0;
+  width: 100%;
+}
+
+#main-cart-footer .cart__blocks {
+  width: 100%;
+  padding: 2.4rem 2rem;
+  border: 1px solid #111;
+  border-radius: 12px;
+  background: #fff;
+}
+
+#main-cart-footer .cart__footer {
+  display: block;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+#main-cart-footer .cart__footer > * {
+  width: 100%;
+  margin: 0;
+}
+
+.gg-cart-page .title-wrapper-with-link {
+  margin-bottom: 2.4rem;
+}
+
+.gg-cart-layout__main .cart__items {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+cart-items.is-empty .gg-cart-layout__summary,
+.gg-cart-layout__summary.is-empty {
+  display: none;
+}
+
+/* Empty cart — center default content */
+cart-items.is-empty .gg-cart-layout {
+  display: block;
+}
+
+cart-items.is-empty .cart__warnings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 40rem;
+  margin: 4rem auto;
+  padding-inline: 1.5rem;
+}
+
+cart-items.is-empty .cart__empty-text,
+cart-items.is-empty .cart__login-title {
+  text-align: center;
+}
+
+cart-items.is-empty .cart__warnings .button {
+  margin-inline: auto;
+}
+
+cart-items.is-empty .cart__login-paragraph {
+  text-align: center;
+  margin-inline: auto;
+}
+
+/* Two-column layout inside cart-items section */
+@media screen and (min-width: 990px) {
+  .gg-cart-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+    column-gap: 4rem;
+    align-items: start;
+  }
+
+  .gg-cart-layout__main {
+    min-width: 0;
+  }
+
+  /* Sticky only the summary column inside this section */
+  .gg-cart-layout__summary {
+    position: sticky;
+    top: 12rem;
+    align-self: start;
+    z-index: 2;
+    min-width: 0;
+  }
+
+  .gg-cart-layout [data-shopify-buttoncontainer] {
+    justify-content: stretch;
+  }
+
+  .gg-cart-layout .additional-checkout-buttons [data-shopify-buttoncontainer] > * {
+    flex: 1 1 0;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .gg-cart-layout__summary {
+    margin-top: 1.6rem;
+  }
+
+  #main-cart-footer .tax-note {
+    display: block;
+    margin: 1.2rem 0 1.6rem;
+    text-align: left;
+  }
+
+  .gg-cart-totals {
+    align-items: flex-end;
+  }
+}

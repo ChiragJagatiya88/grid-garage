@@ -1,0 +1,75 @@
+/* Cart trust badges — Figma row of 4 cards
+───────────────────────────────────────── */
+
+.gg-cart-trust {
+  padding-block: var(--gg-ct-pad-m, 28px);
+}
+
+@media screen and (min-width: 750px) {
+  .gg-cart-trust {
+    padding-block: var(--gg-ct-pad-d, 40px);
+  }
+}
+
+.gg-cart-trust__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .gg-cart-trust__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .gg-cart-trust__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.6rem;
+  }
+}
+
+.gg-cart-trust__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  text-align: center;
+  min-height: 14rem;
+  padding: 2.4rem 1.6rem;
+  background: var(--gg-ct-card, #f2f2f2);
+  border-radius: 1.2rem;
+}
+
+.gg-cart-trust__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.6rem;
+  height: 5.6rem;
+  flex: none;
+}
+
+.gg-cart-trust__badge,
+.gg-cart-trust__icon-img {
+  width: 5.6rem;
+  height: 5.6rem;
+  display: block;
+  object-fit: contain;
+}
+
+.gg-cart-trust__text {
+  margin: 0;
+  max-width: 18rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #0e100f;
+}

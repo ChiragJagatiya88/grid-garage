@@ -1,0 +1,297 @@
+{{ 'if-featured-collection.css' | asset_url | stylesheet_tag }}
+{{ 'gg-design-garage.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign gg_accent = section.settings.accent_color | default: '#DC1C1B'
+  assign gg_bg = section.settings.section_bg | default: '#F7F7F7'
+  assign gg_source = section.settings.source | default: 'collection'
+  assign gg_layout = section.settings.layout | default: 'grid'
+  assign gg_limit = section.settings.products_to_show | default: 8
+  assign gg_has_products = false
+
+  if gg_source == 'products' and section.settings.product_list != blank
+    assign gg_products = section.settings.product_list
+    assign gg_has_products = true
+  elsif section.settings.collection != blank and section.settings.collection.products.size > 0
+    assign gg_products = section.settings.collection.products
+    assign gg_has_products = true
+  endif
+-%}
+
+{%- if gg_layout == 'slider' -%}
+  {% render 'if-swiper' %}
+  <script src="{{ 'if-featured-collection.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+<div
+  id="gg-dg-{{ section.id }}"
+  class="section_{{ section.id }} if-fc gg-dg gg-dg--{{ gg_layout }}{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  {% if gg_layout == 'slider' %}data-if-fc{% endif %}
+  data-gg-dg
+  style="--if-fc-accent: {{ gg_accent }}; --if-fc-bg: {{ gg_bg }};"
+>
+  <div class="{% if section.settings.enable_container %}if-fc__inner{% else %}if-fc__inner if-fc__inner--fluid{% endif %}">
+    <div class="if-fc__head">
+      <div class="if-fc__titles">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="if-fc__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <div class="if-fc__subtitle">{{ section.settings.subtitle }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- if gg_layout == 'slider' -%}
+        <div class="if-fc__nav" data-if-fc-nav aria-label="Product carousel controls" hidden>
+          <button type="button" class="if-fc__nav-btn" data-if-fc-prev aria-label="Previous products">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <button type="button" class="if-fc__nav-btn" data-if-fc-next aria-label="Next products">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if gg_layout == 'slider' -%}
+      <div class="if-fc__rail swiper" data-if-fc-rail>
+        <div class="swiper-wrapper" role="list">
+          {%- if gg_has_products -%}
+            {%- for tile_product in gg_products limit: gg_limit -%}
+              <div class="swiper-slide" role="listitem">
+                {%- render 'if-product-tile-card',
+                  tile_product: tile_product,
+                  show_swatches: section.settings.show_swatches,
+                  show_price: section.settings.show_price,
+                  is_selected: false,
+                  badge_mode: 'auto'
+                -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              <div class="swiper-slide" role="listitem">
+                <div class="if-fc__tile if-fc__tile--placeholder">
+                  <div class="if-fc__tile-img">
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                  <p class="if-fc__tile-name">
+                    {%- if gg_source == 'products' -%}
+                      Select products
+                    {%- else -%}
+                      Select a collection
+                    {%- endif -%}
+                  </p>
+                  <p class="if-fc__tile-size">17" x 17" inch</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- else -%}
+      <div class="gg-dg__grid" role="list">
+        {%- if gg_has_products -%}
+          {%- for tile_product in gg_products limit: gg_limit -%}
+            <div class="gg-dg__item" role="listitem">
+              {%- render 'if-product-tile-card',
+                tile_product: tile_product,
+                show_swatches: section.settings.show_swatches,
+                show_price: section.settings.show_price,
+                is_selected: false,
+                badge_mode: 'auto'
+              -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <div class="gg-dg__item" role="listitem">
+              <div class="if-fc__tile if-fc__tile--placeholder">
+                <div class="if-fc__tile-img">
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+                <p class="if-fc__tile-name">
+                  {%- if gg_source == 'products' -%}
+                    Select products
+                  {%- else -%}
+                    Select a collection
+                  {%- endif -%}
+                </p>
+                <p class="if-fc__tile-size">17" x 17" inch</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if section.settings.enable_custom_padding -%}
+  <style>
+    .section_{{ section.id }}.gg-dg {
+      padding-block: {{ section.settings.padding_desk }};
+      background: {{ gg_bg }};
+    }
+    @media screen and (max-width: 749px) {
+      .section_{{ section.id }}.gg-dg {
+        padding-block: {{ section.settings.padding_mob }};
+      }
+    }
+  </style>
+{%- else -%}
+  <style>
+    .section_{{ section.id }}.gg-dg {
+      background: {{ gg_bg }};
+    }
+  </style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Design your garage",
+  "tag": "section",
+  "class": "section-gg-design-garage",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_custom_class",
+      "label": "Enable custom class",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": "Custom class"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_container",
+      "label": "Enable container",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Design Your Own Perfect Garage"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>From cracked concrete to a garage you'll actually be proud to open every day.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "slider", "label": "Slider" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Product source",
+      "options": [
+        { "value": "collection", "label": "Collection" },
+        { "value": "products", "label": "Product list" }
+      ],
+      "default": "collection",
+      "info": "Choose Collection or Product list below. Only the selected source is used."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Used when Product source is Collection"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products",
+      "limit": 16,
+      "info": "Used when Product source is Product list"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "label": "Show color swatches",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show product price",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section background",
+      "default": "#F7F7F7"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#DC1C1B"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding",
+      "label": "Enable custom padding",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "padding_desk",
+      "label": "Padding desktop",
+      "default": "60px 0"
+    },
+    {
+      "type": "text",
+      "id": "padding_mob",
+      "label": "Padding mobile",
+      "default": "40px 0"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Design your garage"
+    }
+  ]
+}
+{% endschema %}

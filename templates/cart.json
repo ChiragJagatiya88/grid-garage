@@ -7,10 +7,24 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
+ {
   "sections": {
     "cart-items": {
       "type": "main-cart-items",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons"
+      ],
       "settings": {
         "color_scheme": "scheme-1",
         "padding_top": 36,
@@ -19,31 +33,177 @@
     },
     "cart-footer": {
       "type": "main-cart-footer",
-      "settings": {
-        "color_scheme": "scheme-1",
-        "padding_top": 20,
-        "padding_bottom": 40
-      },
       "blocks": {
         "subtotal": {
           "type": "subtotal",
-          "settings": {
-          }
+          "settings": {}
         },
         "buttons": {
           "type": "buttons",
-          "settings": {
-          }
+          "settings": {}
         }
       },
       "block_order": [
         "subtotal",
         "buttons"
-      ]
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 40
+      }
+    },
+    "cart_trust_badges": {
+      "type": "gg-cart-trust-badges",
+      "blocks": {
+        "badge_shipping": {
+          "type": "badge",
+          "settings": {
+            "text": "Free Shipping, Ships in 3-6 days",
+            "icon_preset": "shipping",
+            "icon": "shopify://shop_images/Group_2147228722.svg"
+          }
+        },
+        "badge_warranty": {
+          "type": "badge",
+          "settings": {
+            "text": "20 Year Warranty",
+            "icon_preset": "warranty",
+            "icon": "shopify://shop_images/Group_2147228722_1.svg"
+          }
+        },
+        "badge_moneyback": {
+          "type": "badge",
+          "settings": {
+            "text": "30 Days Money Back Guarantee",
+            "icon_preset": "moneyback",
+            "icon": "shopify://shop_images/Group_2147228723.svg"
+          }
+        },
+        "badge_secure": {
+          "type": "badge",
+          "settings": {
+            "text": "Secure Checkout",
+            "icon_preset": "secure",
+            "icon": "shopify://shop_images/Group_2147228723_1.svg"
+          }
+        }
+      },
+      "block_order": [
+        "badge_shipping",
+        "badge_warranty",
+        "badge_moneyback",
+        "badge_secure"
+      ],
+      "settings": {
+        "enable_container": true,
+        "card_bg": "#efefef",
+        "padding_desk": "40px",
+        "padding_mob": "28px",
+        "enable_custom_class": false,
+        "section_class": ""
+      }
+    },
+    "if_customer_reviews_y3JXNH": {
+      "type": "if-customer-reviews",
+      "blocks": {
+        "review_MqyG86": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625937_d59f4fc3-f3aa-4c96-9d36-55f5099280f0.jpg",
+            "title": "Answered all my questions",
+            "body": "“I was building my mancave and couldn't figure out the right flooring system. GridGarage answered all my questions.”",
+            "author": "Michael Anderson",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "review_WHidnc": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625936.jpg",
+            "title": "The real deal",
+            "body": "“Completely changed the look of my garage. It went from a dusty storage room to my favorite place in the house.”",
+            "author": "Daniel Thompson",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "review_P7J9JA": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625937.jpg",
+            "title": "Brilliant",
+            "body": "“I was building my mancave and couldn't figure out the right flooring system. GridGarage answered all my questions.”",
+            "author": "James Bennett",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "review_zhJniX": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625940_ec1d81f4-e935-412d-9358-d4be6e5666f0.jpg",
+            "title": "Completely transformed our garage",
+            "body": "“A tinkerers dream. As someone who spends every weekend fixing up old motorcycles, I needed a clean, durable workspace.”",
+            "author": "Ryan Mitchell",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "review_wdihKJ": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625940.jpg",
+            "title": "Amazing customer service",
+            "body": "“Highly recommend grid garage, amazing customer service.”",
+            "author": "Rachel G.",
+            "verified": true,
+            "rating": 5
+          }
+        },
+        "review_JWkHw8": {
+          "type": "review",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_34625939.jpg",
+            "title": "Premium Quality",
+            "body": "“Worth every penny. It is a premium price, but you get premium quality. The interlocking tiles do not budge even under my heaviest equipment. The website installation videos were also a massive help.”",
+            "author": "Chloe V.",
+            "verified": true,
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "review_MqyG86",
+        "review_WHidnc",
+        "review_P7J9JA",
+        "review_zhJniX",
+        "review_wdihKJ",
+        "review_JWkHw8"
+      ],
+      "settings": {
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "eyebrow": "Customer Reviews",
+        "heading": "Loved by garage owners nationwide",
+        "show_quote_icon": false,
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#df2d2c",
+        "enable_custom_padding": true,
+        "padding_desk": "70px",
+        "padding_mob": "50px"
+      }
     }
   },
   "order": [
     "cart-items",
-    "cart-footer"
+    "cart-footer",
+    "cart_trust_badges",
+    "if_customer_reviews_y3JXNH"
   ]
 }
