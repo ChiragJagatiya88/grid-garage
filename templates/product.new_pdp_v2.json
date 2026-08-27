@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "sections": {
     "product_main_v2": {
       "type": "if-new-pdp-v2",
@@ -118,7 +118,7 @@
             "atc_label": "ADD TO CART",
             "sold_out_label": "SOLD OUT",
             "secondary_label": "DESIGN MY FLOOR",
-            "secondary_link": ""
+            "secondary_link": "shopify://pages/design-your-floor"
           }
         },
         "trust_secure": {
@@ -223,6 +223,8 @@
         "enable_custom_class": false,
         "section_class": "",
         "enable_container": true,
+        "support_phone_label": "(888) 898-8022",
+        "support_phone": "8888988022",
         "use_product_media": true,
         "promo_text": "Black Front Ramp Edges Included - Free. Every flooring order includes the required front entrance ramp edge pieces.",
         "benefits_heading": "Key Benefits",
