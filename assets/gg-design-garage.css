@@ -61,6 +61,12 @@
   box-shadow: 0 4px 16px rgba(14, 16, 15, 0.06);
 }
 
+.gg-dg .if-fc__dealer-badge {
+  top: 5px;
+  right: 5px;
+  width: clamp(40px, 30%, 60px);
+}
+
 .gg-dg--slider .if-fc__tile {
   border-color: transparent;
 }

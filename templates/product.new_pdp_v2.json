@@ -104,7 +104,7 @@
           "type": "quantity",
           "settings": {
             "qty_label": "Quantity",
-            "default_qty": 60,
+            "default_qty": 1,
             "min_qty": 1,
             "coverage_label": "Calculate Coverage",
             "coverage_help": "Enter the number of tiles to see total coverage area.",
@@ -182,7 +182,7 @@
           "settings": {
             "title": "Specifications",
             "use_product_description": false,
-            "content": "<p>Tile dimensions, construction, weight capacity, warranty, and available colors vary by the collection selected.</p>"
+            "content": "{{ product.metafields.custom.specifications | metafield_tag }}"
           }
         },
         "acc_shipping": {
@@ -238,7 +238,6 @@
     },
     "main": {
       "type": "if-new-pdp-v1",
-      "disabled": true,
       "blocks": {
         "gallery_image_wH4ekE": {
           "type": "gallery_image",
@@ -364,6 +363,7 @@
         "acc_specs",
         "acc_shipping"
       ],
+      "disabled": true,
       "settings": {
         "enable_custom_class": false,
         "section_class": "",
@@ -464,6 +464,7 @@
         "intro_logo_width": 96,
         "choose_label": "Step 1: Choose Tile",
         "tile_collection": "complete-garage-floor-kits",
+        "default_product": "",
         "show_swatches": true,
         "show_price": true,
         "size_heading": "Step 2: Enter Floor Size",

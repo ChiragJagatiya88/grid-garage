@@ -160,6 +160,28 @@
   z-index: 1;
 }
 
+.if-fc__dealer-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  width: clamp(40px, 28%, 70px);
+  line-height: 0;
+  pointer-events: none;
+}
+
+.if-fc__dealer-badge img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+  position: relative;
+  z-index: 4;
+}
+
 .if-fc__tile-badge-container {
   position: absolute;
   top: 0;

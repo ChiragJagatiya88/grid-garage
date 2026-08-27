@@ -72,6 +72,22 @@
   data-product-handle="{{ tile_product.handle }}"
 >
   <div class="if-fc__tile-img">
+    {%- liquid
+      assign if_show_dealer_logo = tile_product.metafields.custom.show_dealer_logo.value | default: tile_product.metafields.custom.show_dealer_logo
+    -%}
+    {%- if if_show_dealer_logo == true or if_show_dealer_logo == 'true' or if_show_dealer_logo == 1 -%}
+      <div class="if-fc__dealer-badge" aria-hidden="true">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0811/8543/9973/files/Authorized_Dealer_Logo_2.png?v=1786627547"
+          alt=""
+          width="72"
+          height="72"
+          loading="lazy"
+          decoding="async"
+        >
+      </div>
+    {%- endif -%}
+
     {%- if if_badge_label != blank -%}
       <div class="if-fc__tile-badge-container">
         <span

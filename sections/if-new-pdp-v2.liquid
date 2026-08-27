@@ -9,6 +9,14 @@
   assign if_trust_blocks = section.blocks | where: 'type', 'trust'
   assign if_accordion_blocks = section.blocks | where: 'type', 'accordion'
   assign if_slide_count = 0
+  assign if_showcase_media = product.metafields.custom.showcase_media.value | default: product.metafields.custom.showcase_media
+  assign if_showcase_count = 0
+  assign if_show_dealer_logo = product.metafields.custom.show_dealer_logo.value | default: product.metafields.custom.show_dealer_logo
+  assign if_pdp2_tags_lc = product.tags | join: ',' | downcase
+  assign if_price_by_consultation = false
+  if if_pdp2_tags_lc contains 'price by consultation'
+    assign if_price_by_consultation = true
+  endif
   assign product_form_id = 'if-pdp2-form-' | append: section.id
 
   assign if_mf_title = product.metafields.custom.product_title.value | default: product.metafields.custom.product_title
@@ -189,8 +197,71 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
               </button>
             {%- endif -%}
+
+            {%- if if_show_dealer_logo == true or if_show_dealer_logo == 'true' or if_show_dealer_logo == 1 -%}
+              <div class="if-pdp2__dealer-badge" aria-hidden="true">
+                <img
+                  src="https://cdn.shopify.com/s/files/1/0811/8543/9973/files/Authorized_Dealer_Logo_2.png?v=1786627547"
+                  alt="Swisstrax Authorized Dealer"
+                  width="96"
+                  height="96"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </div>
+            {%- endif -%}
           </div>
         </div>
+
+        {%- comment -%} Showcase gallery from custom.showcase_media {%- endcomment -%}
+        {%- if if_showcase_media != blank -%}
+          {%- assign if_showcase_count = 0 -%}
+          {%- capture if_showcase_slides -%}
+            {%- for media in if_showcase_media -%}
+              {%- liquid
+                assign if_showcase_img = blank
+                if media.preview_image != blank
+                  assign if_showcase_img = media.preview_image
+                elsif media != blank
+                  assign if_showcase_img = media
+                endif
+              -%}
+              {%- if if_showcase_img != blank -%}
+                {%- assign if_showcase_count = if_showcase_count | plus: 1 -%}
+                <figure class="if-pdp2__slide">
+                  {{
+                    if_showcase_img
+                    | image_url: width: 1600
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: '(min-width: 990px) 50vw, 100vw',
+                      widths: '400,600,800,1000,1200,1600',
+                      alt: if_showcase_img.alt | default: if_product_title | escape
+                  }}
+                </figure>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endcapture -%}
+
+          {%- if if_showcase_count > 0 -%}
+            <div class="if-pdp2__gallery if-pdp2__gallery--showcase" data-if-pdp2-gallery data-if-pdp2-showcase-gallery>
+              <div class="if-pdp2__gallery-frame">
+                <div class="if-pdp2__gallery-track" data-if-pdp2-gallery-track>
+                  {{ if_showcase_slides }}
+                </div>
+
+                {%- if if_showcase_count > 1 -%}
+                  <button type="button" class="if-pdp2__nav if-pdp2__nav--prev" data-if-pdp2-gallery-prev aria-label="Previous showcase image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <button type="button" class="if-pdp2__nav if-pdp2__nav--next" data-if-pdp2-gallery-next aria-label="Next showcase image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
 
         {%- if section.settings.promo_text != blank -%}
           <div class="if-pdp2__promo">
@@ -254,7 +325,12 @@
               {%- endif -%}
 
             {%- when 'pricing' -%}
-              <div class="if-pdp2__pricing" {{ block.shopify_attributes }} data-if-pdp2-pricing>
+              <div class="if-pdp2__pricing{% if if_price_by_consultation %} if-pdp2__pricing--quote{% endif %}" {{ block.shopify_attributes }} data-if-pdp2-pricing>
+                {%- if if_price_by_consultation -%}
+                  <p class="if-pdp2__unit if-pdp2__unit--quote" data-if-pdp2-unit-price>
+                    Call Today for the Best Pricing (No Sales Tax at Checkout)
+                  </p>
+                {%- else -%}
                 {%- if if_price_sq_ft != blank -%}
                   {%- liquid
                     comment
@@ -316,6 +392,7 @@
                       <span class="if-pdp2__unit-text">{{ unit_after | escape }}</span>
                     {%- endif -%}
                   </p>
+                {%- endif -%}
                 {%- endif -%}
               </div>
 
@@ -530,8 +607,9 @@
               {%- endif -%}
 
             {%- when 'quantity' -%}
+              {%- unless if_price_by_consultation -%}
               {%- liquid
-                assign qty_default = block.settings.default_qty | default: 60
+                assign qty_default = block.settings.default_qty | default: 1
                 if block.settings.sq_ft_per_tile != blank
                   assign sq_per = block.settings.sq_ft_per_tile
                 else
@@ -578,10 +656,18 @@
                   </div>
                 </div>
               </div>
+              {%- endunless -%}
 
             {%- when 'buttons' -%}
               <div class="if-pdp2__cta" {{ block.shopify_attributes }}>
-                {%- if block.settings.show_add_to_cart -%}
+                {%- if if_price_by_consultation -%}
+                  <a
+                    class="if-pdp2__btn if-pdp2__btn--primary"
+                    href="tel:{{ section.settings.support_phone | default: '8888988022' | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}"
+                  >
+                    CALL {{ section.settings.support_phone_label | default: '(888) 898-8022' | escape }}
+                  </a>
+                {%- elsif block.settings.show_add_to_cart -%}
                   <product-form class="if-pdp2__product-form" data-hide-errors="false">
                     {%- form 'product', product, id: product_form_id, class: 'if-pdp2__form', novalidate: 'novalidate' -%}
                       <input type="hidden" name="id" value="{{ if_unit_variant.id }}" data-if-pdp2-variant-id>
@@ -724,95 +810,101 @@
     var root = document.querySelector('.section_{{ section.id }}[data-if-pdp2]');
     if (!root) return;
 
-    /* Gallery */
-    var gallery = root.querySelector('[data-if-pdp2-gallery]');
-    var frame = gallery ? gallery.querySelector('.if-pdp2__gallery-frame') : null;
-    var track = gallery ? gallery.querySelector('[data-if-pdp2-gallery-track]') : null;
-    var slides = track ? Array.prototype.slice.call(track.querySelectorAll('.if-pdp2__slide')) : [];
-    var prev = gallery ? gallery.querySelector('[data-if-pdp2-gallery-prev]') : null;
-    var next = gallery ? gallery.querySelector('[data-if-pdp2-gallery-next]') : null;
-    var index = 0;
-    var drag = {
-      active: false,
-      startX: 0,
-      currentX: 0,
-      width: 0,
-      moved: false,
-      pointerId: null
-    };
+    /* Galleries (product media + showcase metafield) */
+    function initGallery(gallery) {
+      if (!gallery) return;
+      var frame = gallery.querySelector('.if-pdp2__gallery-frame');
+      var track = gallery.querySelector('[data-if-pdp2-gallery-track]');
+      var slides = track ? Array.prototype.slice.call(track.querySelectorAll('.if-pdp2__slide')) : [];
+      var prev = gallery.querySelector('[data-if-pdp2-gallery-prev]');
+      var next = gallery.querySelector('[data-if-pdp2-gallery-next]');
+      var index = 0;
+      var drag = {
+        active: false,
+        startX: 0,
+        currentX: 0,
+        width: 0,
+        moved: false,
+        pointerId: null
+      };
 
-    function goTo(i, animate) {
-      if (!slides.length || !track) return;
-      index = (i + slides.length) % slides.length;
-      if (animate === false) {
+      function goTo(i, animate) {
+        if (!slides.length || !track) return;
+        index = (i + slides.length) % slides.length;
+        if (animate === false) {
+          track.style.transition = 'none';
+        } else {
+          track.style.transition = '';
+        }
+        track.style.transform = 'translateX(' + (-index * 100) + '%)';
+      }
+
+      function dragOffsetPercent() {
+        if (!drag.width) return 0;
+        return ((drag.currentX - drag.startX) / drag.width) * 100;
+      }
+
+      function onPointerDown(e) {
+        if (!slides.length || slides.length < 2 || !track || !frame) return;
+        if (e.target.closest && e.target.closest('.if-pdp2__nav')) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+        drag.active = true;
+        drag.moved = false;
+        drag.startX = e.clientX;
+        drag.currentX = e.clientX;
+        drag.width = frame.offsetWidth || 1;
+        drag.pointerId = e.pointerId;
+
         track.style.transition = 'none';
-      } else {
+        frame.classList.add('is-dragging');
+        try {
+          frame.setPointerCapture(e.pointerId);
+        } catch (err) {}
+      }
+
+      function onPointerMove(e) {
+        if (!drag.active || !track) return;
+        drag.currentX = e.clientX;
+        var dx = drag.currentX - drag.startX;
+        if (Math.abs(dx) > 4) drag.moved = true;
+        if (drag.moved && e.cancelable) e.preventDefault();
+
+        var offset = -index * 100 + dragOffsetPercent();
+        track.style.transform = 'translateX(' + offset + '%)';
+      }
+
+      function onPointerUp() {
+        if (!drag.active || !track) return;
+        drag.active = false;
+        frame.classList.remove('is-dragging');
+        try {
+          if (drag.pointerId != null) frame.releasePointerCapture(drag.pointerId);
+        } catch (err) {}
+        drag.pointerId = null;
+
         track.style.transition = '';
+        var pct = dragOffsetPercent();
+        if (Math.abs(pct) > 15) {
+          goTo(pct < 0 ? index + 1 : index - 1);
+        } else {
+          goTo(index);
+        }
       }
-      track.style.transform = 'translateX(' + (-index * 100) + '%)';
-    }
 
-    function dragOffsetPercent() {
-      if (!drag.width) return 0;
-      return (drag.currentX - drag.startX) / drag.width * 100;
-    }
+      if (prev) prev.addEventListener('click', function () { goTo(index - 1); });
+      if (next) next.addEventListener('click', function () { goTo(index + 1); });
 
-    function onPointerDown(e) {
-      if (!slides.length || slides.length < 2 || !track || !frame) return;
-      if (e.target.closest && e.target.closest('.if-pdp2__nav')) return;
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-
-      drag.active = true;
-      drag.moved = false;
-      drag.startX = e.clientX;
-      drag.currentX = e.clientX;
-      drag.width = frame.offsetWidth || 1;
-      drag.pointerId = e.pointerId;
-
-      track.style.transition = 'none';
-      frame.classList.add('is-dragging');
-      try { frame.setPointerCapture(e.pointerId); } catch (err) {}
-    }
-
-    function onPointerMove(e) {
-      if (!drag.active || !track) return;
-      drag.currentX = e.clientX;
-      var dx = drag.currentX - drag.startX;
-      if (Math.abs(dx) > 4) drag.moved = true;
-      if (drag.moved && e.cancelable) e.preventDefault();
-
-      var offset = -index * 100 + dragOffsetPercent();
-      track.style.transform = 'translateX(' + offset + '%)';
-    }
-
-    function onPointerUp(e) {
-      if (!drag.active || !track) return;
-      drag.active = false;
-      frame.classList.remove('is-dragging');
-      try {
-        if (drag.pointerId != null) frame.releasePointerCapture(drag.pointerId);
-      } catch (err) {}
-      drag.pointerId = null;
-
-      track.style.transition = '';
-      var pct = dragOffsetPercent();
-      if (Math.abs(pct) > 15) {
-        goTo(pct < 0 ? index + 1 : index - 1);
-      } else {
-        goTo(index);
+      if (frame && slides.length > 1) {
+        frame.addEventListener('pointerdown', onPointerDown);
+        frame.addEventListener('pointermove', onPointerMove);
+        frame.addEventListener('pointerup', onPointerUp);
+        frame.addEventListener('pointercancel', onPointerUp);
+        frame.addEventListener('dragstart', function (e) { e.preventDefault(); });
       }
     }
 
-    if (prev) prev.addEventListener('click', function () { goTo(index - 1); });
-    if (next) next.addEventListener('click', function () { goTo(index + 1); });
-
-    if (frame && slides.length > 1) {
-      frame.addEventListener('pointerdown', onPointerDown);
-      frame.addEventListener('pointermove', onPointerMove);
-      frame.addEventListener('pointerup', onPointerUp);
-      frame.addEventListener('pointercancel', onPointerUp);
-      frame.addEventListener('dragstart', function (e) { e.preventDefault(); });
-    }
+    root.querySelectorAll('[data-if-pdp2-gallery]').forEach(initGallery);
     /* Quantity + coverage */
     var qtyWrap = root.querySelector('[data-if-pdp2-qty]');
     var qtyInput = root.querySelector('[data-if-pdp2-qty-input]');
@@ -1040,6 +1132,26 @@
       "id": "enable_container",
       "label": "Enable Container",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Consultation products"
+    },
+    {
+      "type": "paragraph",
+      "content": "Products tagged “price by consultation” hide Add to Cart and show a call button instead."
+    },
+    {
+      "type": "text",
+      "id": "support_phone_label",
+      "label": "Support phone (display)",
+      "default": "(888) 898-8022"
+    },
+    {
+      "type": "text",
+      "id": "support_phone",
+      "label": "Support phone (tel link)",
+      "default": "8888988022"
     },
     {
       "type": "header",
