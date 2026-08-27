@@ -299,7 +299,7 @@
 
   .gg-fh__nav .header__inline-menu > .list-menu--inline {
     justify-content: flex-start;
-    column-gap: 2.4rem;
+    column-gap: 1.4rem;
     row-gap: 0.8rem;
   }
 
