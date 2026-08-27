@@ -519,7 +519,9 @@
                             <s>{{ cart.original_total_price | money }}</s>
                           </p>
                         {%- endif -%}
-                        <p data-hulkapps-cart-total class="totals__total-value">{{ cart.total_price | money }}</p>
+                        <p data-hulkapps-cart-total class="totals__total-value" data-cart-subtotal>
+                          {{ cart.total_price | money }}
+                        </p>
                       </div>
 
                       <small class="tax-note caption-large rte">
@@ -561,6 +563,17 @@
                           {%- endif -%}
                         {%- endif -%}
                       </small>
+
+                      {%- if cart != empty and section.settings.show_shop_pay_installments -%}
+                        <div class="gg-cart-shop-pay">
+                          {% form 'cart', cart %}
+                            {{ form | payment_terms }}
+                          {% endform %}
+                          {%- if section.settings.shop_pay_shipping_note != blank -%}
+                            <p class="gg-cart-shop-pay__note">{{ section.settings.shop_pay_shipping_note | escape }}</p>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
                     </div>
                   </div>
                 {%- when 'buttons' -%}
@@ -628,6 +641,23 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Shop Pay installments"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shop_pay_installments",
+      "label": "Show Shop Pay installments above checkout",
+      "default": true,
+      "info": "Requires Shop Pay Installments to be enabled in Shopify admin. Amount updates with cart total."
+    },
+    {
+      "type": "text",
+      "id": "shop_pay_shipping_note",
+      "label": "Note under Shop Pay messaging",
+      "default": "FREE Shipping Included (Limited Time Offer)"
     }
   ],
   "blocks": [
