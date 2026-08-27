@@ -1728,62 +1728,6 @@
   flex: none;
 }
 
-@media screen and (max-width: 749px) {
-  .if-cfg__dream-head,
-  .if-cfg__dream-body {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .if-cfg__dream-title {
-    font-size: 16px;
-  }
-
-  .if-cfg__trust {
-    flex-direction: column;
-    align-items: center;
-    padding: 14px 16px;
-  }
-
-  .if-cfg__trust-contacts {
-    justify-content: center;
-    gap: 8px 16px;
-  }
-
-  .if-cfg__trust-badges {
-    justify-content: center;
-    row-gap: 8px;
-  }
-
-  .if-cfg__trust-item {
-    padding: 0 8px;
-  }
-
-  .if-cfg__trust-sep:nth-child(4) {
-    display: none;
-  }
-
-  .if-cfg__buy-quote {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .if-cfg__info-box-title {
-    font-size: 16px;
-    font-weight: 500;
-  }
-
-  .if-cfg__info-box-text {
-    font-size: 14px;
-    line-height: 1.3;
-  }
-
-  .if-cfg__shop-pay-hint,
-  .if-cfg__pay {
-    justify-content: center;
-  }
-}
-
 @media screen and (max-width: 989px) {
   .if-cfg__preview {
     position: sticky;
@@ -1899,5 +1843,71 @@
 
   .if-cfg__btn--primary {
     font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .if-cfg__dream-head,
+  .if-cfg__dream-body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .if-cfg__dream-title {
+    font-size: 16px;
+  }
+
+  .if-cfg__trust {
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 16px;
+  }
+
+  .if-cfg__trust-contacts {
+    justify-content: center;
+    gap: 8px 16px;
+  }
+
+  .if-cfg__trust-badges {
+    justify-content: center;
+    row-gap: 8px;
+  }
+
+  .if-cfg__trust-item {
+    padding: 0 8px;
+  }
+
+  .if-cfg__trust-sep:nth-child(4) {
+    display: none;
+  }
+
+  .if-cfg__buy-quote {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .if-cfg__info-box-title {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .if-cfg__info-box-text {
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .if-cfg__shop-pay-hint,
+  .if-cfg__pay {
+    justify-content: center;
+  }
+
+  .gg-dyf-cfg .if-cfg__size-grid--garage .if-cfg__size-text {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .if-cfg__pay {
+    gap: 5px 4px;
   }
 }
