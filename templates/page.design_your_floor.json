@@ -7,81 +7,113 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
+ {
   "sections": {
-    "gg_story_banner_VzY66n": {
-      "type": "gg-story-banner",
-      "name": "GG: Story banner",
-      "settings": {
-        "image": "shopify://shop_images/about-banner.png",
-        "image_alt": "Grid Garage team and flooring",
-        "image_position": "center center",
-        "overlay_color": "#000000",
-        "overlay_opacity": 30,
-        "heading": "{{ page.title }}",
-        "heading_color": "#ffffff",
-        "heading_size_desktop": 5.5,
-        "heading_lh_desktop": 6.2,
-        "heading_tracking_desktop": 0,
-        "heading_size_mobile": 3.2,
-        "heading_lh_mobile": 0,
-        "heading_tracking_mobile": 0,
-        "align_h_desktop": "center",
-        "align_v_desktop": "center",
-        "min_height_desktop": 44,
-        "inner_pad_y_desktop_top": 0,
-        "inner_pad_y_desktop_bottom": 0,
-        "align_h_mobile": "center",
-        "align_v_mobile": "center",
-        "min_height_mobile": 20,
-        "inner_pad_y_mobile": 0,
-        "content_max_width": 0,
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "gg_breadcrumbs_t7HE7g": {
-      "type": "gg-breadcrumbs",
+    "configurator": {
+      "type": "gg-design-your-floor-configurator",
       "blocks": {
-        "crumb_3rrB6z": {
-          "type": "crumb",
+        "ugc_shipping": {
+          "type": "ugc",
           "settings": {
-            "label": "Home",
-            "link": "/",
-            "is_current": false
+            "text": "Free Shipping, Ships in 3-6 days",
+            "icon_preset": "truck",
+            "icon": "shopify://shop_images/truck-fast.svg"
+          }
+        },
+        "ugc_install": {
+          "type": "ugc",
+          "settings": {
+            "text": "20 Year Warranty",
+            "icon_preset": "clock",
+            "icon": "shopify://shop_images/History_3.svg"
+          }
+        },
+        "ugc_clean": {
+          "type": "ugc",
+          "settings": {
+            "text": "Easy to Clean, Vac Blower or Hose Off",
+            "icon_preset": "package",
+            "icon": "shopify://shop_images/3d-rotate.svg"
+          }
+        },
+        "ugc_return": {
+          "type": "ugc",
+          "settings": {
+            "text": "30-Day Money-Back",
+            "icon_preset": "return",
+            "icon": "shopify://shop_images/money-send.svg"
+          }
+        },
+        "ugc_weight": {
+          "type": "ugc",
+          "settings": {
+            "text": "Supports Up to 45,000 lbs",
+            "icon_preset": "clean",
+            "icon": "shopify://shop_images/Weigher.svg"
+          }
+        },
+        "ugc_drainage": {
+          "type": "ugc",
+          "settings": {
+            "text": "Flow Thur Self Drainage - Keeps Floors Dry & Slip Free",
+            "icon_preset": "water",
+            "icon": "shopify://shop_images/Waterdrop.svg"
           }
         }
       },
       "block_order": [
-        "crumb_3rrB6z"
+        "ugc_shipping",
+        "ugc_install",
+        "ugc_clean",
+        "ugc_return",
+        "ugc_weight",
+        "ugc_drainage"
       ],
-      "name": "GG: Breadcrumbs",
       "settings": {
-        "breadcrumb_mode": "auto",
-        "hide_on_home": true,
-        "home_label": "Home",
-        "separator": "|",
-        "aria_label": "Breadcrumb",
-        "label_cart": "",
-        "label_search": "",
-        "label_collections": "",
-        "label_404": "",
-        "background_color": "#ffffff",
-        "text_color": "#222222",
-        "separator_color": "#222222",
-        "font_size_desktop": 1.2,
-        "font_size_mobile": 1.1,
-        "line_height": 1.5,
-        "font_weight": 700,
-        "letter_spacing": 0,
-        "align_desktop": "left",
-        "align_mobile": "left",
-        "padding_top": 20,
-        "padding_bottom": 12
+        "enable_custom_class": false,
+        "section_class": "",
+        "enable_container": true,
+        "heading": "Design Your Floor in 4 Easy Steps",
+        "subtitle": "From cracked concrete to a garage you'll actually be proud to open every day. (1.Choose Tile → 2. Enter Floor Size → 3. Choose Pattern → 4. Choose Colors)",
+        "intro_logo_width": 96,
+        "choose_label": "Step 1: Choose Tile",
+        "tile_collection": "complete-garage-floor-kits",
+        "default_product": "",
+        "show_swatches": false,
+        "show_price": true,
+        "size_heading": "Step 2: Choose Your Size Garage",
+        "pattern_heading": "Step 3: Choose Pattern",
+        "color_heading": "Step 4: Choose Color",
+        "custom_banner_text": "<p>Every custom order ships as a complete, ready-to-install kit interlocking tiles plus all Front Entrance Edge Pieces Included Every GridGarage kit includes tapered edge pieces for your garage entrance pre-calculated for your exact floor.</p>",
+        "show_spaces": true,
+        "spaces_heading": "Great for these spaces",
+        "spaces_text": "Garage Floors, Gyms, Patios & Decks, Workshops, Events Trade Shows, Tint Wrap Shop, Man Cave, Air Craft Hanger",
+        "summary_heading": "Your Dream Garage",
+        "quote_url": "",
+        "support_phone_label": "(888) 898-8022",
+        "support_phone": "8888988022",
+        "support_email": "",
+        "show_edge_notice": false,
+        "edge_notice_text": "<p>Front Entrance Edge Pieces Included. Every 1, 2, and 3-car garage kit includes matching tapered front edge pieces. Need full-perimeter edges? Contact us via email.</p>",
+        "edge_notice_bg": "#ffffff",
+        "edge_notice_border": "#e8e8e8",
+        "show_bonus_box": false,
+        "bonus_box_heading": "GRIDGARAGE SHOWCASE BONUS",
+        "bonus_box_text": "Share photos, a short video, and a review of your completed project to earn $50. (Eligible on projects over 300 sq. ft)",
+        "bonus_box_bg": "#fce9eb",
+        "bonus_box_border": "#f5b8c0",
+        "bonus_box_title_color": "#dc1c1b",
+        "section_bg": "#f7f7f7",
+        "section_gradient_bg": "",
+        "accent_color": "#e61e43",
+        "enable_custom_padding": true,
+        "padding_desk": "60px",
+        "padding_mob": "30px"
       }
     },
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
@@ -89,8 +121,7 @@
     }
   },
   "order": [
-    "gg_story_banner_VzY66n",
-    "gg_breadcrumbs_t7HE7g",
+    "configurator",
     "main"
   ]
 }

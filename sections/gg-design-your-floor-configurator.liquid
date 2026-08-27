@@ -1,5 +1,4 @@
-{% render 'if-swiper' %}
-{{ 'if-pdp-configurator.css' | asset_url | stylesheet_tag }}
+{{ 'gg-design-your-floor-configurator.css' | asset_url | stylesheet_tag }}
 
 {%- comment -%} Hide leftover HulkApps / Design Style pickers on this PDP {%- endcomment -%}
 <style>
@@ -29,15 +28,12 @@
   assign if_ugc_blocks = section.blocks | where: 'type', 'ugc'
   assign if_choose_prefix = section.settings.choose_label | default: 'Choose Tile'
 
-  assign if_cfg_product = product
-  assign if_cfg_page_mode = false
-  if if_cfg_product == blank or if_cfg_product.id == blank
-    assign if_cfg_page_mode = true
-    if section.settings.default_product != blank
-      assign if_cfg_product = section.settings.default_product
-    elsif if_collection != blank and if_collection.products.size > 0
-      assign if_cfg_product = if_collection.products.first
-    endif
+  assign if_cfg_page_mode = true
+  assign if_cfg_product = blank
+  if section.settings.default_product != blank
+    assign if_cfg_product = section.settings.default_product
+  elsif if_collection != blank and if_collection.products.size > 0
+    assign if_cfg_product = if_collection.products.first
   endif
 
   assign if_selected_title = if_cfg_product.title | default: 'Select a tile'
@@ -52,8 +48,8 @@
 -%}
 
 <div
-  id="if-configure"
-  class="section_{{ section.id }} if-cfg{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
+  id="gg-design-your-floor"
+  class="section_{{ section.id }} gg-dyf-cfg if-cfg{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
   data-if-cfg
   data-if-cfg-id="{{ section.id }}"
   {% if if_cfg_page_mode %}data-if-cfg-page-mode="true"{% endif %}
@@ -98,251 +94,6 @@
       {%- endif -%}
     </div>
 
-    {%- comment -%} Choose Tile {%- endcomment -%}
-    <div class="if-cfg__tiles" data-if-cfg-tiles>
-      <div class="if-cfg__tiles-head">
-        <p class="if-cfg__tiles-label">
-          {{ if_choose_prefix | escape }}:
-          <strong data-if-cfg-selected-name>{{ if_selected_title | escape }}</strong>
-        </p>
-        <div class="if-cfg__tiles-nav" data-if-cfg-tiles-nav aria-label="Tile carousel controls">
-          <button
-            type="button"
-            class="if-cfg__tiles-nav-btn"
-            data-if-cfg-tiles-prev
-            aria-label="Previous tiles"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-              <path d="M15 18l-6-6 6-6"/>
-            </svg>
-          </button>
-          <button
-            type="button"
-            class="if-cfg__tiles-nav-btn"
-            data-if-cfg-tiles-next
-            aria-label="Next tiles"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-              <path d="M9 18l6-6-6-6"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="if-cfg__tiles-rail swiper" data-if-cfg-tiles-rail>
-        {%- if if_tile_blocks.size > 0 or if_collection != blank -%}
-          <div class="swiper-wrapper" role="list">
-            {%- if if_tile_blocks.size > 0 -%}
-              {%- comment -%} Custom tile blocks (product picker + overrides) {%- endcomment -%}
-              {%- for block in if_tile_blocks -%}
-                {%- assign tile_product = block.settings.product -%}
-                {%- if tile_product != blank -%}
-                  {%- liquid
-                    assign is_selected = false
-                    if if_cfg_product.id == tile_product.id
-                      assign is_selected = true
-                    endif
-                    assign tile_title = block.settings.title | default: tile_product.title
-                    assign tile_size = block.settings.tile_size
-                    if tile_size == blank
-                      assign tile_size_raw = tile_product.metafields.custom.tile_size
-                      if tile_size_raw == blank
-                        assign tile_size = '12" x 12" inch'
-                      else
-                        assign tile_size = tile_size_raw | strip
-                        unless tile_size contains 'inch'
-                          assign tile_size = tile_size | append: ' inch'
-                        endunless
-                      endif
-                    endif
-                    assign tile_url = tile_product.url
-                    if block.settings.custom_url != blank
-                      assign tile_url = block.settings.custom_url
-                    endif
-                  -%}
-
-                  <div class="swiper-slide" role="listitem" {{ block.shopify_attributes }}>
-                    <a
-                      class="if-cfg__tile{% if is_selected %} is-selected{% endif %}"
-                      href="{{ tile_url }}"
-                      aria-pressed="{{ is_selected }}"
-                      data-if-cfg-tile
-                      data-product-id="{{ tile_product.id }}"
-                      data-product-handle="{{ tile_product.handle }}"
-                      data-product-title="{{ tile_title | escape }}"
-                      data-tile-size="{{ tile_size | escape }}"
-                    >
-                      <div class="if-cfg__tile-img">
-                        {%- liquid
-                          assign if_badge_mode = block.settings.badge | default: 'auto'
-                          assign if_badge_label = ''
-                          assign if_badge_mod = ''
-
-                          if if_badge_mode == 'none'
-                            assign if_badge_label = ''
-                          elsif if_badge_mode == 'custom'
-                            if block.settings.badge_text != blank
-                              assign if_badge_label = block.settings.badge_text
-                              assign if_badge_mod = 'gg-bb-custom'
-                            endif
-                          elsif if_badge_mode == 'best_value'
-                            assign if_badge_label = 'Best Value'
-                            assign if_badge_mod = 'gg-bb-value'
-                          elsif if_badge_mode == 'most_popular'
-                            assign if_badge_label = 'Most Popular'
-                            assign if_badge_mod = 'gg-bb-pop'
-                          elsif if_badge_mode == 'premium'
-                            assign if_badge_label = 'Premium'
-                            assign if_badge_mod = 'gg-bb-prem'
-                          elsif if_badge_mode == 'bold_unique'
-                            assign if_badge_label = 'Bold Unique Design'
-                            assign if_badge_mod = 'gg-bb-bold'
-                          else
-                            if tile_product.tags contains 'Best Value'
-                              assign if_badge_label = 'Best Value'
-                              assign if_badge_mod = 'gg-bb-value'
-                            elsif tile_product.tags contains 'Most Popular'
-                              assign if_badge_label = 'Most Popular'
-                              assign if_badge_mod = 'gg-bb-pop'
-                            elsif tile_product.tags contains 'Premium'
-                              assign if_badge_label = 'Premium'
-                              assign if_badge_mod = 'gg-bb-prem'
-                            elsif tile_product.tags contains 'Bold Unique'
-                              assign if_badge_label = 'Bold Unique Design'
-                              assign if_badge_mod = 'gg-bb-bold'
-                            endif
-                          endif
-                        -%}
-                        {%- if if_badge_label != blank -%}
-                          <div class="if-cfg__tile-badge-container">
-                            <span class="if-cfg__tile-badge {{ if_badge_mod }}" {% if if_badge_mode == 'custom' %}style="{% if block.settings.badge_bg != blank %}background: {{ block.settings.badge_bg }};{% endif %}{% if block.settings.badge_color != blank %}color: {{ block.settings.badge_color }};{% endif %}"{% endif %}>{{ if_badge_label | escape }}</span>
-                          </div>
-                        {%- endif -%}
-
-                        {%- if block.settings.image != blank -%}
-                          {{
-                            block.settings.image
-                            | image_url: width: 600
-                            | image_tag:
-                              loading: 'lazy',
-                              sizes: '(min-width: 990px) 18vw, 45vw',
-                              widths: '200,300,400,600',
-                              alt: tile_title
-                            | escape
-                          }}
-                        {%- elsif tile_product.featured_image != blank -%}
-                          {{
-                            tile_product.featured_image
-                            | image_url: width: 600
-                            | image_tag:
-                              loading: 'lazy',
-                              sizes: '(min-width: 990px) 18vw, 45vw',
-                              widths: '200,300,400,600',
-                              alt: tile_title
-                            | escape
-                          }}
-                        {%- else -%}
-                          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                        {%- endif -%}
-                      </div>
-                      <p class="if-cfg__tile-name">{{ tile_title | escape }}</p>
-                      <p class="if-cfg__tile-size">{{ tile_size | escape }}</p>
-                      {%- if section.settings.show_price -%}
-                        {%- render 'if-product-tile-price', tile_product: tile_product, price_class: 'if-cfg' -%}
-                      {%- endif -%}
-
-                      {%- if section.settings.show_swatches -%}
-                        <div class="if-cfg__tile-swatches swiper-no-swiping">
-                          {%- render 'if-pdp-tile-swatches', tile_product: tile_product -%}
-                        </div>
-                      {%- endif -%}
-                    </a>
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
-
-            {%- elsif if_collection != blank -%}
-              {%- comment -%} Auto from collection (same source as react-configurator) {%- endcomment -%}
-              {%- for coll_product in if_collection.products -%}
-                {%- liquid
-                  assign is_selected = false
-                  if if_cfg_product.id == coll_product.id
-                    assign is_selected = true
-                  endif
-                  assign tile_size_raw = coll_product.metafields.custom.tile_size
-                  if tile_size_raw == blank
-                    assign tile_size = '12" x 12" inch'
-                  else
-                    assign tile_size = tile_size_raw | strip
-                    unless tile_size contains 'inch'
-                      assign tile_size = tile_size | append: ' inch'
-                    endunless
-                  endif
-                -%}
-
-                <div class="swiper-slide" role="listitem">
-                  <a
-                    class="if-cfg__tile{% if is_selected %} is-selected{% endif %}"
-                    href="{{ coll_product.url }}"
-                    aria-pressed="{{ is_selected }}"
-                    data-if-cfg-tile
-                    data-product-id="{{ coll_product.id }}"
-                    data-product-handle="{{ coll_product.handle }}"
-                    data-product-title="{{ coll_product.title | escape }}"
-                    data-tile-size="{{ tile_size | escape }}"
-                  >
-                    <div class="if-cfg__tile-img">
-                      <div class="if-cfg__tile-badge-container">
-                        {% if coll_product.tags contains 'Best Value' %}
-                          <span class="if-cfg__tile-badge gg-bb-value">Best Value</span>
-                        {% elsif coll_product.tags contains 'Classic Diamond' %}
-                          <span class="if-cfg__tile-badge gg-bb-classic-diamond">Classic Diamond Plate</span>
-                        {% elsif coll_product.tags contains 'Most Popular' %}
-                          <span class="if-cfg__tile-badge gg-bb-pop">Most Popular</span>
-                        {% elsif coll_product.tags contains 'Premium' %}
-                          <span class="if-cfg__tile-badge gg-bb-prem">Premium</span>
-                        {% elsif coll_product.tags contains 'Bold Unique' %}
-                          <span class="if-cfg__tile-badge gg-bb-bold">Bold Unique Design</span>
-                        {% endif %}
-                      </div>
-                      
-                      {%- if coll_product.featured_image != blank -%}
-                        {{
-                          coll_product.featured_image
-                          | image_url: width: 600
-                          | image_tag:
-                            loading: 'lazy',
-                            sizes: '(min-width: 990px) 18vw, 45vw',
-                            widths: '200,300,400,600',
-                            alt: coll_product.title
-                          | escape
-                        }}
-                      {%- else -%}
-                        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                      {%- endif -%}
-                    </div>
-                    <p class="if-cfg__tile-name">{{ coll_product.title | escape }}</p>
-                    <p class="if-cfg__tile-size">{{ tile_size | escape }}</p>
-                    {%- if section.settings.show_price -%}
-                      {%- render 'if-product-tile-price', tile_product: coll_product, price_class: 'if-cfg' -%}
-                    {%- endif -%}
-
-                    {%- if section.settings.show_swatches -%}
-                      <div class="if-cfg__tile-swatches swiper-no-swiping">
-                        {%- render 'if-pdp-tile-swatches', tile_product: coll_product -%}
-                      </div>
-                    {%- endif -%}
-                  </a>
-                </div>
-              {%- endfor -%}
-            {%- endif -%}
-          </div>
-        {%- else -%}
-          <p class="if-cfg__subtitle">Select a tile collection in the section settings, or add Tile blocks.</p>
-        {%- endif -%}
-      </div>
-    </div>
-
     {%- comment -%} Configurator body: preview + size / pattern / color {%- endcomment -%}
     <div class="if-cfg__body" data-if-cfg-body>
       <div class="if-cfg__preview">
@@ -358,19 +109,30 @@
       </div>
 
       <div class="if-cfg__controls">
+        {%- comment -%} Step 1: Choose Tile {%- endcomment -%}
+        <div class="if-cfg__panel if-cfg__panel--tiles" data-if-cfg-tiles>
+          <h3 class="if-cfg__panel-title if-cfg__tiles-label">
+            {{ if_choose_prefix | escape }}:
+            <strong data-if-cfg-selected-name>{{ if_selected_title | escape }}</strong>
+          </h3>
+          {%- render 'gg-dyf-tile-grid',
+            if_tile_blocks: if_tile_blocks,
+            if_collection: if_collection,
+            if_cfg_product: if_cfg_product,
+            section: section
+          -%}
+        </div>
+
         {%- comment -%} Size {%- endcomment -%}
         <div class="if-cfg__panel" data-if-cfg-size-panel>
           <h3 class="if-cfg__panel-title">
             {{ section.settings.size_heading | default: 'Choose Your Size Garage' | escape }}
           </h3>
-          <div class="if-cfg__size-grid" data-if-cfg-size-grid>
+          <div class="if-cfg__size-grid if-cfg__size-grid--garage" data-if-cfg-size-grid>
             {%- assign if_size_blocks = section.blocks | where: 'type', 'size' -%}
             {%- if if_size_blocks.size > 0 -%}
               {%- for block in if_size_blocks -%}
                 {%- assign if_size_selected = false -%}
-                {%- if block.settings.kit_id == 'custom' -%}
-                  {%- assign if_size_selected = true -%}
-                {%- endif -%}
                 <button
                   type="button"
                   class="if-cfg__size-card{% if if_size_selected %} is-selected{% endif %}"
@@ -378,23 +140,6 @@
                   aria-pressed="{% if if_size_selected %}true{% else %}false{% endif %}"
                   {{ block.shopify_attributes }}
                 >
-                  <span class="if-cfg__size-icon" aria-hidden="true">
-                    {%- if block.settings.icon != blank -%}
-                      {{
-                        block.settings.icon
-                        | image_url: width: 96
-                        | image_tag: loading: 'lazy', width: 36, height: 36, alt: ''
-                      }}
-                    {%- elsif block.settings.kit_id == 'custom' -%}
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-                        <path d="M8 28L28 8M12 8h8v8M24 28h-8v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    {%- else -%}
-                      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-                        <rect x="4" y="14" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="20" y="14" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="26" r="2" fill="currentColor"/><circle cx="16" cy="26" r="2" fill="currentColor"/><circle cx="24" cy="26" r="2" fill="currentColor"/><circle cx="32" cy="26" r="2" fill="currentColor"/>
-                      </svg>
-                    {%- endif -%}
-                  </span>
                   <span class="if-cfg__size-text">
                     <span class="if-cfg__size-name">{{ block.settings.title | escape }}</span>
                     {%- if block.settings.description != blank -%}
@@ -404,67 +149,29 @@
                 </button>
               {%- endfor -%}
             {%- else -%}
-              <button type="button" class="if-cfg__size-card is-selected" data-kit="custom" aria-pressed="true">
-                <span class="if-cfg__size-icon" aria-hidden="true">
-                  {% comment %} <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                    <path d="M8 28L28 8M12 8h8v8M24 28h-8v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg> {% endcomment %}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
-                    <g clip-path="url(#clip0_19_653)">
-                      <path d="M13.2432 4.52637L10.041 7.72857" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M16.7026 7.98584L14.7158 9.97263" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M20.1621 11.4453L16.96 14.6475" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M32.5547 23.8379L29.3525 27.0401" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M36.0141 27.2971L34.0273 29.2839" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M39.4737 30.7566L36.2715 33.9588" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M9.27716 40.1962C10.1992 39.2742 10.1992 37.7794 9.27716 36.8575C8.87119 36.4515 8.3541 36.2245 7.82387 36.1761C7.7754 35.6457 7.54844 35.1287 7.14247 34.7228C6.22045 33.8007 4.72565 33.8007 3.80371 34.7228" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linejoin="round"/>
-                      <path d="M34.04 4.48682L39.5135 9.96026" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linejoin="round"/>
-                      <path d="M2.87793 38.4114C3.50493 38.5845 4.09704 38.9175 4.58989 39.4103C5.08274 39.9032 5.41566 40.4953 5.58883 41.1223" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="10" stroke-linejoin="round"/>
-                      <path d="M14.7832 23.7432L0.945312 9.90541L9.90541 0.945312L23.7432 14.7832" stroke="black" stroke-width="1.89062" stroke-miterlimit="10" stroke-linejoin="round"/>
-                      <path d="M29.2169 20.2568L43.0548 34.0947L34.0947 43.0548L20.2568 29.2169" stroke="black" stroke-width="1.89062" stroke-miterlimit="10" stroke-linejoin="round"/>
-                      <path d="M9.27738 40.1964L0.945312 43.0549L3.80385 34.7228L37.0774 1.44939C37.7492 0.777613 38.8383 0.777613 39.51 1.44939L42.5508 4.4902C43.2226 5.16197 43.2226 6.25114 42.5508 6.92283L9.27738 40.1964Z" stroke="black" stroke-width="1.89062" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    </g>
-                    <defs><clipPath id="clip0_19_653"><rect width="44" height="44" fill="white"/></clipPath></defs>
-                  </svg>
-                </span>
+              <button type="button" class="if-cfg__size-card" data-kit="1car" aria-pressed="false">
                 <span class="if-cfg__size-text">
-                  <span class="if-cfg__size-name">Design My Space</span>
-                  <span class="if-cfg__size-desc">Gym Floors, Commercial Space, Basement, Showroom, Auto Detailing, Patio, Mancave &amp; more</span>
+                  <span class="if-cfg__size-name">1-Car Garage</span>
+                  <span class="if-cfg__size-desc">12 × 20 ft</span>
                 </span>
               </button>
               <button type="button" class="if-cfg__size-card" data-kit="2car" aria-pressed="false">
-                <span class="if-cfg__size-icon" aria-hidden="true">
-                  {% comment %}
-                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                      <rect x="4" y="14" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="20" y="14" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="26" r="2" fill="currentColor"/><circle cx="16" cy="26" r="2" fill="currentColor"/><circle cx="24" cy="26" r="2" fill="currentColor"/><circle cx="32" cy="26" r="2" fill="currentColor"/>
-                    </svg>
-                  {% endcomment %}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
-                    <g clip-path="url(#clip0_19_631)">
-                      <path d="M3.95312 37.0391H2.66406C1.71884 37.0391 0.945312 36.2656 0.945312 35.3203V4.8125C0.945312 3.86719 1.71875 3.09375 2.66406 3.09375H18.1328C19.0781 3.09375 19.8516 3.86727 19.8516 4.8125V35.3203C19.8516 36.2655 19.078 37.0391 18.1328 37.0391H16.8438" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M15.9845 10.8281H4.8125V29.3047H15.9845V10.8281Z" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M6.53125 3.52344V5.24219C6.53125 6.18716 7.30469 6.96094 8.25 6.96094H12.547C13.4923 6.96094 14.2657 6.1875 14.2657 5.24219V3.52344" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M5.24219 20.0664H15.5548" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M27.1562 37.0391H25.8672C24.922 37.0391 24.1484 36.2656 24.1484 35.3203V4.8125C24.1484 3.86719 24.9219 3.09375 25.8672 3.09375H41.3359C42.2812 3.09375 43.0547 3.86727 43.0547 4.8125V35.3203C43.0547 36.2655 42.2812 37.0391 41.3359 37.0391H40.0469" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M39.1876 10.8281H28.0156V29.3047H39.1876V10.8281Z" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M29.7344 3.52344V5.24219C29.7344 6.18716 30.5078 6.96094 31.4531 6.96094H35.7501C36.6954 6.96094 37.4688 6.1875 37.4688 5.24219V3.52344" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M28.4453 20.0664H38.7579" stroke="black" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M3.95312 40.9062H16.8438L15.9844 33.1719H4.8125L3.95312 40.9062Z" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M27.1562 40.9062H40.047L39.1876 33.1719H28.0156L27.1562 40.9062Z" stroke="#DC1C1B" stroke-width="1.89062" stroke-miterlimit="22.9256" stroke-linecap="round" stroke-linejoin="round"/>
-                    </g>
-                    <defs><clipPath id="clip0_19_631"><rect width="44" height="44" fill="white"/></clipPath></defs>
-                  </svg>
-                </span>
                 <span class="if-cfg__size-text">
                   <span class="if-cfg__size-name">2-Car Garage</span>
-                  <span class="if-cfg__size-desc">Fits most standard two-car garages</span>
+                  <span class="if-cfg__size-desc">20 × 20 ft</span>
+                </span>
+              </button>
+              <button type="button" class="if-cfg__size-card" data-kit="3car" aria-pressed="false">
+                <span class="if-cfg__size-text">
+                  <span class="if-cfg__size-name">3-Car Garage</span>
+                  <span class="if-cfg__size-desc">24 × 26 ft</span>
                 </span>
               </button>
             {%- endif -%}
           </div>
 
-          {%- comment -%} Design My Space options — shown when kit=custom {%- endcomment -%}
-          <div class="if-cfg__custom" data-if-cfg-custom hidden>
+          {%- comment -%} Floor size details — always visible on Design Your Floor {%- endcomment -%}
+          <div class="if-cfg__custom" data-if-cfg-custom>
             <div class="if-cfg__custom-field">
               <label class="if-cfg__custom-label" for="if-cfg-project-{{ section.id }}">What are you building?</label>
               <div class="if-cfg__select-wrap">
@@ -561,7 +268,7 @@
             </div>
 
             <div class="if-cfg__presets" data-if-cfg-presets>
-              <button type="button" class="if-cfg__preset" data-w="20" data-d="20" aria-pressed="false">
+              <button type="button" class="if-cfg__preset is-selected" data-w="20" data-d="20" aria-pressed="true">
                 20x20
               </button>
               <button type="button" class="if-cfg__preset" data-w="24" data-d="24" aria-pressed="false">24x24</button>
@@ -808,7 +515,7 @@
                   </button>
 
                   <button type="button" class="if-cfg__btn if-cfg__btn--outline" data-if-cfg-shop-pay>
-                    FINANCE STARTING FROM $131/mo
+                    Buy and Finance with
                     <span class="if-cfg__shop-pay-mark">
                       <svg xmlns="http://www.w3.org/2000/svg" width="63" height="16" viewBox="0 0 63 16" fill="none">
                         <g clip-path="url(#clip0_19_2794)">
@@ -1040,7 +747,7 @@
       solid: {{ 'gg-pattern-stealth-solid.jpeg' | asset_url | json }}
     };
   </script>
-  <script src="{{ 'if-pdp-configurator.js' | asset_url }}" defer></script>
+  <script src="{{ 'gg-design-your-floor-configurator.js' | asset_url }}" defer></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1445,8 +1152,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 {% schema %}
 {
-  "name": "IF PDP Configurator",
-  "class": "if_pdp_configurator",
+  "name": "GG: Floor Configurator",
+  "class": "gg_design_your_floor_configurator",
   "tag": "section",
   "settings": [
     {
@@ -1521,15 +1228,15 @@ document.addEventListener('DOMContentLoaded', function () {
     {
       "type": "product",
       "id": "default_product",
-      "label": "Default product (page templates)",
-      "info": "Starting tile on pages without a product context. Falls back to the first product in the tile collection."
+      "label": "Default product",
+      "info": "Starting tile when the page loads. Falls back to the first product in the tile collection."
     },
     {
       "type": "checkbox",
       "id": "show_swatches",
-      "label": "Show color swatches",
-      "info": "Shows every color variant. Extra swatches scroll horizontally on the card.",
-      "default": true
+      "label": "Show color swatches on tile cards",
+      "info": "Color dots under each product in the Step 1 tile grid.",
+      "default": false
     },
     {
       "type": "checkbox",
@@ -1827,6 +1534,7 @@ document.addEventListener('DOMContentLoaded', function () {
           "id": "kit_id",
           "label": "Kit ID",
           "options": [
+            { "value": "1car", "label": "1-Car Garage" },
             { "value": "2car", "label": "2-Car Garage" },
             { "value": "3car", "label": "3-Car Garage" },
             { "value": "custom", "label": "Design My Space" }
@@ -1887,8 +1595,8 @@ document.addEventListener('DOMContentLoaded', function () {
   ],
   "presets": [
     {
-      "name": "IF PDP Configurator",
-      "category": "IF Section",
+      "name": "GG: Floor Configurator",
+      "category": "GG Section",
       "blocks": [
         {
           "type": "size",

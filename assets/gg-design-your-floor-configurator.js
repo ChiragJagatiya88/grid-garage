@@ -1,8 +1,6 @@
 /**
- * IF PDP Configurator — size / pattern / color + live preview
- * Tile qty = ceil(sqft / tileArea) — e.g. 17" on 400 sq ft → 200 tiles.
- * Preview grid still uses ceil(floorFt / tileFt) per side for layout.
- * 2-Car kit = 20×20 ft (400 sq ft).
+ * GG Design Your Floor Configurator — page-only clone of IF PDP Configurator
+ * Same size / pattern / color + live preview logic; styles live in gg-design-your-floor-configurator.css
  */
 (function () {
   const CDN = 'https://www.gridgarageinc.com/cdn/shop/files/';
@@ -12,7 +10,7 @@
       id: 'checkered',
       name: 'Checkered Classic',
       shortName: 'Checkered',
-      zones: ['Tile Color A', 'Tile Color B'],
+      zones: ['Checker 1', 'Checker 2'],
       noDuplicate: true,
     },
     {
@@ -51,14 +49,16 @@
     { name: 'White', hex: '#f2f2ee', image: CDN + '5ecdce44-7929-4d00-801a-2fee623d09db.jpg?v=1778085573&width=416' },
   ];
 
-  /** Kit floor footprints in feet. 2-Car = 400 sq ft. */
+  /** Kit floor footprints in feet. */
   const KIT_DIMS = {
+    '1car': { width: 12, length: 20, sqft: 240 },
     '2car': { width: 20, length: 20, sqft: 400 },
     '3car': { width: 24, length: 26, sqft: 624 },
     custom: { width: 20, length: 20, sqft: 400 },
   };
 
   const KIT_LABELS = {
+    '1car': '1-Car Garage',
     '2car': '2-Car Garage',
     '3car': '3-Car Garage',
     custom: 'Design My Space',
@@ -66,6 +66,7 @@
 
   /** Sq ft baselines used for custom $/sqft rate derivation (matches old configurator). */
   const KIT_SQFT = {
+    '1car': 240,
     '2car': 430,
     '3car': 630,
   };
@@ -395,7 +396,7 @@
 
   function findKitVariant(productData, kit, preferredColor) {
     if (!productData || !productData.variants) return null;
-    const num = kit === '3car' ? '3' : '2';
+    const num = kit === '3car' ? '3' : kit === '1car' ? '1' : '2';
     const sizeRe = new RegExp('\\b' + num + '[\\s-]*car\\b', 'i');
 
     const candidates = productData.variants.filter((v) =>
@@ -576,16 +577,18 @@
       root.getAttribute('data-tile-size') ||
       '17" x 17" inch';
 
+    const DEFAULT_PREVIEW_FT = 20;
+
     const state = {
-      kit: 'custom',
+      kit: '',
       pattern: 'checkered',
       zoneColors: [],
       activeZone: 0,
       dupWarn: false,
       tileInches: parseTileInches(tileSizeLabel),
       tileSizeLabel: tileSizeLabel,
-      width: KIT_DIMS['2car'].width,
-      length: KIT_DIMS['2car'].length,
+      width: null,
+      length: null,
       shape: 'rect',
       cutouts: [],
       projectType: 'Other',
@@ -619,7 +622,7 @@
     const shopPayBtn = root.querySelector('[data-if-cfg-shop-pay]');
     const customErrorEl = root.querySelector('[data-if-cfg-custom-error]');
     const CUSTOM_INCOMPLETE_MSG =
-      'Please customize your project or select a 2-car garage kit';
+      'Please select a garage size or customize your project before adding to cart';
 
     const p0 = PATTERNS.find((x) => x.id === state.pattern);
     state.zoneColors = makeDefaultColors(colors, state.pattern, p0.zones.length);
@@ -822,39 +825,8 @@
       }
     }
 
-    function waitForSwiper(cb) {
-      if (typeof window.Swiper === 'function') {
-        cb();
-        return;
-      }
-      let tries = 0;
-      const timer = setInterval(() => {
-        tries += 1;
-        if (typeof window.Swiper === 'function') {
-          clearInterval(timer);
-          cb();
-        } else if (tries > 80) {
-          clearInterval(timer);
-        }
-      }, 50);
-    }
-
-    function syncTilesNav(swiper, prevBtn, nextBtn) {
-      if (!prevBtn || !nextBtn) return;
-      const atStart = swiper.isBeginning;
-      const atEnd = swiper.isEnd;
-      prevBtn.disabled = atStart;
-      nextBtn.disabled = atEnd;
-      prevBtn.setAttribute('aria-disabled', atStart ? 'true' : 'false');
-      nextBtn.setAttribute('aria-disabled', atEnd ? 'true' : 'false');
-    }
 
     function bindTiles() {
-      const tilesRail = root.querySelector('[data-if-cfg-tiles-rail]');
-      const prevBtn = root.querySelector('[data-if-cfg-tiles-prev]');
-      const nextBtn = root.querySelector('[data-if-cfg-tiles-next]');
-      const tilesNav = root.querySelector('[data-if-cfg-tiles-nav]');
-
       root.querySelectorAll('[data-if-cfg-tile]').forEach((card) => {
         card.addEventListener('click', (e) => {
           e.preventDefault();
@@ -937,64 +909,6 @@
           { passive: false }
         );
       });
-
-      if (!tilesRail || !tilesRail.querySelector('.swiper-slide')) return;
-
-      waitForSwiper(() => {
-        if (root._ifTilesSwiper) {
-          try {
-            root._ifTilesSwiper.destroy(true, true);
-          } catch (err) {
-            /* ignore */
-          }
-        }
-
-        const swiper = new window.Swiper(tilesRail, {
-          slidesPerView: 1.35,
-          spaceBetween: 12,
-          speed: 420,
-          watchOverflow: true,
-          observer: true,
-          observeParents: true,
-          breakpoints: {
-            480: { slidesPerView: 1.6, spaceBetween: 12 },
-            750: { slidesPerView: 3, spaceBetween: 14 },
-            1200: { slidesPerView: 5, spaceBetween: 14 },
-          },
-          on: {
-            init() {
-              syncTilesNav(this, prevBtn, nextBtn);
-              if (tilesNav) {
-                tilesNav.hidden = this.isLocked;
-              }
-            },
-            slideChange() {
-              syncTilesNav(this, prevBtn, nextBtn);
-            },
-            resize() {
-              syncTilesNav(this, prevBtn, nextBtn);
-              if (tilesNav) {
-                tilesNav.hidden = this.isLocked;
-              }
-            },
-            reachBeginning() {
-              syncTilesNav(this, prevBtn, nextBtn);
-            },
-            reachEnd() {
-              syncTilesNav(this, prevBtn, nextBtn);
-            },
-          },
-        });
-
-        root._ifTilesSwiper = swiper;
-
-        if (prevBtn) {
-          prevBtn.addEventListener('click', () => swiper.slidePrev());
-        }
-        if (nextBtn) {
-          nextBtn.addEventListener('click', () => swiper.slideNext());
-        }
-      });
     }
 
     function currentPattern() {
@@ -1012,7 +926,7 @@
       const cols = Math.max(0, tc.across);
       const rows = Math.max(0, tc.down);
       const activeCutouts =
-        state.kit === 'custom' && state.shape === 'lshape' ? state.cutouts : [];
+        isCustomFlow() && state.shape === 'lshape' ? state.cutouts : [];
       const gridCounts = new Array(p.zones.length).fill(0);
 
       for (let r = 0; r < rows; r++) {
@@ -1031,7 +945,7 @@
     }
 
     function cutoutSqft() {
-      if (state.kit !== 'custom' || state.shape !== 'lshape') return 0;
+      if (!isCustomFlow() || state.shape !== 'lshape') return 0;
       return state.cutouts.reduce(
         (sum, c) => sum + (c.width && c.depth ? c.width * c.depth : 0),
         0
@@ -1044,11 +958,8 @@
     }
 
     function sizeLabel() {
-      if (state.kit === 'custom') {
-        if (state.width && state.length) {
-          return `Custom ${state.width}×${state.length} ft`;
-        }
-        return KIT_LABELS.custom;
+      if (!state.kit || state.kit === 'custom') {
+        return KIT_LABELS.custom || 'Design My Space';
       }
       const card =
         sizeGrid &&
@@ -1076,9 +987,7 @@
       const net = Math.round(netSqft());
       const zoneTiles = countZoneTiles();
       const project =
-        state.kit === 'custom'
-          ? state.projectType || 'Other'
-          : KIT_LABELS[state.kit] || '—';
+        (projectSelect && projectSelect.value) || state.projectType || 'Other';
 
       let html = `
         <div class="if-cfg__sel-item">
@@ -1157,6 +1066,7 @@
     }
 
     function getKitPrices() {
+      let p1 = variantPriceCents(findKitVariant(productData, '1car'));
       let p2 = variantPriceCents(findKitVariant(productData, '2car'));
       let p3 = variantPriceCents(findKitVariant(productData, '3car'));
       if (!p2 && productData && productData.price) {
@@ -1165,9 +1075,11 @@
             ? productData.price
             : Math.round(parseFloat(productData.price) * 100);
       }
+      if (!p1 && p2) p1 = Math.round(p2 * (KIT_SQFT['1car'] / KIT_SQFT['2car']));
       if (!p3 && p2) p3 = Math.round(p2 * (KIT_SQFT['3car'] / KIT_SQFT['2car']));
       if (!p2 && p3) p2 = Math.round(p3 * (KIT_SQFT['2car'] / KIT_SQFT['3car']));
-      return { '2car': p2, '3car': p3 };
+      if (!p1 && p3) p1 = Math.round(p3 * (KIT_SQFT['1car'] / KIT_SQFT['3car']));
+      return { '1car': p1, '2car': p2, '3car': p3 };
     }
 
     function customPerSqftRateCents() {
@@ -1191,7 +1103,7 @@
 
     function resolveCartVariant() {
       const preferred = preferredColorName();
-      if (state.kit === 'custom') {
+      if (isCustomFlow()) {
         return (
           findCustomPerSqftVariant(productData, preferred) ||
           findKitVariant(productData, '2car', preferred) ||
@@ -1208,7 +1120,7 @@
 
     /** Display price for UI — custom uses sqft estimate, kits use variant. */
     function getDisplayPriceText() {
-      if (state.kit === 'custom') {
+      if (isCustomFlow()) {
         const net = Math.round(netSqft());
         if (net <= 0) return '';
         const calc = calculateCustomSpacePrice(net);
@@ -1249,9 +1161,12 @@
     function sharedCartProperties() {
       const p = currentPattern();
       const rows = [['Pattern', p.name]];
-      if (state.kit === 'custom') {
+      rows.push([
+        'Project Type',
+        (projectSelect && projectSelect.value) || state.projectType || 'Other',
+      ]);
+      if (isCustomFlow()) {
         const net = Math.round(netSqft());
-        rows.push(['Project Type', state.projectType || 'Other']);
         if (state.width && state.length) {
           rows.push(['Floor Size', `${state.width}ft × ${state.length}ft`]);
         }
@@ -1260,6 +1175,8 @@
           state.shape === 'lshape' ? 'L-shape (cut-out)' : 'Rectangle',
         ]);
         if (net > 0) rows.push(['Net Area', `${net} sq ft`]);
+      } else if (state.kit && KIT_LABELS[state.kit]) {
+        rows.push(['Garage Size', KIT_LABELS[state.kit]]);
       }
       return rows;
     }
@@ -1362,6 +1279,7 @@
       const p = currentPattern();
       const lines = [
         `Size: ${sizeLabel()}`,
+        `Project: ${(projectSelect && projectSelect.value) || state.projectType || 'Other'}`,
         `Collection: ${(productData && productData.title) || ''}`,
         `Tile Size: ${formatTileSize()}`,
         `Pattern: ${p.name}`,
@@ -1369,8 +1287,7 @@
       p.zones.forEach((zName, zi) => {
         lines.push(`${zName}: ${colorByName(state.zoneColors[zi]).name}`);
       });
-      if (state.kit === 'custom') {
-        lines.push(`Project Type: ${state.projectType || 'Other'}`);
+      if (isCustomFlow()) {
         if (state.width && state.length) {
           lines.push(`Floor Size: ${state.width}ft × ${state.length}ft`);
         }
@@ -1396,7 +1313,7 @@
           const cols = Math.max(1, Math.min(tc.across, 40));
           const rows = Math.max(1, Math.min(tc.down, 40));
           const activeCutouts =
-            state.kit === 'custom' && state.shape === 'lshape' ? state.cutouts : [];
+            isCustomFlow() && state.shape === 'lshape' ? state.cutouts : [];
           const cell = 15;
           const scale = 3;
           const canvas = document.createElement('canvas');
@@ -1794,7 +1711,39 @@
       cutoutsEl.appendChild(help);
     }
 
+    function isCustomFlow() {
+      return state.kit === 'custom' || (pageMode && !state.kit);
+    }
+
+    function clearGarageSizeSelection() {
+      if (!pageMode || !sizeGrid) return;
+      state.kit = '';
+      sizeGrid.querySelectorAll('.if-cfg__size-card').forEach((b) => {
+        b.classList.remove('is-selected');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      syncHeroCtas('');
+    }
+
+    function syncKitInputsFromState() {
+      if (!pageMode) return;
+      if (widthInput) {
+        widthInput.value = state.width > 0 ? String(state.width) : '';
+      }
+      if (depthInput) {
+        depthInput.value = state.length > 0 ? String(state.length) : '';
+      }
+      syncPresetButtons();
+    }
+
     function applyKitDims(kit) {
+      if (!kit) {
+        if (!pageMode) {
+          state.width = null;
+          state.length = null;
+        }
+        return;
+      }
       if (kit === 'custom') {
         const w = widthInput ? parseFloat(widthInput.value) : NaN;
         const d = depthInput ? parseFloat(depthInput.value) : NaN;
@@ -1805,10 +1754,18 @@
       const dims = KIT_DIMS[kit] || KIT_DIMS['2car'];
       state.width = dims.width;
       state.length = dims.length;
+      syncKitInputsFromState();
     }
 
     function syncCustomPanel(kit) {
       if (!customPanel) return;
+      if (pageMode) {
+        customPanel.hidden = false;
+        syncPresetButtons();
+        syncShapeButtons();
+        renderCutouts();
+        return;
+      }
       const show = kit === 'custom';
       customPanel.hidden = !show;
       if (show) {
@@ -1840,6 +1797,7 @@
     }
 
     function setCustomDims(width, depth) {
+      if (pageMode) clearGarageSizeSelection();
       state.width = width;
       state.length = depth;
       if (widthInput) widthInput.value = String(width);
@@ -1851,6 +1809,13 @@
     }
 
     function isCustomConfigured() {
+      if (pageMode) {
+        if (state.kit && state.kit !== 'custom') return true;
+        const w = widthInput ? parseFloat(widthInput.value) : state.width;
+        const d = depthInput ? parseFloat(depthInput.value) : state.length;
+        return isFinite(w) && w > 0 && isFinite(d) && d > 0;
+      }
+      if (!state.kit) return false;
       if (state.kit !== 'custom') return true;
       const w = widthInput ? parseFloat(widthInput.value) : state.width;
       const d = depthInput ? parseFloat(depthInput.value) : state.length;
@@ -1883,16 +1848,28 @@
     function renderPreview() {
       if (!preview) return;
       const p = currentPattern();
-      const useDummy =
-        state.kit === 'custom' && !(state.width > 0 && state.length > 0);
-      const floorW = useDummy ? 20 : state.width > 0 ? state.width : KIT_DIMS['2car'].width;
-      const floorD = useDummy ? 20 : state.length > 0 ? state.length : KIT_DIMS['2car'].length;
+      const hasCustomDims = state.width > 0 && state.length > 0;
+      const noKitSelected = !state.kit;
+      const useDummy = pageMode
+        ? !hasCustomDims && noKitSelected
+        : noKitSelected ||
+          (state.kit === 'custom' && !hasCustomDims);
+      const floorW = useDummy
+        ? DEFAULT_PREVIEW_FT
+        : state.width > 0
+          ? state.width
+          : KIT_DIMS['2car'].width;
+      const floorD = useDummy
+        ? DEFAULT_PREVIEW_FT
+        : state.length > 0
+          ? state.length
+          : KIT_DIMS['2car'].length;
       const tc = tileCounts(floorW, floorD, state.tileInches);
       const cols = Math.max(1, Math.min(tc.across, 40));
       const rows = Math.max(1, Math.min(tc.down, 40));
       /* Cut-outs only on Design My Space + L-shape — never on 2-Car / kit presets */
       const activeCutouts =
-        state.kit === 'custom' && state.shape === 'lshape' && !useDummy
+        isCustomFlow() && state.shape === 'lshape' && !useDummy
           ? state.cutouts
           : [];
 
@@ -1930,7 +1907,7 @@
       preview.setAttribute(
         'aria-label',
         useDummy
-          ? `Floor preview placeholder: 20' × 20' — ${cols} × ${rows} tiles`
+          ? `Floor preview placeholder: ${DEFAULT_PREVIEW_FT}' × ${DEFAULT_PREVIEW_FT}' — ${cols} × ${rows} tiles`
           : `Floor preview: ${floorW}' × ${floorD}' — ${cols} × ${rows} tiles (${tc.inches}" tile, ${tc.sqft} sq ft)`
       );
       preview.innerHTML = html;
@@ -1976,19 +1953,24 @@
 
     function renderColors() {
       const p = currentPattern();
+      if (state.activeZone >= p.zones.length) state.activeZone = 0;
+
       if (zoneChips) {
         zoneChips.innerHTML = '';
+        zoneChips.classList.toggle('if-cfg__zone-chips--tabs', p.zones.length > 1);
         p.zones.forEach((zName, zi) => {
           const col = colorByName(state.zoneColors[zi]);
           const chip = document.createElement('button');
           chip.type = 'button';
           chip.className =
             'if-cfg__zone-chip' + (state.activeZone === zi ? ' is-active' : '');
+          chip.setAttribute('aria-pressed', state.activeZone === zi ? 'true' : 'false');
           chip.innerHTML =
             `<span class="if-cfg__zone-chip-sw" style="${swatchStyle(col)}"></span>` +
-            `<span class="if-cfg__zone-chip-label"><b>${zName}</b> <span class="color_name">${col.name}</span></span>`;
+            `<span class="if-cfg__zone-chip-label"><b>${zName}</b><span class="color_name">${col.name}</span></span>`;
           chip.addEventListener('click', () => {
             state.activeZone = zi;
+            state.dupWarn = false;
             renderColors();
           });
           zoneChips.appendChild(chip);
@@ -1997,46 +1979,46 @@
 
       if (zoneRows) {
         zoneRows.innerHTML = '';
-        p.zones.forEach((zName, zi) => {
-          const wrap = document.createElement('div');
-          wrap.className = 'if-cfg__zone-row';
-          wrap.innerHTML = `<span class="if-cfg__zone-row-label">${zName}</span>`;
-          const row = document.createElement('div');
-          row.className = 'if-cfg__swatch-row';
-          colors.forEach((c) => {
-            const sel = state.zoneColors[zi] === c.name;
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'if-cfg__color-swatch' + (sel ? ' is-selected' : '');
-            btn.setAttribute('aria-pressed', sel ? 'true' : 'false');
-            btn.title = c.name;
-            const sw = document.createElement('span');
-            sw.className = 'if-cfg__color-swatch-bg';
-            sw.style.cssText = swatchStyle(c);
-            sw.setAttribute('aria-hidden', 'true');
-            btn.appendChild(sw);
-            btn.addEventListener('click', () => {
-              if (p.noDuplicate) {
-                const clash = state.zoneColors.findIndex(
-                  (n, i) => i !== zi && n === c.name
-                );
-                if (clash !== -1) {
-                  state.dupWarn = true;
-                  state.activeZone = zi;
-                  renderColors();
-                  return;
-                }
+        const zi = state.activeZone;
+        const zName = p.zones[zi] || p.zones[0];
+        const wrap = document.createElement('div');
+        wrap.className = 'if-cfg__zone-row is-active';
+        wrap.innerHTML = `<span class="if-cfg__zone-row-label">${zName}</span>`;
+        const row = document.createElement('div');
+        row.className = 'if-cfg__swatch-row';
+        colors.forEach((c) => {
+          const sel = state.zoneColors[zi] === c.name;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'if-cfg__color-swatch' + (sel ? ' is-selected' : '');
+          btn.setAttribute('aria-pressed', sel ? 'true' : 'false');
+          btn.title = c.name;
+          const sw = document.createElement('span');
+          sw.className = 'if-cfg__color-swatch-bg';
+          sw.style.cssText = swatchStyle(c);
+          sw.setAttribute('aria-hidden', 'true');
+          btn.appendChild(sw);
+          btn.addEventListener('click', () => {
+            if (p.noDuplicate) {
+              const clash = state.zoneColors.findIndex(
+                (n, i) => i !== zi && n === c.name
+              );
+              if (clash !== -1) {
+                state.dupWarn = true;
+                state.activeZone = zi;
+                renderColors();
+                return;
               }
-              state.zoneColors[zi] = c.name;
-              state.activeZone = zi;
-              state.dupWarn = false;
-              renderAll();
-            });
-            row.appendChild(btn);
+            }
+            state.zoneColors[zi] = c.name;
+            state.activeZone = zi;
+            state.dupWarn = false;
+            renderAll();
           });
-          wrap.appendChild(row);
-          zoneRows.appendChild(wrap);
+          row.appendChild(btn);
         });
+        wrap.appendChild(row);
+        zoneRows.appendChild(wrap);
       }
 
       if (dupWarnEl) {
@@ -2068,6 +2050,7 @@
         if (depthInput) depthInput.value = '';
       }
       applyKitDims(next);
+      syncPresetButtons();
       clearCustomError();
       if (sizeGrid) {
         sizeGrid.querySelectorAll('.if-cfg__size-card').forEach((b) => {
@@ -2101,7 +2084,8 @@
       }
 
       const onDimInput = () => {
-        if (state.kit !== 'custom') return;
+        if (!pageMode && state.kit !== 'custom') return;
+        if (pageMode) clearGarageSizeSelection();
         const w = parseFloat(widthInput && widthInput.value);
         const d = parseFloat(depthInput && depthInput.value);
         state.width = isFinite(w) && w > 0 ? w : null;
@@ -2137,13 +2121,21 @@
     function bindSizes() {
       if (!sizeGrid) return;
       const selected = sizeGrid.querySelector('.if-cfg__size-card.is-selected');
-      const fallback =
-        sizeGrid.querySelector('.if-cfg__size-card[data-kit="custom"]') ||
-        sizeGrid.querySelector('.if-cfg__size-card');
-      state.kit = (selected || fallback).getAttribute('data-kit') || 'custom';
-      applyKitDims(state.kit);
+      if (selected) {
+        state.kit = selected.getAttribute('data-kit') || '';
+        applyKitDims(state.kit);
+      } else {
+        state.kit = '';
+        if (!pageMode) {
+          state.width = null;
+          state.length = null;
+        }
+      }
       syncHeroCtas(state.kit);
       syncCustomPanel(state.kit);
+      if (pageMode && !state.kit && !(state.width > 0 && state.length > 0)) {
+        setCustomDims(DEFAULT_PREVIEW_FT, DEFAULT_PREVIEW_FT);
+      }
 
       sizeGrid.querySelectorAll('.if-cfg__size-card').forEach((btn) => {
         btn.addEventListener('click', () => {

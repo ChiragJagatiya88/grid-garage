@@ -1,0 +1,213 @@
+{%- comment -%}
+  Design Your Floor — tile product grid (sidebar, no slider)
+  Accepts: if_tile_blocks, if_collection, if_cfg_product, section
+{%- endcomment -%}
+
+{%- if if_tile_blocks.size > 0 or if_collection != blank -%}
+  <div class="if-cfg__tiles-grid" data-if-cfg-tiles-grid role="list">
+    {%- if if_tile_blocks.size > 0 -%}
+      {%- for block in if_tile_blocks -%}
+        {%- assign tile_product = block.settings.product -%}
+        {%- if tile_product != blank -%}
+          {%- liquid
+            assign is_selected = false
+            if if_cfg_product.id == tile_product.id
+              assign is_selected = true
+            endif
+            assign tile_title = block.settings.title | default: tile_product.title
+            assign tile_size = block.settings.tile_size
+            if tile_size == blank
+              assign tile_size_raw = tile_product.metafields.custom.tile_size
+              if tile_size_raw == blank
+                assign tile_size = '12" x 12" inch'
+              else
+                assign tile_size = tile_size_raw | strip
+                unless tile_size contains 'inch'
+                  assign tile_size = tile_size | append: ' inch'
+                endunless
+              endif
+            endif
+            assign tile_url = tile_product.url
+            if block.settings.custom_url != blank
+              assign tile_url = block.settings.custom_url
+            endif
+          -%}
+
+          <div class="if-cfg__tiles-grid-item" role="listitem" {{ block.shopify_attributes }}>
+            <a
+              class="if-cfg__tile{% if is_selected %} is-selected{% endif %}"
+              href="{{ tile_url }}"
+              aria-pressed="{{ is_selected }}"
+              data-if-cfg-tile
+              data-product-id="{{ tile_product.id }}"
+              data-product-handle="{{ tile_product.handle }}"
+              data-product-title="{{ tile_title | escape }}"
+              data-tile-size="{{ tile_size | escape }}"
+            >
+              <div class="if-cfg__tile-img">
+                {%- liquid
+                  assign if_badge_mode = block.settings.badge | default: 'auto'
+                  assign if_badge_label = ''
+                  assign if_badge_mod = ''
+
+                  if if_badge_mode == 'none'
+                    assign if_badge_label = ''
+                  elsif if_badge_mode == 'custom'
+                    if block.settings.badge_text != blank
+                      assign if_badge_label = block.settings.badge_text
+                      assign if_badge_mod = 'gg-bb-custom'
+                    endif
+                  elsif if_badge_mode == 'best_value'
+                    assign if_badge_label = 'Best Value'
+                    assign if_badge_mod = 'gg-bb-value'
+                  elsif if_badge_mode == 'most_popular'
+                    assign if_badge_label = 'Most Popular'
+                    assign if_badge_mod = 'gg-bb-pop'
+                  elsif if_badge_mode == 'premium'
+                    assign if_badge_label = 'Premium'
+                    assign if_badge_mod = 'gg-bb-prem'
+                  elsif if_badge_mode == 'bold_unique'
+                    assign if_badge_label = 'Bold Unique Design'
+                    assign if_badge_mod = 'gg-bb-bold'
+                  else
+                    if tile_product.tags contains 'Best Value'
+                      assign if_badge_label = 'Best Value'
+                      assign if_badge_mod = 'gg-bb-value'
+                    elsif tile_product.tags contains 'Most Popular'
+                      assign if_badge_label = 'Most Popular'
+                      assign if_badge_mod = 'gg-bb-pop'
+                    elsif tile_product.tags contains 'Premium'
+                      assign if_badge_label = 'Premium'
+                      assign if_badge_mod = 'gg-bb-prem'
+                    elsif tile_product.tags contains 'Bold Unique'
+                      assign if_badge_label = 'Bold Unique Design'
+                      assign if_badge_mod = 'gg-bb-bold'
+                    endif
+                  endif
+                -%}
+                {%- if if_badge_label != blank -%}
+                  <div class="if-cfg__tile-badge-container">
+                    <span class="if-cfg__tile-badge {{ if_badge_mod }}" {% if if_badge_mode == 'custom' %}style="{% if block.settings.badge_bg != blank %}background: {{ block.settings.badge_bg }};{% endif %}{% if block.settings.badge_color != blank %}color: {{ block.settings.badge_color }};{% endif %}"{% endif %}>{{ if_badge_label | escape }}</span>
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 600
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: '(min-width: 990px) 12vw, 42vw',
+                      widths: '200,300,400,600',
+                      alt: tile_title
+                    | escape
+                  }}
+                {%- elsif tile_product.featured_image != blank -%}
+                  {{
+                    tile_product.featured_image
+                    | image_url: width: 600
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: '(min-width: 990px) 12vw, 42vw',
+                      widths: '200,300,400,600',
+                      alt: tile_title
+                    | escape
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </div>
+              <p class="if-cfg__tile-name">{{ tile_title | escape }}</p>
+              <p class="if-cfg__tile-size">{{ tile_size | escape }}</p>
+              {%- if section.settings.show_price -%}
+                {%- render 'if-product-tile-price', tile_product: tile_product, price_class: 'if-cfg' -%}
+              {%- endif -%}
+
+              {%- if section.settings.show_swatches -%}
+                <div class="if-cfg__tile-swatches">
+                  {%- render 'if-pdp-tile-swatches', tile_product: tile_product -%}
+                </div>
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+    {%- elsif if_collection != blank -%}
+      {%- for coll_product in if_collection.products -%}
+        {%- liquid
+          assign is_selected = false
+          if if_cfg_product.id == coll_product.id
+            assign is_selected = true
+          endif
+          assign tile_size_raw = coll_product.metafields.custom.tile_size
+          if tile_size_raw == blank
+            assign tile_size = '12" x 12" inch'
+          else
+            assign tile_size = tile_size_raw | strip
+            unless tile_size contains 'inch'
+              assign tile_size = tile_size | append: ' inch'
+            endunless
+          endif
+        -%}
+
+        <div class="if-cfg__tiles-grid-item" role="listitem">
+          <a
+            class="if-cfg__tile{% if is_selected %} is-selected{% endif %}"
+            href="{{ coll_product.url }}"
+            aria-pressed="{{ is_selected }}"
+            data-if-cfg-tile
+            data-product-id="{{ coll_product.id }}"
+            data-product-handle="{{ coll_product.handle }}"
+            data-product-title="{{ coll_product.title | escape }}"
+            data-tile-size="{{ tile_size | escape }}"
+          >
+            <div class="if-cfg__tile-img">
+              <div class="if-cfg__tile-badge-container">
+                {% if coll_product.tags contains 'Best Value' %}
+                  <span class="if-cfg__tile-badge gg-bb-value">Best Value</span>
+                {% elsif coll_product.tags contains 'Classic Diamond' %}
+                  <span class="if-cfg__tile-badge gg-bb-classic-diamond">Classic Diamond Plate</span>
+                {% elsif coll_product.tags contains 'Most Popular' %}
+                  <span class="if-cfg__tile-badge gg-bb-pop">Most Popular</span>
+                {% elsif coll_product.tags contains 'Premium' %}
+                  <span class="if-cfg__tile-badge gg-bb-prem">Premium</span>
+                {% elsif coll_product.tags contains 'Bold Unique' %}
+                  <span class="if-cfg__tile-badge gg-bb-bold">Bold Unique Design</span>
+                {% endif %}
+              </div>
+
+              {%- if coll_product.featured_image != blank -%}
+                {{
+                  coll_product.featured_image
+                  | image_url: width: 600
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 990px) 12vw, 42vw',
+                    widths: '200,300,400,600',
+                    alt: coll_product.title
+                  | escape
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <p class="if-cfg__tile-name">{{ coll_product.title | escape }}</p>
+            <p class="if-cfg__tile-size">{{ tile_size | escape }}</p>
+            {%- if section.settings.show_price -%}
+              {%- render 'if-product-tile-price', tile_product: coll_product, price_class: 'if-cfg' -%}
+            {%- endif -%}
+
+            {%- if section.settings.show_swatches -%}
+              <div class="if-cfg__tile-swatches">
+                {%- render 'if-pdp-tile-swatches', tile_product: coll_product -%}
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+{%- else -%}
+  <p class="if-cfg__subtitle">Select a tile collection in the section settings, or add Tile blocks.</p>
+{%- endif -%}
