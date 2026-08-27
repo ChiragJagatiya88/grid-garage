@@ -812,7 +812,7 @@
 
     /* Galleries (product media + showcase metafield) */
     function initGallery(gallery) {
-      if (!gallery) return;
+      if (!gallery) return null;
       var frame = gallery.querySelector('.if-pdp2__gallery-frame');
       var track = gallery.querySelector('[data-if-pdp2-gallery-track]');
       var slides = track ? Array.prototype.slice.call(track.querySelectorAll('.if-pdp2__slide')) : [];
@@ -837,6 +837,27 @@
           track.style.transition = '';
         }
         track.style.transform = 'translateX(' + (-index * 100) + '%)';
+      }
+
+      function goToMediaId(mediaId) {
+        if (!mediaId || !slides.length) return false;
+        var targetIdx = slides.findIndex(function (s) {
+          return String(s.getAttribute('data-media-id')) === String(mediaId);
+        });
+        if (targetIdx < 0) return false;
+        goTo(targetIdx);
+        return true;
+      }
+
+      function setMainImage(url) {
+        if (!url || !slides.length) return false;
+        var img = slides[0].querySelector('img');
+        if (!img) return false;
+        img.src = url;
+        img.removeAttribute('srcset');
+        img.removeAttribute('sizes');
+        goTo(0);
+        return true;
       }
 
       function dragOffsetPercent() {
@@ -902,9 +923,21 @@
         frame.addEventListener('pointercancel', onPointerUp);
         frame.addEventListener('dragstart', function (e) { e.preventDefault(); });
       }
+
+      return {
+        goTo: goTo,
+        goToMediaId: goToMediaId,
+        setMainImage: setMainImage
+      };
     }
 
-    root.querySelectorAll('[data-if-pdp2-gallery]').forEach(initGallery);
+    var productGalleryApi = null;
+    root.querySelectorAll('[data-if-pdp2-gallery]').forEach(function (gallery) {
+      var api = initGallery(gallery);
+      if (api && !gallery.hasAttribute('data-if-pdp2-showcase-gallery') && !productGalleryApi) {
+        productGalleryApi = api;
+      }
+    });
     /* Quantity + coverage */
     var qtyWrap = root.querySelector('[data-if-pdp2-qty]');
     var qtyInput = root.querySelector('[data-if-pdp2-qty-input]');
@@ -986,11 +1019,10 @@
         }
 
         var mediaId = btn.getAttribute('data-media-id');
-        if (mediaId && slides.length) {
-          var targetIdx = slides.findIndex(function (s) {
-            return s.getAttribute('data-media-id') === mediaId;
-          });
-          if (targetIdx >= 0) goTo(targetIdx);
+        var imageUrl = btn.getAttribute('data-image');
+        if (productGalleryApi) {
+          var moved = mediaId ? productGalleryApi.goToMediaId(mediaId) : false;
+          if (!moved && imageUrl) productGalleryApi.setMainImage(imageUrl);
         }
       });
     });
