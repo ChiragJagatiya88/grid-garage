@@ -8,6 +8,34 @@
   line-height: 1.35;
 }
 
+.gg-cart-price--sale,
+.cart-item__final-price.gg-cart-price--sale,
+.cart-item__totals .gg-cart-price--sale {
+  color: #dc1c1b;
+}
+
+.cart-item__old-price {
+  color: rgba(var(--color-foreground), 0.45);
+}
+
+.gg-cart-savings {
+  margin: 0.8rem 0 0;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: #fce9eb;
+  color: #dc1c1b;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.gg-cart-totals__amounts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
 .cart-item__sqft {
   margin-top: 0.15rem;
   font-size: 1.35rem;

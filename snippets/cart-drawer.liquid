@@ -8,6 +8,7 @@
 <link rel="preload" href="{{ 'quantity-popover.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'gg-cart-drawer.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
@@ -155,26 +156,7 @@
                             {{- item.product.title | escape -}}
                           </a>
 
-                          {%- if item.original_price != item.final_price -%}
-                            <div class="cart-item__discounted-prices">
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.regular_price' | t }}
-                              </span>
-                              <s  data-hulkapps-ci-price data-key='{{item.key}}' class="cart-item__old-price product-option">
-                                {{- item.original_price | money -}}
-                              </s>
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.sale_price' | t }}
-                              </span>
-                              <strong  data-hulkapps-ci-price data-key='{{item.key}}' class="cart-item__final-price product-option">
-                                {{ item.final_price | money }}
-                              </strong>
-                            </div>
-                          {%- else -%}
-                            <div  data-hulkapps-ci-price data-key='{{item.key}}' class="product-option">
-                              {{ item.original_price | money }}
-                            </div>
-                          {%- endif -%}
+                          {% render 'gg-cart-item-prices', item: item, display: 'unit' %}
 
                           {%- if item.product.has_only_default_variant == false
                             or item.properties.size != 0
@@ -240,26 +222,7 @@
                         <td class="cart-item__totals right" role="cell" headers="CartDrawer-ColumnTotal">
                           {%- render 'loading-spinner' -%}
                           <div class="cart-item__price-wrapper">
-                            {%- if item.original_line_price != item.final_line_price -%}
-                              <div class="cart-item__discounted-prices">
-                                <span class="visually-hidden">
-                                  {{ 'products.product.price.regular_price' | t }}
-                                </span>
-                                <s  data-hulkapps-line-price data-key='{{item.key}}' class="cart-item__old-price price price--end">
-                                  {{ item.original_line_price | money }}
-                                </s>
-                                <span class="visually-hidden">
-                                  {{ 'products.product.price.sale_price' | t }}
-                                </span>
-                                <span  data-hulkapps-line-price data-key='{{item.key}}' class="price price--end">
-                                  {{ item.final_line_price | money }}
-                                </span>
-                              </div>
-                            {%- else -%}
-                              <span  data-hulkapps-line-price data-key='{{item.key}}' class="price price--end">
-                                {{ item.original_line_price | money }}
-                              </span>
-                            {%- endif -%}
+                            {% render 'gg-cart-item-prices', item: item, display: 'line' %}
 
                             {%- if item.variant.available and item.unit_price_measurement -%}
                               {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
@@ -502,25 +465,12 @@
         <!-- Start blocks -->
         <!-- Subtotals -->
 
-        <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
-          <div>
-            {%- if cart.cart_level_discount_applications.size > 0 -%}
-              <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                {%- for discount in cart.cart_level_discount_applications -%}
-                  <li class="discounts__discount discounts__discount--end">
-                    {{- 'icon-discount.svg' | inline_asset_content -}}
-                    {{ discount.title | escape }}
-                    (-{{ discount.total_allocated_amount | money }})
-                  </li>
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </div>
-
-          <div class="totals" role="status">
-            <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-            <p  data-hulkapps-cart-total class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
-          </div>
+        <div class="cart-drawer__footer js-contents" {{ block.shopify_attributes }}>
+          {% render 'gg-cart-footer-summary',
+            context: 'drawer',
+            show_shop_pay: true,
+            shop_pay_note: 'FREE Shipping Included (Limited Time Offer)'
+          %}
 
           <small class="tax-note caption-large rte">
             {%- if cart.duties_included and cart.taxes_included -%}

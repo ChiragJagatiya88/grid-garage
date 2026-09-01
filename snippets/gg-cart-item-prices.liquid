@@ -1,0 +1,63 @@
+{%- comment -%}
+  Cart line item prices with compare-at support.
+  display: 'unit' (details column) | 'line' (totals column)
+{%- endcomment -%}
+
+{%- liquid
+  assign gg_display = display | default: 'unit'
+  assign gg_compare_unit = item.variant.compare_at_price | default: 0
+  assign gg_compare_line = gg_compare_unit | times: item.quantity
+  assign gg_strike_amount = 0
+
+  if gg_display == 'unit'
+    if gg_compare_unit > item.final_price and gg_compare_unit >= item.original_price
+      assign gg_strike_amount = gg_compare_unit
+    elsif item.original_price > item.final_price
+      assign gg_strike_amount = item.original_price
+    endif
+  else
+    if gg_compare_line > item.final_line_price and gg_compare_line >= item.original_line_price
+      assign gg_strike_amount = gg_compare_line
+    elsif item.original_line_price > item.final_line_price
+      assign gg_strike_amount = item.original_line_price
+    endif
+  endif
+-%}
+
+{%- if gg_display == 'unit' -%}
+  {%- if gg_strike_amount > item.final_price -%}
+    <div class="cart-item__discounted-prices">
+      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+      <s data-hulkapps-ci-price data-key="{{ item.key }}" class="cart-item__old-price product-option">
+        {{- gg_strike_amount | money -}}
+      </s>
+      <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+      <strong data-hulkapps-ci-price data-key="{{ item.key }}" class="cart-item__final-price product-option gg-cart-price--sale">
+        {{ item.final_price | money }}
+      </strong>
+    </div>
+  {%- else -%}
+    <div data-hulkapps-ci-price data-key="{{ item.key }}" class="product-option cart-item__unit-price">
+      {{ item.original_price | money }}
+    </div>
+  {%- endif -%}
+{%- else -%}
+  {%- if gg_strike_amount > item.final_line_price -%}
+    <dl class="cart-item__discounted-prices">
+      <dt class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</dt>
+      <dd>
+        <s data-hulkapps-line-price data-key="{{ item.key }}" class="cart-item__old-price price price--end">
+          {{ gg_strike_amount | money }}
+        </s>
+      </dd>
+      <dt class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</dt>
+      <dd data-hulkapps-line-price data-key="{{ item.key }}" class="price price--end gg-cart-price--sale">
+        {{ item.final_line_price | money }}
+      </dd>
+    </dl>
+  {%- else -%}
+    <span data-hulkapps-line-price data-key="{{ item.key }}" class="price price--end">
+      {{ item.original_line_price | money }}
+    </span>
+  {%- endif -%}
+{%- endif -%}

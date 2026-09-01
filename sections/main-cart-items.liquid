@@ -114,26 +114,7 @@
 
                           <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
 
-                          {%- if item.original_price != item.final_price -%}
-                            <div class="cart-item__discounted-prices">
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.regular_price' | t }}
-                              </span>
-                              <s  data-hulkapps-ci-price data-key='{{item.key}}' class="cart-item__old-price product-option">
-                                {{- item.original_price | money -}}
-                              </s>
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.sale_price' | t }}
-                              </span>
-                              <strong  data-hulkapps-ci-price data-key='{{item.key}}' class="cart-item__final-price product-option">
-                                {{ item.final_price | money }}
-                              </strong>
-                            </div>
-                          {%- else -%}
-                            <div  data-hulkapps-ci-price data-key='{{item.key}}' class="product-option cart-item__unit-price">
-                              {{ item.original_price | money }}
-                            </div>
-                          {%- endif -%}
+                          {% render 'gg-cart-item-prices', item: item, display: 'unit' %}
 
                           {%- liquid
                             assign item_price_sq_ft = item.product.metafields.custom.price_sq_ft.value | default: item.product.metafields.custom.price_sq_ft
@@ -197,28 +178,7 @@
                         <td class="cart-item__totals right medium-hide large-up-hide">
                           {%- render 'loading-spinner' -%}
                           <div class="cart-item__price-wrapper">
-                            {%- if item.original_line_price != item.final_line_price -%}
-                              <dl class="cart-item__discounted-prices">
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.regular_price' | t }}
-                                </dt>
-                                <dd>
-                                  <s  data-hulkapps-line-price data-key='{{item.key}}' class="cart-item__old-price price price--end">
-                                    {{ item.original_line_price | money }}
-                                  </s>
-                                </dd>
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.sale_price' | t }}
-                                </dt>
-                                <dd  data-hulkapps-line-price data-key='{{item.key}}' class="price price--end">
-                                  {{ item.final_line_price | money }}
-                                </dd>
-                              </dl>
-                            {%- else -%}
-                              <span  data-hulkapps-line-price data-key='{{item.key}}' class="price price--end">
-                                {{ item.original_line_price | money }}
-                              </span>
-                            {%- endif -%}
+                            {% render 'gg-cart-item-prices', item: item, display: 'line' %}
 
                             {%- if item.variant.available and item.unit_price_measurement -%}
                               {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
@@ -424,28 +384,7 @@
                         <td class="cart-item__totals right small-hide">
                           {%- render 'loading-spinner' -%}
                           <div class="cart-item__price-wrapper">
-                            {%- if item.original_line_price != item.final_line_price -%}
-                              <dl class="cart-item__discounted-prices">
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.regular_price' | t }}
-                                </dt>
-                                <dd>
-                                  <s  data-hulkapps-line-price data-key='{{item.key}}' class="cart-item__old-price price price--end">
-                                    {{ item.original_line_price | money }}
-                                  </s>
-                                </dd>
-                                <dt class="visually-hidden">
-                                  {{ 'products.product.price.sale_price' | t }}
-                                </dt>
-                                <dd  data-hulkapps-line-price data-key='{{item.key}}' class="price price--end">
-                                  {{ item.final_line_price | money }}
-                                </dd>
-                              </dl>
-                            {%- else -%}
-                              <span  data-hulkapps-line-price data-key='{{item.key}}' class="price price--end">
-                                {{ item.original_line_price | money }}
-                              </span>
-                            {%- endif -%}
+                            {% render 'gg-cart-item-prices', item: item, display: 'line' %}
 
                             {%- if item.variant.available and item.unit_price_measurement -%}
                               {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
@@ -499,30 +438,11 @@
                   {% render block %}
                 {%- when 'subtotal' -%}
                   <div class="js-contents gg-cart-footer-contents" {{ block.shopify_attributes }}>
-                    <div class="gg-cart-summary">
-                      {%- if cart.cart_level_discount_applications.size > 0 -%}
-                        <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                          {%- for discount in cart.cart_level_discount_applications -%}
-                            <li class="discounts__discount discounts__discount--position">
-                              {{- 'icon-discount.svg' | inline_asset_content -}}
-                              {{ discount.title | escape }}
-                              (-{{ discount.total_allocated_amount | money }})
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                      {%- endif -%}
-
-                      <div class="totals gg-cart-totals">
-                        <h2 class="totals__total visually-hidden">{{ 'sections.cart.estimated_total' | t }}</h2>
-                        {%- if cart.original_total_price > cart.total_price -%}
-                          <p class="totals__compare">
-                            <s>{{ cart.original_total_price | money }}</s>
-                          </p>
-                        {%- endif -%}
-                        <p data-hulkapps-cart-total class="totals__total-value" data-cart-subtotal>
-                          {{ cart.total_price | money }}
-                        </p>
-                      </div>
+                    {% render 'gg-cart-footer-summary',
+                      context: 'page',
+                      show_shop_pay: section.settings.show_shop_pay_installments,
+                      shop_pay_note: section.settings.shop_pay_shipping_note
+                    %}
 
                       <small class="tax-note caption-large rte">
                         {%- if cart.duties_included and cart.taxes_included -%}
@@ -563,18 +483,6 @@
                           {%- endif -%}
                         {%- endif -%}
                       </small>
-
-                      {%- if cart != empty and section.settings.show_shop_pay_installments -%}
-                        <div class="gg-cart-shop-pay">
-                          {% form 'cart', cart %}
-                            {{ form | payment_terms }}
-                          {% endform %}
-                          {%- if section.settings.shop_pay_shipping_note != blank -%}
-                            <p class="gg-cart-shop-pay__note">{{ section.settings.shop_pay_shipping_note | escape }}</p>
-                          {%- endif -%}
-                        </div>
-                      {%- endif -%}
-                    </div>
                   </div>
                 {%- when 'buttons' -%}
                   <div class="cart__ctas" {{ block.shopify_attributes }}>

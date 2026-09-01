@@ -1,0 +1,82 @@
+{%- comment -%}
+  Cart footer: compare-at total, savings, Shop Pay installments.
+  context: 'page' | 'drawer'
+{%- endcomment -%}
+
+{%- liquid
+  assign gg_context = context | default: 'page'
+  assign gg_show_shop_pay = show_shop_pay | default: true
+  assign gg_shop_pay_note = shop_pay_note | default: 'FREE Shipping Included (Limited Time Offer)'
+
+  assign gg_cart_compare_total = 0
+  for item in cart.items
+    assign gg_compare_unit = item.variant.compare_at_price | default: 0
+    assign gg_compare_line = gg_compare_unit | times: item.quantity
+    assign gg_line_was = item.final_line_price
+
+    if gg_compare_line > item.final_line_price
+      assign gg_line_was = gg_compare_line
+    elsif item.original_line_price > item.final_line_price
+      assign gg_line_was = item.original_line_price
+    endif
+
+    assign gg_cart_compare_total = gg_cart_compare_total | plus: gg_line_was
+  endfor
+
+  assign gg_cart_savings = gg_cart_compare_total | minus: cart.total_price
+  if gg_cart_savings < 0
+    assign gg_cart_savings = 0
+  endif
+-%}
+
+<div class="gg-cart-summary gg-cart-summary--{{ gg_context }}">
+  {%- if cart.cart_level_discount_applications.size > 0 -%}
+    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li class="discounts__discount{% if gg_context == 'drawer' %} discounts__discount--end{% else %} discounts__discount--position{% endif %}">
+          {{- 'icon-discount.svg' | inline_asset_content -}}
+          {{ discount.title | escape }}
+          (-{{ discount.total_allocated_amount | money }})
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <div class="totals gg-cart-totals{% if gg_context == 'drawer' %} gg-cart-totals--drawer{% endif %}" role="status">
+    {%- if gg_context == 'drawer' -%}
+      <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
+    {%- else -%}
+      <h2 class="totals__total visually-hidden">{{ 'sections.cart.estimated_total' | t }}</h2>
+    {%- endif -%}
+
+    <div class="gg-cart-totals__amounts">
+      {%- if gg_cart_compare_total > cart.total_price -%}
+        <p class="totals__compare">
+          <s>{{ gg_cart_compare_total | money }}</s>
+        </p>
+      {%- endif -%}
+      <p data-hulkapps-cart-total class="totals__total-value" data-cart-subtotal>
+        {%- if gg_context == 'drawer' -%}
+          {{ cart.total_price | money_with_currency }}
+        {%- else -%}
+          {{ cart.total_price | money }}
+        {%- endif -%}
+      </p>
+    </div>
+  </div>
+
+  {%- if gg_cart_savings > 0 -%}
+    <p class="gg-cart-savings">🎉 You Saved {{ gg_cart_savings | money }}</p>
+  {%- endif -%}
+
+  {%- if cart != empty and gg_show_shop_pay -%}
+    <div class="gg-cart-shop-pay">
+      {% form 'cart', cart %}
+        {{ form | payment_terms }}
+      {% endform %}
+      {%- if gg_shop_pay_note != blank -%}
+        <p class="gg-cart-shop-pay__note">{{ gg_shop_pay_note | escape }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

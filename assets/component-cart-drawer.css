@@ -185,7 +185,8 @@ cart-drawer {
 }
 
 cart-drawer-items {
-  overflow: auto;
+  overflow: hidden;
+  overflow-y: auto;
   flex: 1;
 }
 
