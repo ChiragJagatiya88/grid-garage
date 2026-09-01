@@ -52,6 +52,7 @@
   class="section_{{ section.id }} gg-dyf-cfg if-cfg{% if section.settings.enable_custom_class and section.settings.section_class != blank %} {{ section.settings.section_class }}{% endif %}"
   data-if-cfg
   data-if-cfg-id="{{ section.id }}"
+  data-if-cfg-product-id="{{ if_cfg_product.id }}"
   {% if if_cfg_page_mode %}data-if-cfg-page-mode="true"{% endif %}
   data-tile-size="{{ if_product_tile_size | escape }}"
   data-support-phone="{{ section.settings.support_phone_label | default: '(888) 898-8022' | escape }}"
@@ -697,9 +698,11 @@
             -%}
             {%- if if_cat_sep -%},{%- endif -%}
             {%- assign if_cat_sep = true -%}
+            {%- assign tp_discount_collections = tp.collections | map: 'handle' -%}
             {{ tp.handle | json }}: {
               "id": {{ tp.id | json }},
               "handle": {{ tp.handle | json }},
+              "discountEligible": {% if tp_discount_collections contains '50-discount' %}true{% else %}false{% endif %},
               "title": {{ block.settings.title | default: tp.title | json }},
               "url": {{ tp.url | json }},
               "tileSize": {{ tile_size | json }},
@@ -723,9 +726,11 @@
             endif
           -%}
           {%- unless forloop.first -%},{%- endunless -%}
+          {%- assign tp_discount_collections = tp.collections | map: 'handle' -%}
           {{ tp.handle | json }}: {
             "id": {{ tp.id | json }},
             "handle": {{ tp.handle | json }},
+            "discountEligible": {% if tp_discount_collections contains '50-discount' %}true{% else %}false{% endif %},
             "title": {{ tp.title | json }},
             "url": {{ tp.url | json }},
             "tileSize": {{ tile_size | json }},
@@ -748,7 +753,6 @@
     };
   </script>
   <script src="{{ 'gg-design-your-floor-configurator.js' | asset_url }}" defer></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -756,137 +760,279 @@ document.addEventListener('DOMContentLoaded', function () {
   const popup = document.querySelector('#discount-popup');
   const closeBtn = document.querySelector('.discount-close');
   const discountForm = document.querySelector('#discount-form');
+  const root = form ? (form.closest('[data-if-cfg]') || document.querySelector('[data-if-cfg]')) : null;
 
-  if (!form || !popup) return;
+  if (!form || !root) return;
 
-
+  const MIN_FLOORING_SUBTOTAL = 75000; // $750.00 in cents
+  const DISCOUNT_COLLECTION_HANDLE = '50-discount';
+  const CLAIM_COOKIE = 'klaviyo_50_claimed';
   let isProcessing = false;
-
+  let popupOpened = false;
 
   function checkCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? match[2] : null;
+    const match = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+    return match ? decodeURIComponent(match[1]) : null;
   }
 
+  function hasClaimedDiscount() {
+    return checkCookie(CLAIM_COOKIE) === 'true' ||
+      localStorage.getItem(CLAIM_COOKIE) === 'true';
+  }
 
-  // ADD TO CART INTERCEPT
-  form.addEventListener('submit', function(e){
+  function saveClaim() {
+    document.cookie = CLAIM_COOKIE + '=true; path=/; max-age=31536000; SameSite=Lax';
+    localStorage.setItem(CLAIM_COOKIE, 'true');
+  }
 
-    if(isProcessing) return;
+  function getCatalog() {
+    const el = document.querySelector('[id^="if-cfg-catalog-json-"]');
+    if (!el) return {};
+    try {
+      return JSON.parse(el.textContent || '{}');
+    } catch (error) {
+      console.error('GG $50 offer: catalog JSON could not be parsed.', error);
+      return {};
+    }
+  }
 
+  function getCurrentProductEntry() {
+    const catalog = getCatalog();
+    const selectedTile = root.querySelector('.if-cfg__tile.is-selected, [data-if-cfg-tile].is-selected');
+    const selectedHandle = selectedTile && selectedTile.getAttribute('data-product-handle');
 
-    const claimed =
-      checkCookie('klaviyo_50_claimed') ||
-      localStorage.getItem('klaviyo_50_claimed');
-
-
-    if(claimed){
-      e.preventDefault();
-      continueToCheckout();
-      return;
+    if (selectedHandle && catalog[selectedHandle]) {
+      return catalog[selectedHandle];
     }
 
+    const selectedId = selectedTile && selectedTile.getAttribute('data-product-id');
+    if (selectedId) {
+      for (const handle in catalog) {
+        if (String(catalog[handle].id) === String(selectedId)) return catalog[handle];
+      }
+    }
 
-    e.preventDefault();
+    // Fallback to the product used when the configurator initially rendered.
+    const initialProductId = root.getAttribute('data-if-cfg-product-id');
+    if (initialProductId) {
+      for (const handle in catalog) {
+        if (String(catalog[handle].id) === String(initialProductId)) return catalog[handle];
+      }
+    }
 
-    // Open Custom Popup
+    return null;
+  }
+
+  function getSelectedVariantPriceCents(productEntry) {
+    if (!productEntry) return 0;
+
+    const variantInput = form.querySelector('[data-if-cfg-variant-id]');
+    const variantId = variantInput && variantInput.value;
+    const variants = productEntry.product && productEntry.product.variants
+      ? productEntry.product.variants
+      : [];
+
+    if (variantId) {
+      const variant = variants.find(v => String(v.id) === String(variantId));
+      if (variant) {
+        const price = Number(variant.price);
+        return Number.isFinite(price) ? Math.round(price) : 0;
+      }
+    }
+
+    if (productEntry.product && productEntry.product.price != null) {
+      const price = Number(productEntry.product.price);
+      return Number.isFinite(price) ? Math.round(price) : 0;
+    }
+
+    return 0;
+  }
+
+  function getQuantity() {
+    const qtyInput = form.querySelector('input[name="quantity"]');
+    const qty = qtyInput ? parseFloat(qtyInput.value) : 1;
+    return Number.isFinite(qty) && qty > 0 ? qty : 1;
+  }
+
+  async function getEligibleCartSubtotalCents(eligibleIds) {
+    try {
+      const response = await fetch('/cart.js?t=' + Date.now(), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store'
+      });
+
+      if (!response.ok) return 0;
+
+      const cart = await response.json();
+      if (!cart || !Array.isArray(cart.items)) return 0;
+
+      return cart.items.reduce(function (total, item) {
+        if (!eligibleIds.has(String(item.product_id))) return total;
+        const linePrice = Number(item.final_line_price);
+        return total + (Number.isFinite(linePrice) ? linePrice : 0);
+      }, 0);
+    } catch (error) {
+      console.error('GG $50 offer: could not read current cart.', error);
+      return 0;
+    }
+  }
+
+  async function isCurrentAddEligible() {
+    const productEntry = getCurrentProductEntry();
+
+    // Only products manually placed in the $50 Discount collection qualify.
+    if (!productEntry || productEntry.discountEligible !== true) {
+      return false;
+    }
+
+    const catalog = getCatalog();
+    const eligibleIds = new Set();
+
+    Object.keys(catalog).forEach(function (handle) {
+      const item = catalog[handle];
+      if (item && item.discountEligible === true && item.id != null) {
+        eligibleIds.add(String(item.id));
+      }
+    });
+
+    if (!eligibleIds.has(String(productEntry.id))) {
+      return false;
+    }
+
+    const currentVariantPriceCents = getSelectedVariantPriceCents(productEntry);
+    const currentQuantity = getQuantity();
+    const currentLineCents = Math.round(currentVariantPriceCents * currentQuantity);
+    const existingEligibleCents = await getEligibleCartSubtotalCents(eligibleIds);
+    const qualifyingSubtotalCents = existingEligibleCents + currentLineCents;
+
+    console.log('GG $50 offer check:', {
+      collection: DISCOUNT_COLLECTION_HANDLE,
+      productId: productEntry.id,
+      currentLineCents: currentLineCents,
+      existingEligibleCents: existingEligibleCents,
+      qualifyingSubtotalCents: qualifyingSubtotalCents,
+      qualifies: qualifyingSubtotalCents >= MIN_FLOORING_SUBTOTAL
+    });
+
+    return qualifyingSubtotalCents >= MIN_FLOORING_SUBTOTAL;
+  }
+
+  function openDiscountPopup() {
+    if (!popup) return false;
+    popupOpened = true;
     popup.classList.add('active');
+    return true;
+  }
 
-  });
+  function closeDiscountPopup() {
+    if (popup) popup.classList.remove('active');
+    popupOpened = false;
+  }
 
-
-
-  // EMAIL SUBMIT
-  discountForm.addEventListener('submit', function(e){
-
-    e.preventDefault();
-
-
-    const email =
-      document.querySelector('#discount-email').value;
-
-
-    if(!email) return;
-
-
-    /*
-      Yahan Klaviyo API / Shopify customer event add hoga
-    */
-
-
-    // save claim
-    document.cookie =
-    "klaviyo_50_claimed=true; path=/; max-age=604800";
-
-    localStorage.setItem(
-      'klaviyo_50_claimed',
-      'true'
-    );
-
-
-    popup.classList.remove('active');
-
-
-    continueToCheckout();
-
-
-  });
-
-
-
-  // CLOSE POPUP
-  closeBtn.addEventListener('click', function(){
-
-    popup.classList.remove('active');
-
-    continueToCheckout();
-
-  });
-
-
-
-  // CONTINUE CART
-  function continueToCheckout(){
-
-    if(isProcessing) return;
-
+  function continueToCheckout() {
+    if (isProcessing) return;
     isProcessing = true;
 
-    const root = form.closest('[data-if-cfg]') || document.querySelector('[data-if-cfg]');
     const addFn = root && root._ifCfgAddToCart;
     const redirect = form.getAttribute('data-if-cfg-redirect') || '/cart';
 
     if (typeof addFn === 'function') {
-      addFn({ redirect: redirect }).catch(function () {
-        isProcessing = false;
-        form.submit();
-      });
+      Promise.resolve(addFn({ redirect: redirect }))
+        .catch(function () {
+          isProcessing = false;
+          HTMLFormElement.prototype.submit.call(form);
+        });
       return;
     }
 
     const formData = new FormData(form);
 
-    fetch('/cart/add.js',{
-      method:'POST',
-      body:formData,
-      headers:{
-        'Accept':'application/json'
-      }
+    fetch('/cart/add.js', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
     })
-    .then(res=>res.json())
-    .then(()=>{
-      
-      window.location.href='/cart';
-
-    })
-    .catch(()=>{
-
-      form.submit();
-
-    });
-
+      .then(function (response) {
+        if (!response.ok) throw new Error('Cart Add Failed');
+        return response.json();
+      })
+      .then(function () {
+        window.location.href = redirect;
+      })
+      .catch(function (error) {
+        console.error('GG $50 offer: AJAX cart add failed.', error);
+        isProcessing = false;
+        HTMLFormElement.prototype.submit.call(form);
+      });
   }
 
+  form.addEventListener('submit', async function (e) {
+    if (isProcessing) return;
+
+    // The eligibility check needs the live cart, so prevent the native submit
+    // immediately. Otherwise an async handler could be too late to stop it.
+    if (e.defaultPrevented) return;
+    e.preventDefault();
+
+    const eligible = await isCurrentAddEligible();
+
+    // Non-eligible products, or eligible products whose flooring subtotal is
+    // below $750, continue normally without showing the popup.
+    if (!eligible) {
+      continueToCheckout();
+      return;
+    }
+
+    // A qualifying flooring subtotal has been reached.
+    if (hasClaimedDiscount()) {
+      continueToCheckout();
+      return;
+    }
+
+    // Qualifying + unclaimed = show the $50 popup.
+    if (!openDiscountPopup()) {
+      // If the popup markup is unavailable, never block the customer.
+      continueToCheckout();
+    }
+  });
+
+  // Custom popup email form, if present.
+  if (discountForm) {
+    discountForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const emailInput = document.querySelector('#discount-email');
+      const email = emailInput ? emailInput.value.trim() : '';
+      if (!email) return;
+
+      saveClaim();
+      closeDiscountPopup();
+      continueToCheckout();
+    });
+  }
+
+  // Closing the popup lets the customer continue without claiming the offer.
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function () {
+      closeDiscountPopup();
+      continueToCheckout();
+    });
+  }
+
+  // If Klaviyo is still the component submitting the popup, preserve the existing flow.
+  document.addEventListener('klaviyoForms:submit', function (event) {
+    if (!popupOpened) return;
+    if (event.detail && event.detail.formId && event.detail.formId !== 'WT9tcM') return;
+    saveClaim();
+    closeDiscountPopup();
+    continueToCheckout();
+  });
+
+  document.addEventListener('klaviyoForms:close', function () {
+    if (!popupOpened) return;
+    closeDiscountPopup();
+    continueToCheckout();
+  });
 
 });
 </script>
