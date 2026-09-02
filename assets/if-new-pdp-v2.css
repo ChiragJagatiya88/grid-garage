@@ -304,6 +304,14 @@
   color: var(--if-pdp2-muted);
 }
 
+.if-pdp2__sqft-compare {
+  margin-left: 8px;
+  font-size: clamp(16px, 1.5vw, 22px);
+  font-weight: 500;
+  color: #9a9a9a;
+  text-decoration: line-through;
+}
+
 .if-pdp2__unit {
   margin: 0;
   font-size: 14px;
@@ -330,6 +338,13 @@
 
 .if-pdp2__unit-value {
   font-weight: 500;
+}
+
+.if-pdp2__unit-compare {
+  margin-left: 4px;
+  font-weight: 500;
+  color: #9a9a9a;
+  text-decoration: line-through;
 }
 
 /* Benefits */

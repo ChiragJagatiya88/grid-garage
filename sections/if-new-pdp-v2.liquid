@@ -36,6 +36,7 @@
     assign if_sq_gtm_raw = if_sq_gtm_raw | remove: '$' | remove: ',' | strip
     assign if_price_sq_ft_value = if_sq_gtm_raw | split: ' ' | first | strip
   endif
+  assign if_compare_price_sq_ft = product.metafields.custom.compare_price_sq_ft.value | default: product.metafields.custom.compare_price_sq_ft
   assign if_variant = product.selected_or_first_available_variant
 
   assign if_tile_size_raw = product.metafields.custom.tile_size.value | default: product.metafields.custom.tile_size | strip
@@ -358,10 +359,34 @@
                       assign sq_suffix = block.settings.sqft_suffix
                     endif
                   -%}
+                  {%- liquid
+                    assign sq_compare_display = ''
+                    if if_compare_price_sq_ft != blank
+                      assign sq_compare_raw = if_compare_price_sq_ft | strip
+                      if sq_compare_raw contains '/'
+                        assign sq_compare_display = sq_compare_raw | split: '/' | first | strip
+                      else
+                        assign sq_compare_display = sq_compare_raw | split: ' ' | first | strip
+                      endif
+                      unless sq_compare_display contains '$'
+                        if sq_compare_display contains '.'
+                          assign sq_compare_display = sq_compare_display | prepend: '$'
+                        else
+                          assign sq_compare_cents = sq_compare_display | times: 100 | round
+                          if sq_compare_cents > 0
+                            assign sq_compare_display = sq_compare_cents | money
+                          endif
+                        endif
+                      endunless
+                    endif
+                  -%}
                   <p class="if-pdp2__sqft">
                     <span class="if-pdp2__sqft-price">{{ sq_price | escape }}</span>
                     {%- if sq_suffix != blank -%}
                       <span class="if-pdp2__sqft-suffix">{{ sq_suffix | escape }}</span>
+                    {%- endif -%}
+                    {%- if sq_compare_display != blank -%}
+                      <s class="if-pdp2__sqft-compare">{{ sq_compare_display | escape }}</s>
                     {%- endif -%}
                   </p>
                 {%- endif -%}
@@ -375,6 +400,7 @@
                       assign unit_before = unit_tpl | split: '[price]' | first
                       assign unit_after = unit_tpl | remove_first: unit_before | remove_first: '[price]'
                     endif
+                    assign unit_compare = if_unit_variant.compare_at_price | default: 0
                   -%}
                   <p class="if-pdp2__unit" data-if-pdp2-unit-price>
                     <span class="if-pdp2__unit-label">Unit Price: </span>
@@ -388,6 +414,15 @@
                         {{ if_unit_variant.price | money }}
                       {%- endif -%}
                     </span>
+                    {%- if unit_compare > if_unit_variant.price -%}
+                      <s class="if-pdp2__unit-compare" data-if-pdp2-compare-money>
+                        {%- if settings.currency_code_enabled -%}
+                          {{ unit_compare | money_with_currency }}
+                        {%- else -%}
+                          {{ unit_compare | money }}
+                        {%- endif -%}
+                      </s>
+                    {%- endif -%}
                     {%- if unit_after != blank -%}
                       <span class="if-pdp2__unit-text">{{ unit_after | escape }}</span>
                     {%- endif -%}
@@ -545,6 +580,7 @@
                         data-color-name="{{ if_val_str | escape }}"
                         data-price="{{ if_mv.price }}"
                         data-unit-price="{{ if_mv.price }}"
+                        data-compare-at-price="{{ if_mv.compare_at_price | default: 0 }}"
                         data-image="{{ if_tile_img | escape }}"
                         data-media-id="{{ if_media_id }}"
                         data-available="{{ if_mv.available }}"
@@ -1010,6 +1046,24 @@
         var moneyEl = root.querySelector('[data-if-pdp2-money]');
         if (moneyEl && !isNaN(price)) {
           moneyEl.textContent = formatMoney(price);
+        }
+
+        var compareAt = parseInt(btn.getAttribute('data-compare-at-price') || '0', 10);
+        var compareEl = root.querySelector('[data-if-pdp2-compare-money]');
+        var unitRow = root.querySelector('[data-if-pdp2-unit-price]');
+        if (!isNaN(compareAt) && compareAt > price) {
+          if (compareEl) {
+            compareEl.textContent = formatMoney(compareAt);
+            compareEl.hidden = false;
+          } else if (unitRow && moneyEl) {
+            var s = document.createElement('s');
+            s.className = 'if-pdp2__unit-compare';
+            s.setAttribute('data-if-pdp2-compare-money', '');
+            s.textContent = formatMoney(compareAt);
+            moneyEl.insertAdjacentElement('afterend', s);
+          }
+        } else if (compareEl) {
+          compareEl.remove();
         }
 
         var available = btn.getAttribute('data-available') === 'true';
