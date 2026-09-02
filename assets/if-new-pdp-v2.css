@@ -341,7 +341,7 @@
 }
 
 .if-pdp2__unit-compare {
-  margin-left: 4px;
+  margin-inline: 4px;
   font-weight: 500;
   color: #9a9a9a;
   text-decoration: line-through;
