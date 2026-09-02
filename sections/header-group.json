@@ -70,6 +70,7 @@
       "blocks": {
         "usp_EA37da": {
           "type": "usp",
+          "disabled": true,
           "settings": {
             "text": "✓ Free Shipping on All 2-Car & 3-Car Garage Kits",
             "link": ""
@@ -85,21 +86,21 @@
         "usp_cyK3Rq": {
           "type": "usp",
           "settings": {
-            "text": "✓ Free Shipping on Cabinets",
+            "text": "✓ Free Shipping",
             "link": ""
           }
         },
         "usp_9JgxWX": {
           "type": "usp",
           "settings": {
-            "text": "✓ Choose from 5 Tile Design Patterns",
+            "text": "✓ 20 Year Warranty on Tiles",
             "link": ""
           }
         },
         "usp_mzmeYN": {
           "type": "usp",
           "settings": {
-            "text": "✓ DIY Installation in Hours",
+            "text": "✓ 3-6 Day Delivery",
             "link": ""
           }
         },
@@ -112,6 +113,7 @@
         },
         "usp_fin4NcE": {
           "type": "usp",
+          "disabled": true,
           "settings": {
             "text": "✓ Financing options available at checkout",
             "link": ""
